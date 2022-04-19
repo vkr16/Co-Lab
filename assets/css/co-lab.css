@@ -1,0 +1,122 @@
+.ff-nunito{
+    font-family: 'Nunito', sans-serif;
+}
+
+.text-orange{
+    color: #ed7d2b;
+}
+
+.text-orange:hover{
+    color: #ed7d2b
+}
+
+.text-orange:focus{
+    color: #ed7d2b
+}
+.text-blue{
+    color: #2b468b;
+}
+
+.text-blue:hover{
+    color: #2b468b
+}
+
+.text-blue:focus{
+    color: #2b468b
+}
+.text-red{
+    color: #b6453d;
+}
+
+.text-red:hover{
+    color: #b6453d
+}
+
+.text-red:focus{
+    color: #b6453d
+}
+
+.login {
+    min-height: 100vh;
+}
+
+.login-bg-image {
+    background-image: url('../../assets/img/coworkingspace.png');
+    background-size: cover;
+    background-position: center center;
+}
+
+.signup-bg-image {
+    background-image: url('../../assets/img/coworkingspace2.png');
+    background-size: cover;
+    background-position: center center;
+}
+
+.recovery-bg-image {
+    background-image: url('../../assets/img/resetpass.png');
+    background-size: cover;
+    background-position: center center;
+}
+
+.btn-orange:hover{
+    background-color: #ffb93f;
+    color: #ffffff;
+}
+
+.btn-orange{
+    background-color: #ed7d2b;
+    color: #ffffff;
+}
+
+.btn-orange:focus{
+    background-color: #ffffff;
+    border-color: #ed7d2b;
+    color: #ed7d2b;
+}
+.btn-blue:hover{
+    background-color: #65a1ef;
+    color: #ffffff;
+}
+
+.btn-blue{
+    background-color: #2b468b;
+    color: #ffffff;
+}
+
+.btn-blue:focus{
+    background-color: #ffffff;
+    border-color: #2b468b;
+    color: #2b468b;
+}
+.btn-red:hover{
+    background-color: #e4645b;
+    color: #ffffff;
+}
+
+.btn-red{
+    background-color: #b6453d;
+    color: #ffffff;
+}
+
+.btn-red:focus{
+    background-color: #ffffff;
+    border-color: #b6453d;
+    color: #b6453d;
+}
+
+.cb-orange:focus{
+    border-color: #fa9746;
+}
+.cb-orange:checked{
+    background-color: #fa9746;
+    border-color: #fa9746;
+}
+
+.cb-blue:focus{
+    border-color: #2b468b;
+}
+.cb-blue:checked{
+    background-color: #2b468b;
+    border-color: #2b468b;
+}
+
