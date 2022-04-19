@@ -1,3 +1,36 @@
+<?php
+require_once "core/init.php";
+
+if (isset($_POST['btnsignup'])) {
+    $fullname = $_POST['fullname'];
+    $username = $_POST['username'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    if (isemailused($email)) {
+        $errTitle = "Email already used";
+        $errBody = "Please use another email account";
+        $loadThis = "errToast()";
+    } else {
+        if (isusernametaken($username)) {
+            $errTitle = "Username unavaliable";
+            $errBody = "Please pick another username";
+            $loadThis = "errToast()";
+        } else {
+            if (createaccount($fullname, $username, $email, $password)) {
+                $succTitle = "Registration Successful";
+                $succBody = "Please check your inbox for email verification";
+                $loadThis = "succToast()";
+            } else {
+                $errTitle = "Registration Failed";
+                $errBody = "System failure, please contact our system administrator";
+                $loadThis = "errToast()";
+            }
+        }
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -24,7 +57,7 @@
     <title>Co-Lab | Sign Up</title>
 </head>
 
-<body>
+<body onload="<?= $loadThis ?>">
     <div class="container-fluid">
         <div class="row no-gutter">
             <div class="col-md-6">
@@ -49,11 +82,11 @@
                                     </div>
                                     <div class="d-flex justify-content-between">
                                         <div class="form-check mb-3">
-                                            <input type="checkbox" class="form-check-input shadow-sm cb-blue" id="checkStayLogin">
+                                            <input required type="checkbox" class="form-check-input shadow-sm cb-blue" id="checkStayLogin" name="staylogin" onchange="agreeCheck()">
                                             <label class="form-check-label" for="checkStayLogin">I agree to <a href="javascript:;" class="text-blue text-decoration-none">privacy policy & terms </a></label>
                                         </div>
                                     </div>
-                                    <input type="submit" class="btn btn-block btn-blue   mb-2 shadow-sm align-self-center" value="&nbsp;&nbsp;Sign Up &nbsp;&nbsp;" name="submit" />
+                                    <input disabled type="submit" class="btn btn-block btn-blue mb-2 shadow-sm align-self-center" value="&nbsp;&nbsp;Sign Up &nbsp;&nbsp;" name="btnsignup" id="btnsignup" />
                                 </form>
                                 <span class="text-muted">Already have an account? <a href="login.php" class="text-blue text-decoration-none">Sign in instead</a></span>
 
@@ -75,7 +108,20 @@
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
             <div class="toast-body text-danger">
-                <p class="mb-0"><strong> User Not Found</strong> <br>Please check your email or username</p>
+                <p class="mb-0"><strong> <?= $errTitle; ?></strong> <br><?= $errBody; ?></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- BS Toast -->
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
+        <div id="successNotif" class="toast border-success ff-nunito" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto text-success"><i class="fa-solid fa-circle-check"></i> &nbsp; Action Success Notification</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body text-success">
+                <p class="mb-0"><strong> <?= $succTitle; ?></strong> <br><?= $succBody; ?></p>
             </div>
         </div>
     </div>
@@ -91,5 +137,21 @@
     function errToast() {
         var errtoast = new bootstrap.Toast(errorNotif)
         errtoast.show()
+    }
+
+    function succToast() {
+        var succtoast = new bootstrap.Toast(successNotif)
+        succtoast.show()
+    }
+
+    function agreeCheck() {
+        var btn = document.getElementById("btnsignup");
+        var cb = document.getElementById("checkStayLogin");
+
+        if (cb.checked == true) {
+            btn.disabled = false;
+        } else {
+            btn.disabled = true;
+        }
     }
 </script>
