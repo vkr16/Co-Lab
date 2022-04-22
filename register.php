@@ -1,5 +1,7 @@
 <?php
 require_once "core/init.php";
+require_once "core/no-session-allowed.php";
+
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;

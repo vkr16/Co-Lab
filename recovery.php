@@ -1,3 +1,9 @@
+<?php
+require_once "core/init.php";
+require_once "core/no-session-allowed.php";
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 

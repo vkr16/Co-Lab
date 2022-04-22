@@ -1,5 +1,7 @@
 <?php
 require_once "core/init.php";
+require_once "core/no-session-allowed.php";
+
 $email = $_GET['apl'];
 $query = "SELECT * FROM users WHERE email = '$email'";
 $result = mysqli_query($link, $query);

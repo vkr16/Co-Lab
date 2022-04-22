@@ -1,3 +1,29 @@
+<?php
+
+require_once "core/init.php";
+require_once "core/no-session-allowed.php";
+
+if (isset($_POST['btnsignin'])) {
+    $useridentity = $_POST['userid'];
+    $password = $_POST['password'];
+    if (isset($_POST['staylogin'])) {
+        $staylogin = true;
+    } else {
+        $staylogin = false;
+    }
+
+    if (isexist($useridentity)) {
+        if (isvalid($useridentity, $password)) {
+            savesession($staylogin, $useridentity);
+        } else {
+            echo "password invalid";
+        }
+    } else {
+        echo "user not exist";
+    }
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -36,19 +62,19 @@
                                 <p class="text-muted mb-4">Please sign-in to your account to start using our services <i class="fa-solid fa-rocket"></i></p>
                                 <form action="" method="post">
                                     <div class="form-group mb-3">
-                                        <input id="inputUserIdentity" type="text" placeholder="Email or Username" required="" autofocus="" class="form-control border-0 shadow-sm px-4 text-orange" autocomplete="off" name="username" />
+                                        <input id="inputUserIdentity" type="text" placeholder="Email or Username" required="" autofocus="" class="form-control border-0 shadow-sm px-4 text-orange" autocomplete="off" name="userid" />
                                     </div>
                                     <div class="form-group mb-3">
                                         <input id="inputPassword" type="password" placeholder="Password" required="" class="form-control border-0 shadow-sm px-4 text-orange" autocomplete="off" name="password" />
                                     </div>
                                     <div class="d-flex justify-content-between">
                                         <div class="form-check mb-3">
-                                            <input type="checkbox" class="form-check-input shadow-sm cb-orange" id="checkStayLogin">
+                                            <input type="checkbox" class="form-check-input shadow-sm cb-orange" id="checkStayLogin" name="staylogin">
                                             <label class="form-check-label" for="checkStayLogin">Keep me logged in</label>
                                         </div>
                                         <span class="text-muted"><a href="recovery.php" class="text-orange text-decoration-none">Forgot password?</a></span>
                                     </div>
-                                    <input type="submit" class="btn btn-block btn-orange mb-2 shadow-sm align-self-center" value="&nbsp;&nbsp;Log In &nbsp;&nbsp;" name="submit" />
+                                    <input type="submit" class="btn btn-block btn-orange mb-2 shadow-sm align-self-center" value="&nbsp;&nbsp;Log In &nbsp;&nbsp;" name="btnsignin" />
                                 </form>
                                 <span class="text-muted">New on our platform? <a href="register.php" class="text-orange text-decoration-none">Create an account</a></span>
 

@@ -1,6 +1,8 @@
 <?php
 
 require_once "core/init.php";
+require_once "core/no-session-allowed.php";
+
 $email = $_GET['apl'];
 $uid = $_GET['uid'];
 $query = "SELECT * FROM users WHERE email = '$email'";
