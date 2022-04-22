@@ -1,5 +1,4 @@
 <?php
-
 function isemailused($email)
 {
     global $link;
@@ -34,7 +33,6 @@ function isusernametaken($username)
 
 function createaccount($fullname, $username, $email, $password)
 {
-
     global $link;
 
     $fullname = mysqli_real_escape_string($link, $fullname);

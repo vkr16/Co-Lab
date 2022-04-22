@@ -58,6 +58,18 @@
     background-position: center center;
 }
 
+.verif-bg-image {
+    background-image: url('../../assets/img/emailverif.png');
+    background-size: cover;
+    background-position: center center;
+}
+
+.activated-bg-image {
+    background-image: url('../../assets/img/activated.png');
+    background-size: cover;
+    background-position: center center;
+}
+
 .btn-orange:hover{
     background-color: #ffb93f;
     color: #ffffff;

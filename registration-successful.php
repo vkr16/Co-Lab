@@ -1,3 +1,16 @@
+<?php
+require_once "core/init.php";
+$email = $_GET['apl'];
+$query = "SELECT * FROM users WHERE email = '$email'";
+$result = mysqli_query($link, $query);
+
+$data = mysqli_fetch_assoc($result);
+$validity = $data['validity'];
+if ($validity != "invalid") {
+    header("Location: login.php");
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -21,26 +34,21 @@
     <!-- Fontawesome -->
     <link rel="stylesheet" href="assets/vendor/fontawesome/css/all.min.css">
 
-    <title>Co-Lab | Account Recovery</title>
+    <title>Co-Lab | Registration Successful</title>
 </head>
 
-<body>
+<body onload="<?= $loadThis ?>">
     <div class="container-fluid">
         <div class="row no-gutter">
-            <div class="col-md-6 d-none d-md-flex recovery-bg-image"></div>
             <div class="col-md-6">
                 <div class="login d-flex align-items-center py-5">
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-10 col-xl-7 mx-auto">
-                                <h3 class="display-6">Account Recovery </h3>
-                                <p class="text-muted mb-4">Please enter the email address associated with your account <i class="fa-solid fa-shield-halved"></i></p>
-                                <form action="" method="post">
-                                    <div class="form-group mb-3">
-                                        <input id="inputUserIdentity" type="text" placeholder="Email address" required="" autofocus="" class="form-control border-0 shadow-sm px-4 text-red" autocomplete="off" name="username" />
-                                    </div>
-                                    <input type="submit" class="btn btn-block btn-red mb-2 shadow-sm align-self-center" value="&nbsp;&nbsp;Reset Password &nbsp;&nbsp;" name="submit" />
-                                </form>
+                                <h2 class="ff-nunito">Verification Email Sent <i class="fa-solid fa-envelope-circle-check"></i></h2>
+                                <p class="text-muted mb-4">An activation link has been sent to your email.</p>
+
+                                <span class="text-muted">Didn't receive the link? <a href="resend-verification.php?apl=<?= $email; ?>" class="text-blue text-decoration-none">Resend email</a></span>
 
 
                             </div>
@@ -48,6 +56,7 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-6 d-none d-md-flex verif-bg-image"></div>
         </div>
     </div>
 
@@ -59,7 +68,20 @@
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
             <div class="toast-body text-danger">
-                <p class="mb-0"><strong> User Not Found</strong> <br>Please check your email or username</p>
+                <p class="mb-0"><strong> <?= $errTitle; ?></strong> <br><?= $errBody; ?></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- BS Toast -->
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
+        <div id="successNotif" class="toast border-success ff-nunito" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto text-success"><i class="fa-solid fa-circle-check"></i> &nbsp; Action Success Notification</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body text-success">
+                <p class="mb-0"><strong> <?= $succTitle; ?></strong> <br><?= $succBody; ?></p>
             </div>
         </div>
     </div>
@@ -75,5 +97,21 @@
     function errToast() {
         var errtoast = new bootstrap.Toast(errorNotif)
         errtoast.show()
+    }
+
+    function succToast() {
+        var succtoast = new bootstrap.Toast(successNotif)
+        succtoast.show()
+    }
+
+    function agreeCheck() {
+        var btn = document.getElementById("btnsignup");
+        var cb = document.getElementById("checkStayLogin");
+
+        if (cb.checked == true) {
+            btn.disabled = false;
+        } else {
+            btn.disabled = true;
+        }
     }
 </script>

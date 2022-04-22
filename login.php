@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
     <link rel="icon" href="assets/img/favicon.png">
 
     <!-- Custom style -->
@@ -19,7 +19,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
 
     <!-- Fontawesome -->
-    <link rel="stylesheet" href="assets/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="assets/vendor/fontawesome/css/all.min.css">
 
     <title>Co-Lab | Sign In</title>
 </head>
@@ -77,7 +77,7 @@
 
 
     <!-- Bootstrap JS -->
-    <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

@@ -1,6 +1,13 @@
 <?php
 require_once "core/init.php";
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'assets/vendor/PHPMailer/src/Exception.php';
+require 'assets/vendor/PHPMailer/src/PHPMailer.php';
+require 'assets/vendor/PHPMailer/src/SMTP.php';
+
 if (isset($_POST['btnsignup'])) {
     $fullname = $_POST['fullname'];
     $username = $_POST['username'];
@@ -18,9 +25,39 @@ if (isset($_POST['btnsignup'])) {
             $loadThis = "errToast()";
         } else {
             if (createaccount($fullname, $username, $email, $password)) {
-                $succTitle = "Registration Successful";
-                $succBody = "Please check your inbox for email verification";
-                $loadThis = "succToast()";
+
+                $JSON_creds     = file_get_contents("core/mail-credentials.json");
+                $credentials    = json_decode($JSON_creds, true);
+                $email_address  = $credentials['creds']['email'];
+                $email_password = $credentials['creds']['password'];
+
+
+                $bytes =  bin2hex(random_bytes(20));
+
+                $mail           = new PHPMailer;
+                $mail->isSMTP();
+                $mail->SMTPAuth = true;
+                $mail->Host     = 'smtp.gmail.com';
+                $mail->Port     = 587;
+                $mail->Username = $email_address;
+                $mail->Password = $email_password;
+                $mail->setFrom($email_address);
+                $mail->addAddress($email);
+                $mail->isHTML(true);
+                $mail->Subject = 'Co-Lab - Account Verification';
+                $mail->Body    = "Click this link to activate your account : <br> " . $home . "/activation.php?apl=" . $email . "&uid=" . $bytes;
+                if ($mail->send()) {
+                    $query = "UPDATE users SET uniqueid='$bytes' WHERE email='$email'";
+                    mysqli_query($link, $query);
+                    header("Location: registration-successful.php?apl=" . $email);
+                    // $succTitle = "Registration Successful";
+                    // $succBody = "Please check your inbox for email verification";
+                    // $loadThis = "succToast()";
+                } else {
+                    $errTitle = "Failed to send verification mail";
+                    $errBody  = "System failure, please contact our system administrator";
+                    $loadThis = "errToast()";
+                }
             } else {
                 $errTitle = "Registration Failed";
                 $errBody = "System failure, please contact our system administrator";
@@ -40,7 +77,7 @@ if (isset($_POST['btnsignup'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
     <link rel="icon" href="assets/img/favicon.png">
 
     <!-- Custom style -->
@@ -52,7 +89,7 @@ if (isset($_POST['btnsignup'])) {
     <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
 
     <!-- Fontawesome -->
-    <link rel="stylesheet" href="assets/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="assets/vendor/fontawesome/css/all.min.css">
 
     <title>Co-Lab | Sign Up</title>
 </head>
@@ -128,7 +165,7 @@ if (isset($_POST['btnsignup'])) {
 
 
     <!-- Bootstrap JS -->
-    <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
