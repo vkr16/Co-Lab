@@ -141,3 +141,81 @@ function autologin($uniqueid)
     $username = $data['username'];
     $_SESSION['cl_user'] = $username;
 }
+
+function getemailfromidentity($useridentity)
+{
+
+    global $link;
+
+    $useridentity = mysqli_real_escape_string($link, $useridentity);
+
+    $query = "SELECT * FROM users WHERE username = '$useridentity' OR email = '$useridentity'";
+    $result = mysqli_query($link, $query);
+    $data = mysqli_fetch_assoc($result);
+
+    $email = $data['email'];
+    return $email;
+}
+
+function isuidmatch($email, $uid)
+{
+    global $link;
+    $email = mysqli_real_escape_string($link, $email);
+    $uid = mysqli_real_escape_string($link, $uid);
+
+    $query = "SELECT * FROM users WHERE email = '$email'";
+    $result = mysqli_query($link, $query);
+    $data = mysqli_fetch_assoc($result);
+
+    $uniqueid = $data['uniqueid'];
+
+    if ($uid == $uniqueid) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function resetpassword($email, $password)
+{
+    global $link;
+
+    $email = mysqli_real_escape_string($link, $email);
+    $password = mysqli_real_escape_string($link, $password);
+    $password = password_hash($password, PASSWORD_DEFAULT);
+
+    $query = "UPDATE users SET password = '$password' WHERE email = '$email'";
+
+    if (mysqli_query($link, $query)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function changeuniqueid($useridentity)
+{
+    global $link;
+
+    $useridentity = mysqli_real_escape_string($link, $useridentity);
+    $new_uniqueid =  bin2hex(random_bytes(20));
+
+    $query = "UPDATE users SET uniqueid = '$new_uniqueid' WHERE username = '$useridentity' OR email = '$useridentity'";
+    mysqli_query($link, $query);
+    return $new_uniqueid;
+}
+
+function isactivated($useridentity)
+{
+    global $link;
+    $useridentity = mysqli_real_escape_string($link, $useridentity);
+    $query = "SELECT * FROM users WHERE username = '$useridentity' OR email = '$useridentity'";
+    $result = mysqli_query($link, $query);
+    $data = mysqli_fetch_assoc($result);
+
+    if ($data['validity'] == "valid") {
+        return true;
+    } else {
+        return false;
+    }
+}

@@ -52,9 +52,6 @@ if (isset($_POST['btnsignup'])) {
                     $query = "UPDATE users SET uniqueid='$bytes' WHERE email='$email'";
                     mysqli_query($link, $query);
                     header("Location: registration-successful.php?apl=" . $email);
-                    // $succTitle = "Registration Successful";
-                    // $succBody = "Please check your inbox for email verification";
-                    // $loadThis = "succToast()";
                 } else {
                     $errTitle = "Failed to send verification mail";
                     $errBody  = "System failure, please contact our system administrator";

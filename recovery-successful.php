@@ -15,15 +15,16 @@ if (isset($_GET['apl']) && isset($_GET['uid'])) {
     header("Location: login.php");
 }
 
+$email = $_GET['apl'];
 $query = "SELECT * FROM users WHERE email = '$email'";
 $result = mysqli_query($link, $query);
 
 $data = mysqli_fetch_assoc($result);
 $validity = $data['validity'];
-
 if ($validity != "valid" && isset($_GET['apl']) && isset($_GET['uid'])) {
     header("Location: login.php");
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -49,7 +50,7 @@ if ($validity != "valid" && isset($_GET['apl']) && isset($_GET['uid'])) {
     <!-- Fontawesome -->
     <link rel="stylesheet" href="assets/vendor/fontawesome/css/all.min.css">
 
-    <title>Co-Lab | Activation Successful</title>
+    <title>Co-Lab | Recovery Successful</title>
 </head>
 
 <body onload="<?= $loadThis ?>">
@@ -60,13 +61,10 @@ if ($validity != "valid" && isset($_GET['apl']) && isset($_GET['uid'])) {
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-10 col-xl-7 mx-auto">
-                                <h2 class="ff-nunito">Account Activated
-                                    <span class="fa-stack fa-2xs">
-                                        <i class="fa-solid fa-certificate fa-stack-2x"></i>
-                                        <i class="fa-solid fa-check fa-stack-1x fa-inverse"></i>
-                                    </span>
+                                <h2 class="ff-nunito">Account Recovered
+                                    <i class="fa-solid fa-shield-halved"></i>
                                 </h2>
-                                <p class="text-muted mb-4">Your account has been activated.</p>
+                                <p class="text-muted mb-4">Your account password has been reset.</p>
                                 <a href="login.php" class="btn btn-block btn-orange">Sign In Now</a>
 
                             </div>

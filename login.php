@@ -13,13 +13,23 @@ if (isset($_POST['btnsignin'])) {
     }
 
     if (isexist($useridentity)) {
-        if (isvalid($useridentity, $password)) {
-            savesession($staylogin, $useridentity);
+        if (isactivated($useridentity)) {
+            if (isvalid($useridentity, $password)) {
+                savesession($staylogin, $useridentity);
+            } else {
+                $errTitle = "Password incorrect";
+                $errBody = "Please check your password typing";
+                $loadThis = "errToast()";
+            }
         } else {
-            echo "password invalid";
+            $errTitle = "Account found but not activated";
+            $errBody = "Please activate your account by follow the link sent to your email";
+            $loadThis = "errToast()";
         }
     } else {
-        echo "user not exist";
+        $errTitle = "Account not found";
+        $errBody = "Please check your email or username typing";
+        $loadThis = "errToast()";
     }
 }
 
@@ -50,7 +60,7 @@ if (isset($_POST['btnsignin'])) {
     <title>Co-Lab | Sign In</title>
 </head>
 
-<body>
+<body onload="<?= $loadThis; ?>">
     <div class="container-fluid">
         <div class="row no-gutter">
             <div class="col-md-6">
@@ -96,7 +106,7 @@ if (isset($_POST['btnsignin'])) {
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
             <div class="toast-body text-danger">
-                <p class="mb-0"><strong> User Not Found</strong> <br>Please check your email or username</p>
+                <p class="mb-0"><strong> <?= $errTitle; ?></strong> <br><?= $errBody; ?></p>
             </div>
         </div>
     </div>

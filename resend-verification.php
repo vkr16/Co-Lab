@@ -2,16 +2,25 @@
 require_once "core/init.php";
 require_once "core/no-session-allowed.php";
 
+if (isset($_GET['apl'])) {
+    $email = $_GET['apl'];
+    if (isexist($email)) {
+        $query = "SELECT * FROM users WHERE email = '$email'";
+        $result = mysqli_query($link, $query);
 
-$email = $_GET['apl'];
-$query = "SELECT * FROM users WHERE email = '$email'";
-$result = mysqli_query($link, $query);
-
-$data = mysqli_fetch_assoc($result);
-$validity = $data['validity'];
-if ($validity != "invalid") {
+        $data = mysqli_fetch_assoc($result);
+        $validity = $data['validity'];
+        if ($validity != "invalid") {
+            header("Location: login.php");
+        }
+    } else {
+        header("Location: login.php");
+    }
+} else {
     header("Location: login.php");
 }
+
+
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;

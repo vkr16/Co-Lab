@@ -15,15 +15,17 @@ if (isset($_GET['apl']) && isset($_GET['uid'])) {
     header("Location: login.php");
 }
 
-$query = "SELECT * FROM users WHERE email = '$email'";
-$result = mysqli_query($link, $query);
-
-$data = mysqli_fetch_assoc($result);
-$validity = $data['validity'];
-
-if ($validity != "valid" && isset($_GET['apl']) && isset($_GET['uid'])) {
-    header("Location: login.php");
+if (isset($_POST['btnreset'])) {
+    $password = $_POST['password'];
+    if (resetpassword($email, $password)) {
+        $newuid = changeuniqueid($email);
+        header("Location: recovery-successful.php?apl=" . $email . "&uid=" . $newuid);
+    } else {
+        echo "gatau kenapa gagal";
+    }
 }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -49,7 +51,7 @@ if ($validity != "valid" && isset($_GET['apl']) && isset($_GET['uid'])) {
     <!-- Fontawesome -->
     <link rel="stylesheet" href="assets/vendor/fontawesome/css/all.min.css">
 
-    <title>Co-Lab | Activation Successful</title>
+    <title>Co-Lab | Reset Password</title>
 </head>
 
 <body onload="<?= $loadThis ?>">
@@ -60,21 +62,24 @@ if ($validity != "valid" && isset($_GET['apl']) && isset($_GET['uid'])) {
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-10 col-xl-7 mx-auto">
-                                <h2 class="ff-nunito">Account Activated
-                                    <span class="fa-stack fa-2xs">
-                                        <i class="fa-solid fa-certificate fa-stack-2x"></i>
-                                        <i class="fa-solid fa-check fa-stack-1x fa-inverse"></i>
-                                    </span>
-                                </h2>
-                                <p class="text-muted mb-4">Your account has been activated.</p>
-                                <a href="login.php" class="btn btn-block btn-orange">Sign In Now</a>
+                                <h3 class="display-6">Reset Password</h3>
+                                <p class="text-muted mb-4">Create new password for your account <i class="fa-solid fa-key"></i></p>
+                                <form action="" method="post">
+
+                                    <div class="form-group mb-3">
+                                        <input id="newPassword" type="password" placeholder="New Password" required="" class="form-control border-0 shadow-sm px-4 text-blue" autocomplete="off" name="password" />
+                                    </div>
+                                    <input type="submit" class="btn btn-block btn-blue mb-2 shadow-sm align-self-center" value="&nbsp;&nbsp;Reset Password &nbsp;&nbsp;" name="btnreset" id="btnreset" />
+                                </form>
+                                <span class="text-muted">or <a href="login.php" class="text-blue text-decoration-none">Sign in instead</a></span>
+
 
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 d-none d-md-flex activated-bg-image"></div>
+            <div class="col-md-6 d-none d-md-flex signup-bg-image"></div>
         </div>
     </div>
 
@@ -120,16 +125,5 @@ if ($validity != "valid" && isset($_GET['apl']) && isset($_GET['uid'])) {
     function succToast() {
         var succtoast = new bootstrap.Toast(successNotif)
         succtoast.show()
-    }
-
-    function agreeCheck() {
-        var btn = document.getElementById("btnsignup");
-        var cb = document.getElementById("checkStayLogin");
-
-        if (cb.checked == true) {
-            btn.disabled = false;
-        } else {
-            btn.disabled = true;
-        }
     }
 </script>
