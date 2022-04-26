@@ -31,17 +31,34 @@ function isusernametaken($username)
     }
 }
 
-function createaccount($fullname, $username, $email, $password)
+function isstudentidused($studentid)
+{
+    global $link;
+
+    $studentid = mysqli_real_escape_string($link, $studentid);
+
+    $query = "SELECT * FROM users WHERE studentid = '$studentid'";
+    if ($result = mysqli_query($link, $query)) {
+        if (mysqli_num_rows($result) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
+function createaccount($fullname, $studentid, $username, $email, $password)
 {
     global $link;
 
     $fullname = mysqli_real_escape_string($link, $fullname);
+    $studentid = mysqli_real_escape_string($link, $studentid);
     $username = mysqli_real_escape_string($link, $username);
     $email = mysqli_real_escape_string($link, $email);
     $password = mysqli_real_escape_string($link, $password);
     $password = password_hash($password, PASSWORD_DEFAULT);
 
-    $query = "INSERT INTO users (fullname, username, email, password) VALUES ('$fullname','$username','$email','$password')";
+    $query = "INSERT INTO users (fullname,studentid, username, email, password) VALUES ('$fullname','$studentid','$username','$email','$password')";
 
     if (mysqli_query($link, $query)) {
         return true;

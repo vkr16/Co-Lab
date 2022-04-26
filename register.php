@@ -12,6 +12,7 @@ require 'assets/vendor/PHPMailer/src/SMTP.php';
 
 if (isset($_POST['btnsignup'])) {
     $fullname = $_POST['fullname'];
+    $studentid = $_POST['studentid'];
     $username = $_POST['username'];
     $email = $_POST['email'];
     $password = $_POST['password'];
@@ -26,41 +27,47 @@ if (isset($_POST['btnsignup'])) {
             $errBody = "Please pick another username";
             $loadThis = "errToast()";
         } else {
-            if (createaccount($fullname, $username, $email, $password)) {
+            if (isstudentidused($studentid)) {
+                $errTitle = "Student id already registered";
+                $errBody = "Each student ID number can only be used to register 1 account";
+                $loadThis = "errToast()";
+            } else {
+                if (createaccount($fullname, $studentid, $username, $email, $password)) {
 
-                $JSON_creds     = file_get_contents("core/mail-credentials.json");
-                $credentials    = json_decode($JSON_creds, true);
-                $email_address  = $credentials['creds']['email'];
-                $email_password = $credentials['creds']['password'];
+                    $JSON_creds     = file_get_contents("core/mail-credentials.json");
+                    $credentials    = json_decode($JSON_creds, true);
+                    $email_address  = $credentials['creds']['email'];
+                    $email_password = $credentials['creds']['password'];
 
 
-                $bytes =  bin2hex(random_bytes(20));
+                    $bytes =  bin2hex(random_bytes(20));
 
-                $mail           = new PHPMailer;
-                $mail->isSMTP();
-                $mail->SMTPAuth = true;
-                $mail->Host     = 'smtp.gmail.com';
-                $mail->Port     = 587;
-                $mail->Username = $email_address;
-                $mail->Password = $email_password;
-                $mail->setFrom($email_address);
-                $mail->addAddress($email);
-                $mail->isHTML(true);
-                $mail->Subject = 'Co-Lab - Account Verification';
-                $mail->Body    = "Click this link to activate your account : <br> " . $home . "/activation.php?apl=" . $email . "&uid=" . $bytes;
-                if ($mail->send()) {
-                    $query = "UPDATE users SET uniqueid='$bytes' WHERE email='$email'";
-                    mysqli_query($link, $query);
-                    header("Location: registration-successful.php?apl=" . $email);
+                    $mail           = new PHPMailer;
+                    $mail->isSMTP();
+                    $mail->SMTPAuth = true;
+                    $mail->Host     = 'smtp.gmail.com';
+                    $mail->Port     = 587;
+                    $mail->Username = $email_address;
+                    $mail->Password = $email_password;
+                    $mail->setFrom($email_address);
+                    $mail->addAddress($email);
+                    $mail->isHTML(true);
+                    $mail->Subject = 'Co-Lab - Account Verification';
+                    $mail->Body    = "Click this link to activate your account : <br> " . $home . "/activation.php?apl=" . $email . "&uid=" . $bytes;
+                    if ($mail->send()) {
+                        $query = "UPDATE users SET uniqueid='$bytes' WHERE email='$email'";
+                        mysqli_query($link, $query);
+                        header("Location: registration-successful.php?apl=" . $email);
+                    } else {
+                        $errTitle = "Failed to send verification mail";
+                        $errBody  = "System failure, please contact our system administrator";
+                        $loadThis = "errToast()";
+                    }
                 } else {
-                    $errTitle = "Failed to send verification mail";
-                    $errBody  = "System failure, please contact our system administrator";
+                    $errTitle = "Registration Failed";
+                    $errBody = "System failure, please contact our system administrator";
                     $loadThis = "errToast()";
                 }
-            } else {
-                $errTitle = "Registration Failed";
-                $errBody = "System failure, please contact our system administrator";
-                $loadThis = "errToast()";
             }
         }
     }
@@ -106,6 +113,9 @@ if (isset($_POST['btnsignup'])) {
                                 <form action="" method="post">
                                     <div class="form-group mb-3">
                                         <input id="inputFullname" type="text" placeholder="Full Name" required="" autofocus="" class="form-control border-0 shadow-sm px-4 text-blue" autocomplete="off" name="fullname" />
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <input id="inputStudentId" type="text" placeholder="Student ID Number" required="" autofocus="" class="form-control border-0 shadow-sm px-4 text-blue" autocomplete="off" name="studentid" />
                                     </div>
                                     <div class="form-group mb-3">
                                         <input id="inputUsername" type="text" placeholder="Username" required="" autofocus="" class="form-control border-0 shadow-sm px-4 text-blue" autocomplete="off" name="username" />
