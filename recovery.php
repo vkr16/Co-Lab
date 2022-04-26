@@ -87,6 +87,7 @@ if (isset($_POST['btnrecover'])) {
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-10 col-xl-7 mx-auto">
+                                <span><a href="login.php" class="text-decoration-none text-blue"><i class="fa-solid fa-arrow-left-long"></i> &nbsp; Back to login page</a></span><br><br>
                                 <h3 class="display-6">Account Recovery </h3>
                                 <p class="text-muted mb-4">Please enter the email address or username associated with your account <i class="fa-solid fa-shield-halved"></i></p>
                                 <form action="" method="post">
