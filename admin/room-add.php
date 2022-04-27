@@ -4,6 +4,31 @@ $room_management = true;
 require_once "../core/init.php";
 require_once "../core/admin-session-only.php";
 
+if (isset($_POST['save'])) {
+    $room_name = $_POST['room_name'];
+    $location = $_POST['location'];
+    $capacity = $_POST['capacity'];
+    // $thumbnail = $_POST['thumbnail'];
+    $status = $_POST['status'];
+    $description = $_POST['description'];
+
+    if ($_FILES['thumbnail']['size'] != 0 && $_FILES['thumbnail']['error'] == 0) {
+        $path  = $_SERVER['DOCUMENT_ROOT'] . "/co-lab/assets/img/rooms/";
+        $path2 = $_FILES['thumbnail']['name'];
+        $ext   = pathinfo($path2, PATHINFO_EXTENSION);
+        $path  = $path . $room_name . '-' . $location . '.' . $ext;
+
+        $filenameondb = $room_name . '-' . $location . '.' . $ext;
+        move_uploaded_file($_FILES['thumbnail']['tmp_name'], $path);
+    } else {
+        $filenameondb = 'default_thumbnail.jpg';
+    }
+
+    $query = "INSERT INTO rooms (room_name, location, capacity, thumbnail, status, description) VALUES ('$room_name','$location','$capacity','$filenameondb','$status','$description')";
+    if ($result = mysqli_query($link, $query)) {
+        header("Location: room-management.php");
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -40,7 +65,7 @@ require_once "../core/admin-session-only.php";
 
 </head>
 
-<body id="page-top">
+<body id="page-top" onload="<?= $loadThis ?>">
 
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -60,6 +85,7 @@ require_once "../core/admin-session-only.php";
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
+
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Room Management</h1>
@@ -69,64 +95,61 @@ require_once "../core/admin-session-only.php";
                         <div class="card-body">
                             <h5 class="text-dark">Add New Room</h5><br>
 
-                            <form action="">
-                                <form>
-                                    <div class="form-row">
-                                        <div class="form-group col-md-6">
-                                            <label for="room_name">Room Name</label>
-                                            <input type="text" class="form-control" id="room_name" placeholder="Multimedia Laboratory">
-                                        </div>
-                                        <div class="form-group col-md-6">
-                                            <label for="location">Location</label>
-                                            <input type="text" class="form-control" id="location" placeholder="2nd Floor (A2.5)">
-                                        </div>
+                            <form action="" method="POST" enctype="multipart/form-data">
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="room_name">Room Name</label>
+                                        <input type="text" class="form-control" id="room_name" placeholder="Multimedia Laboratory" name="room_name" required>
                                     </div>
-                                    <div class="form-row">
-                                        <div class="form-group col-md-2">
+                                    <div class="form-group col-md-6">
+                                        <label for="location">Location</label>
+                                        <input type="text" class="form-control" id="location" placeholder="2nd Floor (A2.5)" name="location" required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-2">
 
-                                            <label for="capacity">Capacity</label>
-                                            <div class="input-group">
-                                                <input type="number" class="form-control" placeholder="30" aria-describedby="basic-addon2">
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text" id="basic-addon2">Persons</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-md-6">
-                                            <label for="thumbnail">Thumbnail</label>
-                                            <div class="input-group mb-3">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
-                                                </div>
-                                                <div class="custom-file">
-                                                    <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
-                                                    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                            <label for="availability">Availability</label>
-                                            <div class="input-group mb-3">
-                                                <div class="input-group-prepend">
-                                                    <label class="input-group-text" for="inputGroupSelect01">Set</label>
-                                                </div>
-                                                <select class="custom-select" id="inputGroupSelect01">
-                                                    <option selected value="available">Available (Default)</option>
-                                                    <option value="unavailable">Unavailable</option>
-
-                                                </select>
+                                        <label for="capacity">Capacity</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" placeholder="30" aria-describedby="basic-addon2" name="capacity" required>
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" id="basic-addon2">Persons</span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-row">
-                                        <div class="form-group col-md-12">
-                                            <label for="description">Description</label>
-                                            <textarea class="form-control desc-textarea" name="description" placeholder="Description or Facilities"></textarea>
+                                    <div class="form-group col-md-6">
+                                        <label for="thumbnail">Thumbnail (Optional)</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                                            </div>
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="thumbnail" aria-describedby="inputGroupFileAddon01" name="thumbnail" accept=".jpg,.jpeg,.png">
+                                                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                            </div>
                                         </div>
                                     </div>
-                                    <a href="room-management.php" class="btn btn-secondary">Cancel</a>
-                                    <button type="submit" class="btn btn-red"><i class="fa-regular fa-floppy-disk"></i> Save</button>
-                                </form>
+                                    <div class="form-group col-md-4">
+                                        <label for="availability">Availability</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <label class="input-group-text" for="inputGroupSelect01">Set</label>
+                                            </div>
+                                            <select class="custom-select" id="inputGroupSelect01" name="status">
+                                                <option selected value="active">Active (Default)</option>
+                                                <option value="inactive">Inactive</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label for="description">Description</label>
+                                        <textarea class="form-control desc-textarea" name="description" placeholder="Description or Facilities" required></textarea>
+                                    </div>
+                                </div>
+                                <a href="room-management.php" class="btn btn-secondary">Cancel</a>
+                                <button type="submit" class="btn btn-red" name="save"><i class="fa-regular fa-floppy-disk"></i> Save</button>
                             </form>
                         </div>
                     </div>
@@ -139,6 +162,7 @@ require_once "../core/admin-session-only.php";
 
             <!-- Footer -->
             <?php include "views/footer.php" ?>
+
 
         </div>
         <!-- End of Content Wrapper -->
@@ -170,6 +194,7 @@ require_once "../core/admin-session-only.php";
         </div>
     </div>
 
+
     <!-- Bootstrap core JavaScript-->
     <script src="../assets/vendor/jquery/jquery.min.js"></script>
     <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -193,4 +218,8 @@ require_once "../core/admin-session-only.php";
     $(document).ready(function() {
         $('#rooms_table').DataTable();
     });
+
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
 </script>

@@ -87,7 +87,7 @@ require_once "../core/admin-session-only.php";
                                         <td><i class="fa-regular fa-circle-xmark text-danger"></i> Unavailable </td>
                                         <td><button class=" btn btn-sm btn-danger mr-3"><i class="fa-solid fa-ban"></i> &nbsp; Delete</button>
                                             <a href="room-edit.php" class=" btn btn-sm btn-blue mr-3"><i class="fa-regular fa-pen-to-square"></i> &nbsp; Edit</a>
-                                            <button class=" btn btn-sm btn-orange"><i class="fa-solid fa-circle-info"></i> &nbsp; Detail</button>
+                                            <a href="room-detail.php" class=" btn btn-sm btn-orange"><i class="fa-solid fa-circle-info"></i> &nbsp; Detail</a>
                                         </td>
                                     </tr>
                                     <tr>
@@ -97,7 +97,7 @@ require_once "../core/admin-session-only.php";
                                         <td><i class="fa-regular fa-circle-check text-success"></i> Available </td>
                                         <td><button class=" btn btn-sm btn-danger mr-3"><i class="fa-solid fa-ban"></i> &nbsp; Delete</button>
                                             <a href="room-edit.php" class=" btn btn-sm btn-blue mr-3"><i class="fa-regular fa-pen-to-square"></i> &nbsp; Edit</a>
-                                            <button class=" btn btn-sm btn-orange"><i class="fa-solid fa-circle-info"></i> &nbsp; Detail</button>
+                                            <a href="room-detail.php" class=" btn btn-sm btn-orange"><i class="fa-solid fa-circle-info"></i> &nbsp; Detail</a>
                                         </td>
                                     </tr>
                                 </tbody>

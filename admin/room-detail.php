@@ -1,5 +1,6 @@
 <?php
-$dashboard = true;
+$room_management = true;
+
 require_once "../core/init.php";
 require_once "../core/admin-session-only.php";
 
@@ -26,7 +27,7 @@ require_once "../core/admin-session-only.php";
     <link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
 
     <!-- DataTables CSS -->
-    <link rel="stylesheet" href="../assets/vendor/datatables/DataTables-1.11.5/css/dataTables.bootstrap4.min.css">
+    <!-- <link rel="stylesheet" href="../assets/vendor/datatables/DataTables-1.11.5/css/dataTables.bootstrap4.min.css"> -->
 
     <!-- Custom styles for navigation-->
     <link href="../assets/css/sb-admin-2.min.css" rel="stylesheet">
@@ -60,39 +61,50 @@ require_once "../core/admin-session-only.php";
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-4 text-gray-800">Admin Dashboard</h1>
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Room Management</h1>
+                        <!-- <a href="room-add.php" class="d-none d-sm-inline-block btn btn-sm btn-red shadow-sm"><i class="fas fa-plus fa-sm"></i> Add New Room</a> -->
+                    </div>
 
                     <div class="card shadow col-md-12 ">
                         <div class="card-body table-responsive">
-                            <h5 class="text-dark">Room Availability Information</h5>
-                            <br>
-                            <table class="table" id="rooms_table">
-                                <thead>
-                                    <tr>
-                                        <th>Room Name</th>
-                                        <th>Capacity</th>
-                                        <th>Status</th>
-                                        <th>PIC</th>
-                                        <th>Details</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Laboratorium Komputer</td>
-                                        <td>30</td>
-                                        <td>Available</td>
-                                        <td>-</td>
-                                        <td><a href="room-detail.php" class="btn btn-sm btn-orange">Check Details</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Laboratorium Multimedia</td>
-                                        <td>40</td>
-                                        <td>Booked </td>
-                                        <td>Aditya Setiawan </td>
-                                        <td><a href="room-detail.php" class="btn btn-sm btn-orange">Check Details</a></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <h5 class="text-dark"><a href="room-management.php" class="text-decoration-none text-dark"><i class="fa-solid fa-arrow-left-long"></i> Back</h5></a><br>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="mb-3">
+                                        <img src="../assets/img/rooms/lab_multimedia.jpeg" class="thumbnail-room shadow-sm rounded">
+                                    </div>
+                                    <h5>Multimedia Laboratory</h5>
+                                    <h6>2nd Floor (A2.4)</h6>
+                                </div>
+                                <div class="col-md-7">
+                                    <dl class="row">
+                                        <dt class="col-sm-3">Capacity</dt>
+                                        <dd class="col-sm-9">31 Persons</dd>
+
+                                        <dt class="col-sm-3">Description</dt>
+                                        <dd class="col-sm-9">
+                                            <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque voluptas amet atque dignissimos consequatur esse. Reprehenderit, assumenda fugit, autem consequatur aliquid animi, corporis suscipit quam nostrum molestias vero optio quis.
+                                                <br>
+                                                Fasilitas
+                                                <ol>
+                                                    <li>Komputer Desktop &times;31</li>
+                                                    <li>Kursi &times;31</li>
+                                                    <li>Meja &times;31</li>
+                                                    <li>AC &times;2</li>
+                                                    <li>Proyektor &times;1</li>
+                                                </ol>
+                                            </span>
+                                        </dd>
+                                        <dt class="col-sm-3">Status</dt>
+                                        <dd class="col-sm-9">Active</dd>
+                                        <dt class="col-sm-3">Availability</dt>
+                                        <dd class="col-sm-9">Booked</dd>
+                                        <dt class="col-sm-3">PIC</dt>
+                                        <dd class="col-sm-9">Aditya Kurniawan</dd>
+                                    </dl>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -143,8 +155,8 @@ require_once "../core/admin-session-only.php";
     <script src="../assets/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- DataTable JavaScript -->
-    <script src="../assets/vendor/datatables/DataTables-1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="../assets/vendor/datatables/DataTables-1.11.5/js/dataTables.bootstrap4.min.js"></script>
+    <!-- <script src="../assets/vendor/datatables/DataTables-1.11.5/js/jquery.dataTables.min.js"></script> -->
+    <!-- <script src="../assets/vendor/datatables/DataTables-1.11.5/js/dataTables.bootstrap4.min.js"></script> -->
 
 
     <!-- Custom scripts for all pages-->
@@ -153,9 +165,3 @@ require_once "../core/admin-session-only.php";
 </body>
 
 </html>
-
-<script>
-    $(document).ready(function() {
-        $('#rooms_table').DataTable();
-    });
-</script>
