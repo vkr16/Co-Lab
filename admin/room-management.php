@@ -4,6 +4,8 @@ $room_management = true;
 require_once "../core/init.php";
 require_once "../core/admin-session-only.php";
 
+
+
 ?>
 
 <!DOCTYPE html>
@@ -72,6 +74,7 @@ require_once "../core/admin-session-only.php";
                             <table class="table" id="rooms_table">
                                 <thead>
                                     <tr>
+                                        <th>No</th>
                                         <th>Room Name</th>
                                         <th>Capacity</th>
                                         <th>Location</th>
@@ -80,26 +83,28 @@ require_once "../core/admin-session-only.php";
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Laboratorium Komputer</td>
-                                        <td>30 Persons</td>
-                                        <td>2nd Floor (A2.2)</td>
-                                        <td><i class="fa-regular fa-circle-xmark text-danger"></i> Unavailable </td>
-                                        <td><button class=" btn btn-sm btn-danger mr-3"><i class="fa-solid fa-ban"></i> &nbsp; Delete</button>
-                                            <a href="room-edit.php" class=" btn btn-sm btn-blue mr-3"><i class="fa-regular fa-pen-to-square"></i> &nbsp; Edit</a>
-                                            <a href="room-detail.php" class=" btn btn-sm btn-orange"><i class="fa-solid fa-circle-info"></i> &nbsp; Detail</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Laboratorium Multimedia</td>
-                                        <td>40 Persons</td>
-                                        <td>2nd Floor (A2.4)</td>
-                                        <td><i class="fa-regular fa-circle-check text-success"></i> Available </td>
-                                        <td><button class=" btn btn-sm btn-danger mr-3"><i class="fa-solid fa-ban"></i> &nbsp; Delete</button>
-                                            <a href="room-edit.php" class=" btn btn-sm btn-blue mr-3"><i class="fa-regular fa-pen-to-square"></i> &nbsp; Edit</a>
-                                            <a href="room-detail.php" class=" btn btn-sm btn-orange"><i class="fa-solid fa-circle-info"></i> &nbsp; Detail</a>
-                                        </td>
-                                    </tr>
+                                    <?php
+                                    $query = "SELECT * FROM rooms";
+                                    $result = mysqli_query($link, $query);
+                                    $i = 0;
+                                    while ($data = mysqli_fetch_assoc($result)) {
+                                        $i++;
+                                    ?>
+                                        <tr>
+                                            <td><?= $i; ?></td>
+                                            <td><?= $data['room_name']; ?></td>
+                                            <td><?= $data['capacity']; ?> Persons</td>
+                                            <td><?= $data['location']; ?></td>
+                                            <td><i class="fa-regular fa-circle-xmark text-danger"></i> Unavailable </td>
+                                            <td><button class=" btn btn-sm btn-danger mr-3" onclick="deleteRoom(<?= $data['id'] ?>)"><i class="fa-solid fa-ban"></i> &nbsp; Delete</button>
+                                                <a href="room-edit.php" class=" btn btn-sm btn-blue mr-3"><i class="fa-regular fa-pen-to-square"></i> &nbsp; Edit</a>
+                                                <a href="room-detail.php?id=<?= $data['id'] ?>" class="btn btn-sm btn-orange"><i class="fa-solid fa-circle-info"></i> &nbsp; Detail</a>
+                                            </td>
+                                        </tr>
+                                    <?php
+
+                                    }
+                                    ?>
                                 </tbody>
                             </table>
                         </div>
@@ -159,6 +164,8 @@ require_once "../core/admin-session-only.php";
     <!-- Custom scripts for all pages-->
     <script src="../assets/js/sb-admin-2.min.js"></script>
 
+    <script src="../assets/vendor/SweetAlert2/SweetAlert2.js"></script>
+
 </body>
 
 </html>
@@ -167,4 +174,38 @@ require_once "../core/admin-session-only.php";
     $(document).ready(function() {
         $('#rooms_table').DataTable();
     });
+
+    function deleteRoom(id) {
+        Swal.fire({
+            title: 'Are you sure want to delete?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Delete',
+            confirmButtonColor: '#3085d6',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire('Deleted!', '', 'success')
+                console.log("delete " + id)
+                $.post("room-delete.php", {
+                        room_id: id
+                    },
+                    function(data) {
+                        Swal.fire({
+                            title: 'Deleted',
+                            text: 'Room deleted successfully',
+                            icon: 'success',
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            confirmButtonText: 'OK',
+                            confirmButtonColor: '#3085d6',
+                        }).then((result) => {
+                            /* Read more about isConfirmed, isDenied below */
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        })
+                    });
+            }
+        })
+    }
 </script>

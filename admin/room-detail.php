@@ -3,7 +3,20 @@ $room_management = true;
 
 require_once "../core/init.php";
 require_once "../core/admin-session-only.php";
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
 
+    $query = "SELECT * FROM rooms WHERE id = '$id'";
+    $result = mysqli_query($link, $query);
+    $data = mysqli_fetch_assoc($result);
+
+    $thumbnail = $data['thumbnail'];
+    $room_name = $data['room_name'];
+    $location = $data['location'];
+    $capacity = $data['capacity'];
+    $description = $data['description'];
+    $status = $data['status'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -72,19 +85,21 @@ require_once "../core/admin-session-only.php";
                             <div class="row">
                                 <div class="col-md-5">
                                     <div class="mb-3">
-                                        <img src="../assets/img/rooms/lab_multimedia.jpeg" class="thumbnail-room shadow-sm rounded">
+                                        <img src="../assets/img/rooms/<?= $thumbnail ?>" class="thumbnail-room shadow-sm rounded">
                                     </div>
-                                    <h5>Multimedia Laboratory</h5>
-                                    <h6>2nd Floor (A2.4)</h6>
+                                    <h5><?= $room_name; ?></h5>
+                                    <h6><?= $location; ?></h6>
                                 </div>
                                 <div class="col-md-7">
                                     <dl class="row">
                                         <dt class="col-sm-3">Capacity</dt>
-                                        <dd class="col-sm-9">31 Persons</dd>
+                                        <dd class="col-sm-9"><?= $capacity; ?> Persons</dd>
 
                                         <dt class="col-sm-3">Description</dt>
                                         <dd class="col-sm-9">
-                                            <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque voluptas amet atque dignissimos consequatur esse. Reprehenderit, assumenda fugit, autem consequatur aliquid animi, corporis suscipit quam nostrum molestias vero optio quis.
+                                            <?= $description; ?>
+
+                                            <!-- <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque voluptas amet atque dignissimos consequatur esse. Reprehenderit, assumenda fugit, autem consequatur aliquid animi, corporis suscipit quam nostrum molestias vero optio quis.
                                                 <br>
                                                 Fasilitas
                                                 <ol>
@@ -94,14 +109,14 @@ require_once "../core/admin-session-only.php";
                                                     <li>AC &times;2</li>
                                                     <li>Proyektor &times;1</li>
                                                 </ol>
-                                            </span>
+                                            </span> -->
                                         </dd>
                                         <dt class="col-sm-3">Status</dt>
-                                        <dd class="col-sm-9">Active</dd>
+                                        <dd class="col-sm-9"><?= $status == 'active' ? 'Active' : 'Inactive'; ?></dd>
                                         <dt class="col-sm-3">Availability</dt>
-                                        <dd class="col-sm-9">Booked</dd>
+                                        <dd class="col-sm-9">Booked(statis)</dd>
                                         <dt class="col-sm-3">PIC</dt>
-                                        <dd class="col-sm-9">Aditya Kurniawan</dd>
+                                        <dd class="col-sm-9">Aditya Kurniawan(statis)</dd>
                                     </dl>
                                 </div>
                             </div>

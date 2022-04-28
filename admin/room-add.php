@@ -6,19 +6,38 @@ require_once "../core/admin-session-only.php";
 
 if (isset($_POST['save'])) {
     $room_name = $_POST['room_name'];
+    $room_name = str_replace(array(
+        "'",
+        "\\",
+        "\""
+    ), '', $room_name);
     $location = $_POST['location'];
+    $location = str_replace(array(
+        "'",
+        "\\",
+        "\""
+    ), '', $location);
     $capacity = $_POST['capacity'];
-    // $thumbnail = $_POST['thumbnail'];
     $status = $_POST['status'];
     $description = $_POST['description'];
+    $description = str_replace(array(
+        "\r\n",
+        "\n"
+    ), '<br>', $description);
 
     if ($_FILES['thumbnail']['size'] != 0 && $_FILES['thumbnail']['error'] == 0) {
+        $query  = "SELECT MAX(id) AS PreviousId FROM rooms";
+        $result = mysqli_query($link, $query);
+        $data = mysqli_fetch_assoc($result);
+        $PreviousId = $data['PreviousId'];
+        $PreviousId = $PreviousId + 1;
         $path  = $_SERVER['DOCUMENT_ROOT'] . "/co-lab/assets/img/rooms/";
         $path2 = $_FILES['thumbnail']['name'];
         $ext   = pathinfo($path2, PATHINFO_EXTENSION);
-        $path  = $path . $room_name . '-' . $location . '.' . $ext;
+        $path  = $path . $PreviousId . '.' . $ext;
 
-        $filenameondb = $room_name . '-' . $location . '.' . $ext;
+        $filenameondb = $PreviousId . '.' . $ext;
+
         move_uploaded_file($_FILES['thumbnail']['tmp_name'], $path);
     } else {
         $filenameondb = 'default_thumbnail.jpg';
@@ -26,7 +45,9 @@ if (isset($_POST['save'])) {
 
     $query = "INSERT INTO rooms (room_name, location, capacity, thumbnail, status, description) VALUES ('$room_name','$location','$capacity','$filenameondb','$status','$description')";
     if ($result = mysqli_query($link, $query)) {
-        header("Location: room-management.php");
+        $loadThis = 'alertSuccess()';
+    } else {
+        $loadThis = 'alertFailed()';
     }
 }
 ?>
@@ -148,7 +169,7 @@ if (isset($_POST['save'])) {
                                         <textarea class="form-control desc-textarea" name="description" placeholder="Description or Facilities" required></textarea>
                                     </div>
                                 </div>
-                                <a href="room-management.php" class="btn btn-secondary">Cancel</a>
+                                <a href="room-management.php" class="btn btn-secondary"><i class="fa-solid fa-arrow-left-long"></i> Back</a>
                                 <button type="submit" class="btn btn-red" name="save"><i class="fa-regular fa-floppy-disk"></i> Save</button>
                             </form>
                         </div>
@@ -210,6 +231,8 @@ if (isset($_POST['save'])) {
     <!-- Custom scripts for all pages-->
     <script src="../assets/js/sb-admin-2.min.js"></script>
 
+    <script src="../assets/vendor/SweetAlert2/SweetAlert2.js"></script>
+
 </body>
 
 </html>
@@ -218,6 +241,27 @@ if (isset($_POST['save'])) {
     $(document).ready(function() {
         $('#rooms_table').DataTable();
     });
+
+
+    function alertSuccess() {
+        Swal.fire({
+            title: 'Success',
+            text: "New data has been saved to database",
+            icon: 'success',
+            showCancelButton: false,
+            showConfirmButton: false
+        })
+    }
+
+    function alertFailed() {
+        Swal.fire({
+            title: 'Failed',
+            text: "Something went wrong, data not saved",
+            icon: 'error',
+            showCancelButton: false,
+            showConfirmButton: false
+        })
+    }
 
     if (window.history.replaceState) {
         window.history.replaceState(null, null, window.location.href);
