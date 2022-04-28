@@ -26,17 +26,18 @@ if (isset($_POST['save'])) {
     ), '<br>', $description);
 
     if ($_FILES['thumbnail']['size'] != 0 && $_FILES['thumbnail']['error'] == 0) {
-        $query  = "SELECT MAX(id) AS PreviousId FROM rooms";
-        $result = mysqli_query($link, $query);
-        $data = mysqli_fetch_assoc($result);
-        $PreviousId = $data['PreviousId'];
-        $PreviousId = $PreviousId + 1;
+        // $query  = "SELECT MAX(id) AS PreviousId FROM rooms";
+        // $result = mysqli_query($link, $query);
+        // $data = mysqli_fetch_assoc($result);
+        // $PreviousId = $data['PreviousId'];
+        // $PreviousId = $PreviousId + 1;
+        $randStr = bin2hex(random_bytes(10));
         $path  = $_SERVER['DOCUMENT_ROOT'] . "/co-lab/assets/img/rooms/";
         $path2 = $_FILES['thumbnail']['name'];
         $ext   = pathinfo($path2, PATHINFO_EXTENSION);
-        $path  = $path . $PreviousId . '.' . $ext;
+        $path  = $path . $randStr . '.' . $ext;
 
-        $filenameondb = $PreviousId . '.' . $ext;
+        $filenameondb = $randStr . '.' . $ext;
 
         move_uploaded_file($_FILES['thumbnail']['tmp_name'], $path);
     } else {
