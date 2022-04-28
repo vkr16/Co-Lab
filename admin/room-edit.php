@@ -4,6 +4,75 @@ $room_management = true;
 require_once "../core/init.php";
 require_once "../core/admin-session-only.php";
 
+if (isset($_POST['btnsave'])) {
+    $id = $_GET['id'];
+
+    $query = "SELECT * FROM rooms WHERE id = '$id'";
+    $result = mysqli_query($link, $query);
+    $data = mysqli_fetch_assoc($result);
+    $thumbnail = $data['thumbnail'];
+
+    $room_name = $_POST['room_name'];
+    $room_name = str_replace(array(
+        "'",
+        "\\",
+        "\""
+    ), '', $room_name);
+    $location = $_POST['location'];
+    $location = str_replace(array(
+        "'",
+        "\\",
+        "\""
+    ), '', $location);
+    $capacity = $_POST['capacity'];
+    $status = $_POST['status'];
+    $description = $_POST['description'];
+    $description = str_replace(array(
+        "\r\n",
+        "\n"
+    ), '<br>', $description);
+
+    if ($_FILES['thumbnail']['size'] != 0 && $_FILES['thumbnail']['error'] == 0) {
+        $randStr = bin2hex(random_bytes(10));
+        $path  = $_SERVER['DOCUMENT_ROOT'] . "/co-lab/assets/img/rooms/";
+        $path2 = $_FILES['thumbnail']['name'];
+        $ext   = pathinfo($path2, PATHINFO_EXTENSION);
+        $path  = $path . $randStr . '.' . $ext;
+
+        $filenameondb = $randStr . '.' . $ext;
+
+        move_uploaded_file($_FILES['thumbnail']['tmp_name'], $path);
+        unlink('../assets/img/rooms/' . $thumbnail);
+
+        $query = "UPDATE rooms SET room_name = '$room_name', location = '$location',capacity = '$capacity', thumbnail = '$filenameondb',status = '$status', description = '$description' WHERE id = '$id'";
+    } else {
+        $query = "UPDATE rooms SET room_name = '$room_name', location = '$location',capacity = '$capacity', status = '$status', description = '$description' WHERE id = '$id'";
+    }
+
+    if ($result = mysqli_query($link, $query)) {
+        $loadThis = 'alertSuccess()';
+    } else {
+        $loadThis = 'alertFailed()';
+    }
+}
+
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+    $query = "SELECT * FROM rooms WHERE id = '$id'";
+    $result = mysqli_query($link, $query);
+    $data = mysqli_fetch_assoc($result);
+
+    $room_name = $data['room_name'];
+    $location = $data['location'];
+    $capacity = $data['capacity'];
+    $thumbnail = $data['thumbnail'];
+    $status = $data['status'];
+    $description = $data['description'];
+    $description = str_replace(array(
+        "<br>"
+    ), "
+", $description);
+}
 ?>
 
 <!DOCTYPE html>
@@ -40,7 +109,7 @@ require_once "../core/admin-session-only.php";
 
 </head>
 
-<body id="page-top">
+<body id="page-top" onload="<?= $loadThis ?>">
 
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -69,16 +138,16 @@ require_once "../core/admin-session-only.php";
                         <div class="card-body">
                             <h5 class="text-dark">Edit Room Information</h5><br>
 
-                            <form action="">
+                            <form action="" method="post" enctype="multipart/form-data">
                                 <form>
                                     <div class="form-row">
                                         <div class="form-group col-md-6">
                                             <label for="room_name">Room Name</label>
-                                            <input type="text" class="form-control" id="room_name" placeholder="Multimedia Laboratory">
+                                            <input value="<?= $room_name ?>" type="text" class="form-control" id="room_name" name="room_name">
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label for="location">Location</label>
-                                            <input type="text" class="form-control" id="location" placeholder="2nd Floor (A2.5)">
+                                            <input value="<?= $location ?>" type="text" class="form-control" id="location" name="location">
                                         </div>
                                     </div>
                                     <div class="form-row">
@@ -86,33 +155,33 @@ require_once "../core/admin-session-only.php";
 
                                             <label for="capacity">Capacity</label>
                                             <div class="input-group">
-                                                <input type="number" class="form-control" placeholder="30" aria-describedby="basic-addon2">
+                                                <input value="<?= $capacity ?>" type="number" class="form-control" aria-describedby="basic-addon2" name="capacity">
                                                 <div class="input-group-append">
                                                     <span class="input-group-text" id="basic-addon2">Persons</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group col-md-6">
-                                            <label for="thumbnail">Thumbnail</label>
+                                            <label for="thumbnail">Thumbnail (Optional)</label>
                                             <div class="input-group mb-3">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
                                                 </div>
                                                 <div class="custom-file">
-                                                    <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
-                                                    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                                    <input type="file" onchange="imageSelected()" class="custom-file-input" id="thumbnailSelect" aria-describedby="inputGroupFileAddon01" name="thumbnail">
+                                                    <label class="custom-file-label" id="labelThumbnailSelect" for="inputGroupFile01">Choose file</label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group col-md-4">
-                                            <label for="availability">Availability</label>
+                                            <label for="Status">Status</label>
                                             <div class="input-group mb-3">
                                                 <div class="input-group-prepend">
                                                     <label class="input-group-text" for="inputGroupSelect01">Set</label>
                                                 </div>
-                                                <select class="custom-select" id="inputGroupSelect01">
-                                                    <option selected value="available">Available</option>
-                                                    <option value="unavailable">Unavailable</option>
+                                                <select class="custom-select" id="inputGroupSelect01" name="status">
+                                                    <option <?= $status == 'active' ? 'selected' : ''; ?> value="active">Active</option>
+                                                    <option <?= $status == 'inactive' ? 'selected' : ''; ?> value="inactive">Inactive</option>
 
                                                 </select>
                                             </div>
@@ -121,11 +190,11 @@ require_once "../core/admin-session-only.php";
                                     <div class="form-row">
                                         <div class="form-group col-md-12">
                                             <label for="description">Description</label>
-                                            <textarea class="form-control desc-textarea" name="description" placeholder="Description or Facilities"></textarea>
+                                            <textarea class="form-control desc-textarea" name="description" placeholder="Description or Facilities"><?= $description; ?></textarea>
                                         </div>
                                     </div>
                                     <a href="room-management.php" class="btn btn-secondary">Cancel</a>
-                                    <button type="submit" class="btn btn-red"><i class="fa-regular fa-floppy-disk"></i> Save</button>
+                                    <button type="submit" class="btn btn-red" name="btnsave"><i class="fa-regular fa-floppy-disk"></i> Save Changes</button>
                                 </form>
                             </form>
                         </div>
@@ -185,6 +254,9 @@ require_once "../core/admin-session-only.php";
     <!-- Custom scripts for all pages-->
     <script src="../assets/js/sb-admin-2.min.js"></script>
 
+    <!-- SweetAlert2 JS -->
+    <script src="../assets/vendor/SweetAlert2/SweetAlert2.js"></script>
+
 </body>
 
 </html>
@@ -193,4 +265,35 @@ require_once "../core/admin-session-only.php";
     $(document).ready(function() {
         $('#rooms_table').DataTable();
     });
+
+    function alertSuccess() {
+        Swal.fire({
+            title: 'Success',
+            text: "Room details updated",
+            icon: 'success',
+            showCancelButton: false,
+            showConfirmButton: false
+        })
+    }
+
+    function alertFailed() {
+        Swal.fire({
+            title: 'Failed',
+            text: "Something went wrong, data not updated",
+            icon: 'error',
+            showCancelButton: false,
+            showConfirmButton: false
+        })
+    }
+
+    function imageSelected() {
+        if (document.getElementById("thumbnailSelect").value != '') {
+            var input = document.getElementById("thumbnailSelect");
+            document.getElementById("labelThumbnailSelect").innerHTML = input.files.item(0).name;
+        }
+    }
+
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
 </script>

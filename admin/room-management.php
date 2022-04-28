@@ -78,7 +78,7 @@ require_once "../core/admin-session-only.php";
                                         <th>Room Name</th>
                                         <th>Capacity</th>
                                         <th>Location</th>
-                                        <th>Availability</th>
+                                        <th>Status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -95,10 +95,10 @@ require_once "../core/admin-session-only.php";
                                             <td><?= $data['room_name']; ?></td>
                                             <td><?= $data['capacity']; ?> Persons</td>
                                             <td><?= $data['location']; ?></td>
-                                            <td><i class="fa-regular fa-circle-xmark text-danger"></i> Unavailable </td>
-                                            <td><button class=" btn btn-sm btn-danger mr-3" onclick="deleteRoom(<?= $data['id'] ?>)"><i class="fa-solid fa-ban"></i> &nbsp; Delete</button>
-                                                <a href="room-edit.php" class=" btn btn-sm btn-blue mr-3"><i class="fa-regular fa-pen-to-square"></i> &nbsp; Edit</a>
-                                                <a href="room-detail.php?id=<?= $data['id'] ?>" class="btn btn-sm btn-orange"><i class="fa-solid fa-circle-info"></i> &nbsp; Detail</a>
+                                            <td><?= $data['status'] == 'inactive' ? '<i class="fa-regular fa-circle-xmark text-danger"></i> Inactive' : '<i class="fa-regular fa-circle-check text-success"></i> Active'; ?> </td>
+                                            <td><button class=" btn btn-sm btn-danger mr-3 mb-1" onclick="deleteRoom(<?= $data['id'] ?>)"><i class="fa-solid fa-ban"></i> &nbsp; Delete</button>
+                                                <a href="room-edit.php?id=<?= $data['id'] ?>" class=" btn btn-sm btn-blue mr-3 mb-1"><i class="fa-regular fa-pen-to-square"></i> &nbsp; Edit</a>
+                                                <a href="room-detail.php?id=<?= $data['id'] ?>" class="btn btn-sm btn-orange mb-1"><i class="fa-solid fa-circle-info"></i> &nbsp; Detail</a>
                                             </td>
                                         </tr>
                                     <?php

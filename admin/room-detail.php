@@ -88,14 +88,14 @@ if (isset($_GET['id'])) {
                                         <img src="../assets/img/rooms/<?= $thumbnail ?>" class="thumbnail-room shadow-sm rounded">
                                     </div>
                                     <h5><?= $room_name; ?></h5>
-                                    <h6><?= $location; ?></h6>
+                                    <h6><i class="fa-solid fa-location-dot fa-fw"></i> <?= $location; ?></h6>
                                 </div>
                                 <div class="col-md-7">
                                     <dl class="row">
-                                        <dt class="col-sm-3">Capacity</dt>
+                                        <dt class="col-sm-3"><i class="fa-solid fa-people-group fa-fw"></i> Capacity</dt>
                                         <dd class="col-sm-9"><?= $capacity; ?> Persons</dd>
 
-                                        <dt class="col-sm-3">Description</dt>
+                                        <dt class="col-sm-3"><i class="fa-solid fa-align-left fa-fw"></i> Description</dt>
                                         <dd class="col-sm-9">
                                             <?= $description; ?>
 
@@ -111,12 +111,12 @@ if (isset($_GET['id'])) {
                                                 </ol>
                                             </span> -->
                                         </dd>
-                                        <dt class="col-sm-3">Status</dt>
+                                        <dt class="col-sm-3"><i class="fa-solid fa-toggle-<?= $status == 'active' ? 'on' : 'off'; ?> fa-fw"></i> Status</dt>
                                         <dd class="col-sm-9"><?= $status == 'active' ? 'Active' : 'Inactive'; ?></dd>
-                                        <dt class="col-sm-3">Availability</dt>
-                                        <dd class="col-sm-9">Booked(statis)</dd>
-                                        <dt class="col-sm-3">PIC</dt>
-                                        <dd class="col-sm-9">Aditya Kurniawan(statis)</dd>
+                                        <dt class="col-sm-3"><i class="fa-solid fa-clipboard-check fa-fw"></i> Availability</dt>
+                                        <dd class="col-sm-9">Booked(masih statis)</dd>
+                                        <dt class="col-sm-3"><i class="fa-solid fa-user-tie fa-fw"></i> PIC</dt>
+                                        <dd class="col-sm-9">Aditya Kurniawan(masih statis)</dd>
                                     </dl>
                                 </div>
                             </div>

@@ -9,7 +9,7 @@
     <!-- Topbar Search -->
     <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 navbar-search">
 
-        <span class="text-red"><?= date("j F Y, g:i A"); ?></span>
+        <span class="text-red">Last refreshed : <?= date("j F Y, g:i A"); ?></span>
 
 
     </form>

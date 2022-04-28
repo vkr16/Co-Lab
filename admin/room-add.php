@@ -146,8 +146,8 @@ if (isset($_POST['save'])) {
                                                 <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
                                             </div>
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="thumbnail" aria-describedby="inputGroupFileAddon01" name="thumbnail" accept=".jpg,.jpeg,.png">
-                                                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                                <input onchange="imageSelected()" type="file" class="custom-file-input" id="thumbnail" aria-describedby="inputGroupFileAddon01" name="thumbnail" accept=".jpg,.jpeg,.png">
+                                                <label class="custom-file-label" for="inputGroupFile01" id="labelThumbnail">Choose file</label>
                                             </div>
                                         </div>
                                     </div>
@@ -266,5 +266,12 @@ if (isset($_POST['save'])) {
 
     if (window.history.replaceState) {
         window.history.replaceState(null, null, window.location.href);
+    }
+
+    function imageSelected() {
+        if (document.getElementById("thumbnail").value != '') {
+            var input = document.getElementById("thumbnail");
+            document.getElementById("labelThumbnail").innerHTML = input.files.item(0).name;
+        }
     }
 </script>

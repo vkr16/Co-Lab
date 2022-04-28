@@ -3,6 +3,9 @@ $dashboard = true;
 require_once "../core/init.php";
 require_once "../core/admin-session-only.php";
 
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -66,31 +69,37 @@ require_once "../core/admin-session-only.php";
                         <div class="card-body table-responsive">
                             <h5 class="text-dark">Room Availability Information</h5>
                             <br>
+
                             <table class="table" id="rooms_table">
                                 <thead>
                                     <tr>
+                                        <th>No</th>
                                         <th>Room Name</th>
                                         <th>Capacity</th>
-                                        <th>Status</th>
+                                        <th>Availability</th>
                                         <th>PIC</th>
                                         <th>Details</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Laboratorium Komputer</td>
-                                        <td>30</td>
-                                        <td>Available</td>
-                                        <td>-</td>
-                                        <td><a href="room-detail.php" class="btn btn-sm btn-orange">Check Details</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Laboratorium Multimedia</td>
-                                        <td>40</td>
-                                        <td>Booked </td>
-                                        <td>Aditya Setiawan </td>
-                                        <td><a href="room-detail.php" class="btn btn-sm btn-orange">Check Details</a></td>
-                                    </tr>
+                                    <?php
+                                    $query = "SELECT * FROM rooms WHERE status = 'active'";
+                                    $result  = mysqli_query($link, $query);
+                                    $i = 0;
+                                    while ($data = mysqli_fetch_assoc($result)) {
+                                        $i++;
+                                    ?>
+                                        <tr>
+                                            <td><?= $i; ?></td>
+                                            <td><?= $data['room_name']; ?></td>
+                                            <td><?= $data['capacity'] . " Persons"; ?></td>
+                                            <td>Available</td>
+                                            <td>-</td>
+                                            <td><a href="room-detail.php?id=<?= $data['id'] ?>" class="btn btn-sm btn-orange">Check Details</a></td>
+                                        </tr>
+                                    <?php
+                                    }
+                                    ?>
                                 </tbody>
                             </table>
                         </div>
