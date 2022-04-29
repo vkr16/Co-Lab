@@ -18,19 +18,15 @@ if (isset($_POST['btnsignup'])) {
     $password = $_POST['password'];
 
     if (isemailused($email)) {
-        $errTitle = "Email already used";
-        $errBody = "Please use another email account";
-        $loadThis = "errToast()";
+        $loadThis = "emailUsedAlert()";
     } else {
         if (isusernametaken($username)) {
-            $errTitle = "Username unavaliable";
-            $errBody = "Please pick another username";
-            $loadThis = "errToast()";
+            $loadThis = "usernameUnavailable()";
         } else {
             if (isstudentidused($studentid)) {
                 $errTitle = "Student id already registered";
                 $errBody = "Each student ID number can only be used to register 1 account";
-                $loadThis = "errToast()";
+                $loadThis = "studentIdUsed()";
             } else {
                 if (createaccount($fullname, $studentid, $username, $email, $password)) {
 
@@ -59,14 +55,10 @@ if (isset($_POST['btnsignup'])) {
                         mysqli_query($link, $query);
                         header("Location: registration-successful.php?apl=" . $email);
                     } else {
-                        $errTitle = "Failed to send verification mail";
-                        $errBody  = "System failure, please contact our system administrator";
-                        $loadThis = "errToast()";
+                        $loadThis = "failToRegister()";
                     }
                 } else {
-                    $errTitle = "Registration Failed";
-                    $errBody = "System failure, please contact our system administrator";
-                    $loadThis = "errToast()";
+                    $loadThis = "failToRegister()";
                 }
             }
         }
@@ -146,32 +138,8 @@ if (isset($_POST['btnsignup'])) {
         </div>
     </div>
 
-    <!-- BS Toast -->
-    <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
-        <div id="errorNotif" class="toast border-danger ff-nunito" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-                <strong class="me-auto text-danger"><i class="fa-solid fa-circle-exclamation"></i> &nbsp; Error Notification</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body text-danger">
-                <p class="mb-0"><strong> <?= $errTitle; ?></strong> <br><?= $errBody; ?></p>
-            </div>
-        </div>
-    </div>
-
-    <!-- BS Toast -->
-    <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
-        <div id="successNotif" class="toast border-success ff-nunito" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-                <strong class="me-auto text-success"><i class="fa-solid fa-circle-check"></i> &nbsp; Action Success Notification</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body text-success">
-                <p class="mb-0"><strong> <?= $succTitle; ?></strong> <br><?= $succBody; ?></p>
-            </div>
-        </div>
-    </div>
-
+    <!-- SweetAlert2 JS -->
+    <script src="assets/vendor/SweetAlert2/SweetAlert2.js"></script>
 
     <!-- Bootstrap JS -->
     <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -180,15 +148,42 @@ if (isset($_POST['btnsignup'])) {
 </html>
 
 <script>
-    function errToast() {
-        var errtoast = new bootstrap.Toast(errorNotif)
-        errtoast.show()
+    function usernameUnavailable() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Username Unavailable',
+            text: 'Please pick another username',
+            confirmButtonColor: '#2b468b'
+        })
     }
 
-    function succToast() {
-        var succtoast = new bootstrap.Toast(successNotif)
-        succtoast.show()
+    function emailUsedAlert() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Email already used',
+            text: 'Please use another email account',
+            confirmButtonColor: '#2b468b'
+        })
     }
+
+    function failToRegister() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Something Went Wrong',
+            text: 'System failure, please contact our system administrator',
+            confirmButtonColor: '#2b468b'
+        })
+    }
+
+    function studentIdUsed() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Student id already registered',
+            text: 'Each student ID number can only be used to register 1 account',
+            confirmButtonColor: '#2b468b'
+        })
+    }
+
 
     function agreeCheck() {
         var btn = document.getElementById("btnsignup");

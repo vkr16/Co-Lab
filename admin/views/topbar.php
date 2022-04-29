@@ -1,3 +1,12 @@
+<?php
+$session_user = $_SESSION['cl_user'];
+$query = "SELECT * FROM users WHERE username = '$session_user'";
+$result = mysqli_query($link, $query);
+$data = mysqli_fetch_assoc($result);
+
+$fullname = $data['fullname'];
+
+?>
 <!-- Topbar -->
 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
@@ -71,7 +80,7 @@
         <!-- Nav Item - User Information -->
         <li class="nav-item dropdown no-arrow">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Administrator</span>
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $data['role'] == 'admin' ? '<i class="fa-solid fa-crown text-orange" data-toggle="tooltip" data-placement="top" title="Administrator"></i>' : ''; ?> <?= $fullname; ?></span>
                 <img class="img-profile rounded-circle" src="../assets/img/admin-profile.png">
             </a>
             <!-- Dropdown - User Information -->

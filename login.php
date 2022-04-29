@@ -17,19 +17,14 @@ if (isset($_POST['btnsignin'])) {
             if (isvalid($useridentity, $password)) {
                 savesession($staylogin, $useridentity);
             } else {
-                $errTitle = "Password incorrect";
-                $errBody = "Please check your password typing";
-                $loadThis = "errToast()";
+                $loadThis = "wrongPassAlert()";
             }
         } else {
-            $errTitle = "Account found but not activated";
-            $errBody = "Please activate your account by follow the link sent to your email";
-            $loadThis = "errToast()";
+
+            $loadThis = "accountInvalidAlert()";
         }
     } else {
-        $errTitle = "Account not found";
-        $errBody = "Please check your email or username typing";
-        $loadThis = "errToast()";
+        $loadThis = "accountNotFound()";
     }
 }
 
@@ -98,29 +93,38 @@ if (isset($_POST['btnsignin'])) {
         </div>
     </div>
 
-    <!-- BS Toast -->
-    <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
-        <div id="errorNotif" class="toast border-danger ff-nunito" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-                <strong class="me-auto text-danger"><i class="fa-solid fa-circle-exclamation"></i> &nbsp; Error Notification</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body text-danger">
-                <p class="mb-0"><strong> <?= $errTitle; ?></strong> <br><?= $errBody; ?></p>
-            </div>
-        </div>
-    </div>
-
-
     <!-- Bootstrap JS -->
     <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/vendor/SweetAlert2/SweetAlert2.js"></script>
 </body>
 
 </html>
 
 <script>
-    function errToast() {
-        var errtoast = new bootstrap.Toast(errorNotif)
-        errtoast.show()
+    function wrongPassAlert() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Password Incorrect',
+            text: 'Please check your typing again',
+            confirmButtonColor: '#ed7d2b'
+        })
+    }
+
+    function accountInvalidAlert() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Invalid Account',
+            text: 'It seems like your account not activated yet',
+            confirmButtonColor: '#ed7d2b'
+        })
+    }
+
+    function accountNotFound() {
+        Swal.fire({
+            icon: 'error',
+            title: 'User Not Found',
+            text: 'We can not find that user on our database',
+            confirmButtonColor: '#ed7d2b'
+        })
     }
 </script>

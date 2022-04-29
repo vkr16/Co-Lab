@@ -29,8 +29,13 @@
 
     <li class="nav-item <?php echo $room_management == true ? 'active' : '' ?>">
         <a class="nav-link" href="room-management.php">
-            <i class="fa-solid fa-building"></i>
+            <i class="fa-solid fa-building fa-fw"></i>
             <span>Room Management</span></a>
+    </li>
+    <li class="nav-item <?php echo $user_management == true ? 'active' : '' ?>">
+        <a class="nav-link" href="user-management.php">
+            <i class="fa-solid fa-user-gear fa-fw"></i>
+            <span>User Management</span></a>
     </li>
 
     <!-- Nav Item - Pages Collapse Menu -->

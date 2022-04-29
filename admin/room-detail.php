@@ -98,18 +98,6 @@ if (isset($_GET['id'])) {
                                         <dt class="col-sm-3"><i class="fa-solid fa-align-left fa-fw"></i> Description</dt>
                                         <dd class="col-sm-9">
                                             <?= $description; ?>
-
-                                            <!-- <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque voluptas amet atque dignissimos consequatur esse. Reprehenderit, assumenda fugit, autem consequatur aliquid animi, corporis suscipit quam nostrum molestias vero optio quis.
-                                                <br>
-                                                Fasilitas
-                                                <ol>
-                                                    <li>Komputer Desktop &times;31</li>
-                                                    <li>Kursi &times;31</li>
-                                                    <li>Meja &times;31</li>
-                                                    <li>AC &times;2</li>
-                                                    <li>Proyektor &times;1</li>
-                                                </ol>
-                                            </span> -->
                                         </dd>
                                         <dt class="col-sm-3"><i class="fa-solid fa-toggle-<?= $status == 'active' ? 'on' : 'off'; ?> fa-fw"></i> Status</dt>
                                         <dd class="col-sm-9"><?= $status == 'active' ? 'Active' : 'Inactive'; ?></dd>
