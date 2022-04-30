@@ -76,6 +76,7 @@ require_once "../core/admin-session-only.php";
                                         <th>No</th>
                                         <th>Name</th>
                                         <th>Student ID</th>
+                                        <th>Username</th>
                                         <th>Email</th>
                                         <th>Status</th>
                                         <th>Action</th>
@@ -98,6 +99,7 @@ require_once "../core/admin-session-only.php";
                                             <td><?= $i; ?></td>
                                             <td><?= $data['fullname']; ?>&nbsp;<?= $data['role'] == 'admin' ? '<i class="fa-solid fa-crown text-orange" data-toggle="tooltip" data-placement="top" title="Administrator"></i>' : ''; ?></td>
                                             <td><?= $data['studentid']; ?></td>
+                                            <td><?= $data['username']; ?></td>
                                             <td><?= $data['email']; ?></td>
                                             <td><?= $data['validity'] == 'invalid' ? '<i class="fa-regular fa-circle-xmark text-danger"></i> Not Verified' : '<i class="fa-regular fa-circle-check text-success"></i> Verified'; ?> </td>
                                             <td><button class=" btn btn-sm btn-danger mr-3 mb-1" onclick="deleteUser(<?= $data['id'] ?>,'<?= $data['fullname'] ?>')"><i class="fa-solid fa-ban"></i> &nbsp; Delete</button>
