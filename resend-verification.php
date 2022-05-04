@@ -1,3 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
+
+</head>
+
+<body>
+</body>
+<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<script src="assets/vendor/SweetAlert2/SweetAlert2.js"></script>
+
 <?php
 require_once "core/init.php";
 require_once "core/no-session-allowed.php";
@@ -51,8 +69,43 @@ if (isset($_GET['apl'])) {
             }
         }
     } else {
-        header("Location: login.php");
+        echo "<script type=text/javascript>
+        Swal.fire({
+            icon: 'error',
+            title: 'Email Tidak Dikenali',
+            text: \"Tidak ditemukan pengguna dengan email tersebut.\",
+            confirmButtonColor: \"#ed7d2b\",
+            confirmButtonText: \"Kembali\",
+            allowEscapeKey: false,
+            allowOutsideClick: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = \"login.php\";
+            }
+        })
+        </script>";
+        // header("Location: login.php");
     }
 } else {
-    header("Location: login.php");
+    echo "<script type=\"text/Javascript\">
+    (async () => {
+
+        const { value: email } = await Swal.fire({
+          title: 'Aktivasi Akun',
+          input: 'email',
+          inputLabel: 'Masukkan alamat email yang terhubung dengan akun anda.',
+          inputPlaceholder: 'Masukkan alamat email anda',
+          confirmButtonText: \"Kirim\"
+        })
+        
+        if (email) {
+            window.location.href = \"resend-verification.php?apl=\"+ email;
+        }
+        
+        })()
+    </script>";
 }
+?>
+
+
+</html>

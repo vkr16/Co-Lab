@@ -52,7 +52,7 @@ if (isset($_POST['btnsignin'])) {
     <!-- Fontawesome -->
     <link rel="stylesheet" href="assets/vendor/fontawesome/css/all.min.css">
 
-    <title>Co-Lab | Sign In</title>
+    <title>Masuk | Co-Lab</title>
 </head>
 
 <body onload="<?= $loadThis; ?>">
@@ -63,25 +63,25 @@ if (isset($_POST['btnsignin'])) {
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-10 col-xl-7 mx-auto">
-                                <h3 class="display-6">Sign In </h3>
-                                <p class="text-muted mb-4">Please sign-in to your account to start using our services <i class="fa-solid fa-rocket"></i></p>
+                                <h3 class="display-6">Masuk </h3>
+                                <p class="text-muted mb-4">Silahkan masuk ke akun anda untuk mulai menggunakan layanan kami <i class="fa-solid fa-rocket"></i></p>
                                 <form action="" method="post">
                                     <div class="form-group mb-3">
-                                        <input id="inputUserIdentity" type="text" placeholder="Email or Username" required="" autofocus="" class="form-control border-0 shadow-sm px-4 text-orange" autocomplete="off" name="userid" />
+                                        <input id="inputUserIdentity" type="text" placeholder="Nama pengguna atau email" required="" autofocus="" class="form-control border-0 shadow-sm px-4 text-orange" autocomplete="off" name="userid" />
                                     </div>
                                     <div class="form-group mb-3">
-                                        <input id="inputPassword" type="password" placeholder="Password" required="" class="form-control border-0 shadow-sm px-4 text-orange" autocomplete="off" name="password" />
+                                        <input id="inputPassword" type="password" placeholder="Kata sandi" required="" class="form-control border-0 shadow-sm px-4 text-orange" autocomplete="off" name="password" />
                                     </div>
                                     <div class="d-flex justify-content-between">
                                         <div class="form-check mb-3">
                                             <input type="checkbox" class="form-check-input shadow-sm cb-orange" id="checkStayLogin" name="staylogin">
-                                            <label class="form-check-label" for="checkStayLogin">Keep me logged in</label>
+                                            <label class="form-check-label" for="checkStayLogin">Tetap masuk</label>
                                         </div>
-                                        <span class="text-muted"><a href="recovery.php" class="text-orange text-decoration-none">Forgot password?</a></span>
+                                        <span class="text-muted"><a href="recovery.php" class="text-orange text-decoration-none">Lupa kata sandi?</a></span>
                                     </div>
-                                    <input type="submit" class="btn btn-block btn-orange mb-2 shadow-sm align-self-center" value="&nbsp;&nbsp;Log In &nbsp;&nbsp;" name="btnsignin" />
+                                    <input type="submit" class="btn btn-block btn-orange mb-2 shadow-sm align-self-center" value="&nbsp;&nbsp;Masuk &nbsp;&nbsp;" name="btnsignin" />
                                 </form>
-                                <span class="text-muted">New on our platform? <a href="register.php" class="text-orange text-decoration-none">Create an account</a></span>
+                                <span class="text-muted">Belum punya akun? <a href="register.php" class="text-orange text-decoration-none">Buat akun baru</a></span>
 
 
                             </div>
@@ -104,27 +104,31 @@ if (isset($_POST['btnsignin'])) {
     function wrongPassAlert() {
         Swal.fire({
             icon: 'error',
-            title: 'Password Incorrect',
-            text: 'Please check your typing again',
-            confirmButtonColor: '#ed7d2b'
+            title: 'Kata Sandi Salah',
+            text: 'Kata sandi yang anda masukkan tidak sesuai. Silahkan periksa kembali ejaan anda.',
+            confirmButtonColor: '#ed7d2b',
+            confirmButtonText: "Saya mengerti"
         })
     }
 
     function accountInvalidAlert() {
         Swal.fire({
-            icon: 'error',
-            title: 'Invalid Account',
-            text: 'It seems like your account not activated yet',
-            confirmButtonColor: '#ed7d2b'
+            icon: 'warning',
+            title: 'Akun Belum Diverifikasi',
+            text: 'Silahkan lakukan verifikasi dengan mengikuti tautan yang dikirimkan ke email anda.',
+            confirmButtonColor: '#ed7d2b',
+            confirmButtonText: "Saya mengerti",
+            footer: 'Belum menerima email aktivasi?&nbsp; <a href="resend-verification.php" class="text-decoration-none text-orange">Kirim ulang</a>'
         })
     }
 
     function accountNotFound() {
         Swal.fire({
             icon: 'error',
-            title: 'User Not Found',
-            text: 'We can not find that user on our database',
-            confirmButtonColor: '#ed7d2b'
+            title: 'Pengguna Tidak Dikenali',
+            text: 'Kami tidak mengenali nama pengguna atau email yang anda masukkan. Harap periksa kembali ejaan anda.',
+            confirmButtonColor: '#ed7d2b',
+            confirmButtonText: "Saya mengerti"
         })
     }
 </script>
