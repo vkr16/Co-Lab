@@ -89,7 +89,7 @@ if (isset($_POST['btnsignup'])) {
     <!-- Fontawesome -->
     <link rel="stylesheet" href="assets/vendor/fontawesome/css/all.min.css">
 
-    <title>Co-Lab | Sign Up</title>
+    <title>Daftar | Co-Lab</title>
 </head>
 
 <body onload="<?= $loadThis ?>">
@@ -100,33 +100,33 @@ if (isset($_POST['btnsignup'])) {
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-10 col-xl-7 mx-auto">
-                                <h3 class="display-6">Sign Up </h3>
-                                <p class="text-muted mb-4">Book your space right from your room <i class="fa-solid fa-couch"></i></p>
+                                <h3 class="display-6">Daftar </h3>
+                                <p class="text-muted mb-4">Menjadwalkan pembukuan ruangan tidak pernah semudah ini. Buat akun sekarang. <i class="fa-solid fa-couch"></i></p>
                                 <form action="" method="post">
                                     <div class="form-group mb-3">
-                                        <input id="inputFullname" type="text" placeholder="Full Name" required="" autofocus="" class="form-control border-0 shadow-sm px-4 text-blue" autocomplete="off" name="fullname" />
+                                        <input id="inputFullname" type="text" placeholder="Nama lengkap" required="" autofocus="" class="form-control border-0 shadow-sm px-4 text-blue" autocomplete="off" name="fullname" />
                                     </div>
                                     <div class="form-group mb-3">
-                                        <input id="inputStudentId" type="text" placeholder="Student ID Number" required="" autofocus="" class="form-control border-0 shadow-sm px-4 text-blue" autocomplete="off" name="studentid" />
+                                        <input id="inputStudentId" type="number" placeholder="Nomor induk mahasiswa" required="" autofocus="" class="form-control border-0 shadow-sm px-4 text-blue" autocomplete="off" name="studentid" />
                                     </div>
                                     <div class="form-group mb-3">
-                                        <input id="inputUsername" type="text" placeholder="Username" required="" autofocus="" class="form-control border-0 shadow-sm px-4 text-blue" autocomplete="off" name="username" />
+                                        <input id="inputUsername" type="text" placeholder="Nama pengguna" required="" autofocus="" class="form-control border-0 shadow-sm px-4 text-blue" autocomplete="off" name="username" />
                                     </div>
                                     <div class="form-group mb-3">
-                                        <input id="inputEmail" type="email" placeholder="Email address" required="" autofocus="" class="form-control border-0 shadow-sm px-4 text-blue" autocomplete="off" name="email" />
+                                        <input id="inputEmail" type="email" placeholder="Alamat email" required="" autofocus="" class="form-control border-0 shadow-sm px-4 text-blue" autocomplete="off" name="email" />
                                     </div>
                                     <div class="form-group mb-3">
-                                        <input id="inputPassword" type="password" placeholder="Password" required="" class="form-control border-0 shadow-sm px-4 text-blue" autocomplete="off" name="password" />
+                                        <input id="inputPassword" type="password" placeholder="Kata sandi" required="" class="form-control border-0 shadow-sm px-4 text-blue" autocomplete="off" name="password" />
                                     </div>
                                     <div class="d-flex justify-content-between">
                                         <div class="form-check mb-3">
                                             <input required type="checkbox" class="form-check-input shadow-sm cb-blue" id="checkStayLogin" name="staylogin" onchange="agreeCheck()">
-                                            <label class="form-check-label" for="checkStayLogin">I agree to <a href="javascript:;" class="text-blue text-decoration-none">privacy policy & terms </a></label>
+                                            <label class="form-check-label" for="checkStayLogin">Saya setuju dengan <a href="javascript:;" class="text-blue text-decoration-none">kebijakan & ketentuan privasi<a></label>
                                         </div>
                                     </div>
-                                    <input disabled type="submit" class="btn btn-block btn-blue mb-2 shadow-sm align-self-center" value="&nbsp;&nbsp;Sign Up &nbsp;&nbsp;" name="btnsignup" id="btnsignup" />
+                                    <input disabled type="submit" class="btn btn-block btn-blue mb-2 shadow-sm align-self-center" value="&nbsp;&nbsp;Daftar &nbsp;&nbsp;" name="btnsignup" id="btnsignup" />
                                 </form>
-                                <span class="text-muted">Already have an account? <a href="login.php" class="text-blue text-decoration-none">Sign in instead</a></span>
+                                <span class="text-muted">Sudah memiliki akun? <a href="login.php" class="text-blue text-decoration-none">Masuk disini</a></span>
 
 
                             </div>
@@ -151,36 +151,40 @@ if (isset($_POST['btnsignup'])) {
     function usernameUnavailable() {
         Swal.fire({
             icon: 'error',
-            title: 'Username Unavailable',
-            text: 'Please pick another username',
-            confirmButtonColor: '#2b468b'
+            title: 'Nama Pengguna Tidak Tersedia',
+            text: 'Silahkan pilih nama pengguna lain',
+            confirmButtonColor: '#2b468b',
+            confirmButtonText: "Saya Mengerti"
         })
     }
 
     function emailUsedAlert() {
         Swal.fire({
             icon: 'error',
-            title: 'Email already used',
-            text: 'Please use another email account',
-            confirmButtonColor: '#2b468b'
+            title: 'Alamat Email Sudah Digunakan',
+            text: 'Harap gunakan alamat email yang berbeda',
+            confirmButtonColor: '#2b468b',
+            confirmButtonText: "Saya Mengerti"
         })
     }
 
     function failToRegister() {
         Swal.fire({
             icon: 'error',
-            title: 'Something Went Wrong',
-            text: 'System failure, please contact our system administrator',
-            confirmButtonColor: '#2b468b'
+            title: 'Terjadi Kesalahan',
+            text: 'Silahkan coba lagi, jika error berlanjut harap hubungi admin',
+            confirmButtonColor: '#2b468b',
+            confirmButtonText: "Saya Mengerti"
         })
     }
 
     function studentIdUsed() {
         Swal.fire({
             icon: 'error',
-            title: 'Student id already registered',
-            text: 'Each student ID number can only be used to register 1 account',
-            confirmButtonColor: '#2b468b'
+            title: 'NIM Sudah Terdaftar',
+            text: 'Setiap NIM hanya dapat digunakan untuk mendaftarkan 1 akun saja',
+            confirmButtonColor: '#2b468b',
+            confirmButtonText: "Saya Mengerti"
         })
     }
 
