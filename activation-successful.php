@@ -49,7 +49,7 @@ if ($validity != "valid" && isset($_GET['apl']) && isset($_GET['uid'])) {
     <!-- Fontawesome -->
     <link rel="stylesheet" href="assets/vendor/fontawesome/css/all.min.css">
 
-    <title>Aktivasi Berhasil | Co-Lab</title>
+    <title>Verifikasi Berhasil | Co-Lab</title>
 </head>
 
 <body>
