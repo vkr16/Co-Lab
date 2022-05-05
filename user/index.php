@@ -63,9 +63,9 @@ require_once "../core/user-session-only.php";
                                 <div class="input-group mb-3">
                                     <input type="text" class="form-control" placeholder="Cari Ruangan . . ." id="searchKeyword" onkeyup="searchRooms();isSearchEmpty()" onchange="searchRooms();isSearchEmpty()">
                                     <div class="input-group-append clearer">
-                                        <span class="btn input-group-text clearer" type="button" id="search-addon">
+                                        <button class="btn input-group-text clearer" type="button" id="search-addon">
                                             <i class="fa-solid fa-magnifying-glass clearer"></i>
-                                            </button>
+                                        </button>
                                     </div>
                                 </div>
                                 <p class="form-text text-muted mt-0" id="esc-help" style="display: none;">Tekan <kbd>Esc</kbd> untuk menghapus filter pencarian</p>
