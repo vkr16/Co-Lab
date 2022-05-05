@@ -50,7 +50,7 @@ if ($validity != "valid" && isset($_GET['apl']) && isset($_GET['uid'])) {
     <!-- Fontawesome -->
     <link rel="stylesheet" href="assets/vendor/fontawesome/css/all.min.css">
 
-    <title>Co-Lab | Recovery Successful</title>
+    <title>Pemilihan Berhasil | Co-Lab</title>
 </head>
 
 <body onload="<?= $loadThis ?>">

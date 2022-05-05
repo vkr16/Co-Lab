@@ -11,9 +11,9 @@ require 'assets/vendor/PHPMailer/src/SMTP.php';
 
 if (isset($_POST['btnrecover'])) {
     $useridentity = $_POST['useridentity'];
-    $email = getemailfromidentity($useridentity);
 
     if (isexist($useridentity)) {
+        $email = getemailfromidentity($useridentity);
         $JSON_creds     = file_get_contents("core/mail-credentials.json");
         $credentials    = json_decode($JSON_creds, true);
         $email_address  = $credentials['creds']['email'];
@@ -37,23 +37,19 @@ if (isset($_POST['btnrecover'])) {
         if ($mail->send()) {
             $query = "UPDATE users SET uniqueid='$bytes' WHERE email='$email'";
             mysqli_query($link, $query);
-            $succTitle = "Reset link sent";
-            $succBody  = "A link has been sent to your email, click the link to reset your password";
-            $loadThis = "succToast()";
+            $loadThis = "successSendingMail()";
         } else {
-            $errTitle = "Failed to reset password";
-            $errBody  = "System failure, please contact our system administrator";
-            $loadThis = "errToast()";
+            $loadThis = "systemFailed()";
         }
     } else {
-        echo "not exist";
+        $loadThis = "userNotFound()";
     }
 }
 
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="UTF-8">
@@ -75,7 +71,7 @@ if (isset($_POST['btnrecover'])) {
     <!-- Fontawesome -->
     <link rel="stylesheet" href="assets/vendor/fontawesome/css/all.min.css">
 
-    <title>Co-Lab | Account Recovery</title>
+    <title>Pemulihan Akun | Co-Lab</title>
 </head>
 
 <body onload="<?= $loadThis; ?>">
@@ -87,14 +83,14 @@ if (isset($_POST['btnrecover'])) {
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-10 col-xl-7 mx-auto">
-                                <span><a href="login.php" class="text-decoration-none text-blue"><i class="fa-solid fa-arrow-left-long"></i> &nbsp; Back to login page</a></span><br><br>
-                                <h3 class="display-6">Account Recovery </h3>
-                                <p class="text-muted mb-4">Please enter the email address or username associated with your account <i class="fa-solid fa-shield-halved"></i></p>
+                                <span><a href="login.php" class="text-decoration-none text-blue"><i class="fa-solid fa-arrow-left-long"></i> &nbsp; Kembali ke halaman masuk</a></span><br><br>
+                                <h3 class="display-6">Pemulihan Akun </h3>
+                                <p class="text-muted mb-4">Harap masukkan nama pengguna atau email yang terhubung dengan akun anda <i class="fa-solid fa-shield-halved"></i></p>
                                 <form action="" method="post">
                                     <div class="form-group mb-3">
-                                        <input id="inputUserIdentity" type="text" placeholder="Email or username" required="" autofocus="" class="form-control border-0 shadow-sm px-4 text-red" autocomplete="off" name="useridentity" />
+                                        <input id="inputUserIdentity" type="text" placeholder="Nama pengguna atau email" required="" autofocus="" class="form-control border-0 shadow-sm px-4 text-red" autocomplete="off" name="useridentity" />
                                     </div>
-                                    <input type="submit" class="btn btn-block btn-red mb-2 shadow-sm align-self-center" value="&nbsp;&nbsp;Reset Password &nbsp;&nbsp;" name="btnrecover" />
+                                    <input type="submit" class="btn btn-block btn-red mb-2 shadow-sm align-self-center" value="&nbsp;&nbsp;Atur Ulang Kata Sandi &nbsp;&nbsp;" name="btnrecover" />
                                 </form>
                             </div>
                         </div>
@@ -104,46 +100,43 @@ if (isset($_POST['btnrecover'])) {
         </div>
     </div>
 
-    <!-- BS Toast -->
-    <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
-        <div id="errorNotif" class="toast border-danger ff-nunito" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-                <strong class="me-auto text-danger"><i class="fa-solid fa-circle-exclamation"></i> &nbsp; Error Notification</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body text-danger">
-                <p class="mb-0"><strong> <?= $errTitle; ?></strong> <br><?= $errBody; ?></p>
-            </div>
-        </div>
-    </div>
-    <!-- BS Toast -->
-    <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
-        <div id="succNotif" class="toast border-success ff-nunito" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-                <strong class="me-auto text-success"><i class="fa-solid fa-circle-check"></i> &nbsp; Success Notification</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body text-success">
-                <p class="mb-0"><strong> <?= $succTitle; ?></strong> <br><?= $succBody; ?></p>
-            </div>
-        </div>
-    </div>
-
 
     <!-- Bootstrap JS -->
     <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- SweetAlert2 JS -->
+    <script src="assets/vendor/SweetAlert2/SweetAlert2.js"></script>
 </body>
 
 </html>
 
 <script>
-    function errToast() {
-        var errtoast = new bootstrap.Toast(errorNotif)
-        errtoast.show()
+    function successSendingMail() {
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil Terkirim',
+            text: 'Silahkan klik tautan pada email yang kami kirimkan untuk mengatur ulang kata sandi anda.',
+            confirmButtonColor: '#b6453d',
+            confirmButtonText: "Saya Mengerti"
+        })
     }
 
-    function succToast() {
-        var succtoast = new bootstrap.Toast(succNotif)
-        succtoast.show()
+    function systemFailed() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Terjadi Kesalahan',
+            text: 'Silahkan coba lagi, jika masalah berlanjut harap hubungi admin',
+            confirmButtonText: "Saya Mengerti"
+        })
+    }
+
+    function userNotFound() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Akun Tidak Ditemukan',
+            text: 'Silahkan periksa kembali ejaan nama pengguna atau email anda',
+            confirmButtonColor: '#b6453d',
+            confirmButtonText: "Saya Mengerti"
+        })
     }
 </script>

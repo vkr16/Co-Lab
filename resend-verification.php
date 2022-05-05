@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title></title>
     <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
 
 </head>
@@ -60,12 +60,26 @@ if (isset($_GET['apl'])) {
             $mail->setFrom($email_address);
             $mail->addAddress($email);
             $mail->isHTML(true);
-            $mail->Subject = 'Co-Lab - Account Verification';
-            $mail->Body    = "Click this link to activate your account : <br> " . $home . "/activation.php?apl=" . $email . "&uid=" . $uniqueid;
+            $mail->Subject = 'Verifikasi Akun Co-Lab';
+            $mail->Body    = "Klik tautan berikut untuk memverifikasi akun anda : <br> " . $home . "/activation.php?apl=" . $email . "&uid=" . $uniqueid;
             if ($mail->send()) {
                 header("Location: registration-successful.php?apl=" . $email);
             } else {
-                echo "user already active";
+                echo "<script type=text/javascript>
+        Swal.fire({
+            icon: 'error',
+            title: 'Terjadi kesalahan',
+            text: \"Silahkan coba lagi, jika masalah berlanjut harap hubungi admin\",
+            confirmButtonColor: \"#ed7d2b\",
+            confirmButtonText: \"Saya mengerti\",
+            allowEscapeKey: false,
+            allowOutsideClick: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = \"login.php\";
+            }
+        })
+        </script>";
             }
         }
     } else {
@@ -95,7 +109,9 @@ if (isset($_GET['apl'])) {
           input: 'email',
           inputLabel: 'Masukkan alamat email yang terhubung dengan akun anda.',
           inputPlaceholder: 'Masukkan alamat email anda',
-          confirmButtonText: \"Kirim\"
+          confirmButtonText: \"Kirim\",
+          allowEscapeKey: false,
+          allowOutsideClick: false
         })
         
         if (email) {

@@ -36,7 +36,7 @@ if ($validity != "invalid") {
     <!-- Fontawesome -->
     <link rel="stylesheet" href="assets/vendor/fontawesome/css/all.min.css">
 
-    <title>Co-Lab | Registration Successful</title>
+    <title>Pendaftaran Berhasil | Co-Lab</title>
 </head>
 
 <body onload="<?= $loadThis ?>">
@@ -47,10 +47,10 @@ if ($validity != "invalid") {
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-10 col-xl-7 mx-auto">
-                                <h2 class="ff-nunito">Verification Email Sent <i class="fa-solid fa-envelope-circle-check"></i></h2>
-                                <p class="text-muted mb-4">An activation link has been sent to your email.</p>
+                                <h2 class="ff-nunito">Email Verifikasi Terkirim <i class="fa-solid fa-envelope-circle-check"></i></h2>
+                                <p class="text-muted mb-4">Tautan verifikasi telah dikirimkan ke email anda.</p>
 
-                                <span class="text-muted">Didn't receive the link? <a href="resend-verification.php?apl=<?= $email; ?>" class="text-blue text-decoration-none">Resend email</a></span>
+                                <span class="text-muted">Belum menerima email? <a href="resend-verification.php?apl=<?= $email; ?>" class="text-blue text-decoration-none">Kirim ulang email</a></span>
 
 
                             </div>

@@ -172,7 +172,7 @@ if (isset($_POST['btnsignup'])) {
         Swal.fire({
             icon: 'error',
             title: 'Terjadi Kesalahan',
-            text: 'Silahkan coba lagi, jika error berlanjut harap hubungi admin',
+            text: 'Silahkan coba lagi, jika masalah berlanjut harap hubungi admin',
             confirmButtonColor: '#2b468b',
             confirmButtonText: "Saya Mengerti"
         })
