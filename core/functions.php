@@ -248,3 +248,36 @@ function truncate($text, $chars = 40)
     $text = $text . "...";
     return $text;
 }
+
+function updateEmail($email, $username)
+{
+    global $link;
+
+    $email = mysqli_real_escape_string($link, $email);
+    $username = mysqli_real_escape_string($link, $username);
+
+    $query = "UPDATE users SET email = '$email' WHERE username = '$username'";
+
+    if (mysqli_query($link, $query)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function updatePass($username, $password)
+{
+    global $link;
+
+    $username = mysqli_real_escape_string($link, $username);
+    $password = mysqli_real_escape_string($link, $password);
+    $password = password_hash($password, PASSWORD_DEFAULT);
+
+    $query = "UPDATE users SET password = '$password' WHERE username = '$username'";
+
+    if (mysqli_query($link, $query)) {
+        return true;
+    } else {
+        return false;
+    }
+}

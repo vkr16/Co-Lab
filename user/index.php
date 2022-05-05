@@ -31,7 +31,7 @@ require_once "../core/user-session-only.php";
     <!-- Custom styles for navigation-->
     <link href="../assets/css/sb-admin-2.min.css" rel="stylesheet">
 
-    <title>Home | Co-Lab</title>
+    <title>Beranda | Co-Lab</title>
 
 
 </head>
@@ -57,7 +57,7 @@ require_once "../core/user-session-only.php";
                     <!-- Page Heading -->
                     <form>
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                            <h1 class="h3 mb-0 text-gray-800">Home</h1>
+                            <h1 class="h3 mb-0 text-gray-800">Beranda</h1>
                             <div class="form-group col-md-4">
 
                                 <div class="input-group mb-3">

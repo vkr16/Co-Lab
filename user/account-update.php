@@ -3,6 +3,73 @@
 require_once "../core/init.php";
 require_once "../core/user-session-only.php";
 
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require '../assets/vendor/PHPMailer/src/Exception.php';
+require '../assets/vendor/PHPMailer/src/PHPMailer.php';
+require '../assets/vendor/PHPMailer/src/SMTP.php';
+
+$activeUsername = $_SESSION['cl_user'];
+
+if (isset($_POST['btnUpdateEmail'])) {
+    $newEmail = $_POST['newmail'];
+
+    if (isemailused($newEmail)) {
+        $loadThis = "emailUsed()";
+    } else {
+        $query = "SELECT * FROM users WHERE username = '$activeUsername'";
+        $result = mysqli_query($link, $query);
+        $data = mysqli_fetch_assoc($result);
+        $oldEmail = $data['email'];
+        if (updateEmail($newEmail, $activeUsername)) {
+
+            $JSON_creds     = file_get_contents("../core/mail-credentials.json");
+            $credentials    = json_decode($JSON_creds, true);
+            $email_address  = $credentials['creds']['email'];
+            $email_password = $credentials['creds']['password'];
+
+
+            $mail           = new PHPMailer;
+            $mail->isSMTP();
+            $mail->SMTPAuth = true;
+            $mail->Host     = 'smtp.gmail.com';
+            $mail->Port     = 587;
+            $mail->Username = $email_address;
+            $mail->Password = $email_password;
+            $mail->setFrom($email_address);
+            $mail->addAddress($newEmail);
+            $mail->isHTML(true);
+            $mail->Subject = 'Perubahan Alamat Email - Co-Lab';
+            $mail->Body    = "<h3>Alamat email anda berhasil di perbarui</h3> " . $oldEmail . " tidak lagi terhubung dengan akun Co-Lab anda.";
+            $mail->send();
+
+            $loadThis = "emailUpdated()";
+        } else {
+            $loadThis = "failedToUpdate()";
+        }
+    }
+}
+
+
+if (isset($_POST['btnUpdatePass'])) {
+    $oldPass = $_POST['oldPass'];
+    $newPass = $_POST['newPass'];
+
+    if (isvalid($activeUsername, $oldPass)) {
+        if (updatePass($activeUsername, $newPass)) {
+            $loadThis = "passwordUpdated()";
+        } else {
+            $loadThis = "failedToUpdatePass()";
+        }
+    } else {
+        $loadThis = "failedPasswordInvalid()";
+    }
+}
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -31,12 +98,12 @@ require_once "../core/user-session-only.php";
     <!-- Custom styles for navigation-->
     <link href="../assets/css/sb-admin-2.min.css" rel="stylesheet">
 
-    <title>Home | Co-Lab</title>
+    <title>Data Pengguna | Co-Lab</title>
 
 
 </head>
 
-<body id="page-top">
+<body id="page-top" onload="<?= $loadThis; ?>">
 
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -71,21 +138,15 @@ require_once "../core/user-session-only.php";
                                     <h5><i class="fa-solid fa-envelope"></i> Ubah Alamat Email </h5>
                                     <br>
 
-                                    <form>
-                                        <!-- <div class="form-group row">
-                                            <label for="staticEmail" class="col-sm-3 col-form-label">Alamat email lama</label>
-                                            <div class="col-sm-9">
-                                                <input disabled readonly class="form-control-plaintext" id="staticEmail" value="contact.fikmif16@gmail.com">
-                                            </div>
-                                        </div> -->
+                                    <form action="" method="POST">
                                         <div class="form-group row">
                                             <label for="inputEmail" class="col-sm-3 col-form-label">Alamat email baru</label>
                                             <div class="col-sm-9">
-                                                <input type="email" class="form-control" id="inputEmail" placeholder="Masukkan alamat email baru">
+                                                <input type="email" name="newmail" class="form-control" id="inputEmail" placeholder="Masukkan alamat email baru">
                                             </div>
                                         </div>
                                         <br>
-                                        <button class="btn btn-primary d-flex justify-content-end">Perbarui Email</button>
+                                        <button type="submit" name="btnUpdateEmail" class="btn btn-primary d-flex justify-content-end">Perbarui Email</button>
                                     </form>
 
                                     <br>
@@ -94,12 +155,12 @@ require_once "../core/user-session-only.php";
                                     <h5> <i class="fa-solid fa-lock"></i> Atur Ulang Kata Sandi</h5>
                                     <br>
 
-                                    <form>
+                                    <form action="" method="POST">
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label">Kata Sandi Saat Ini</label>
                                             <div class="col-sm-9">
                                                 <div class="input-group mb-3">
-                                                    <input type="password" class="form-control" placeholder="Masukkan kata sandi lama" aria-describedby="button-addon2" id="old-pass">
+                                                    <input type="password" name="oldPass" class="form-control" placeholder="Masukkan kata sandi lama" aria-describedby="button-addon2" id="old-pass">
                                                     <div class="input-group-append">
                                                         <span class="btn btn-outline-secondary" type="button" id="current-visib" onclick="changeVisibility(this.innerHTML , this.id)"><i class="fa-solid fa-eye"></i></span>
                                                     </div>
@@ -110,7 +171,7 @@ require_once "../core/user-session-only.php";
                                             <label for="inputEmail" class="col-sm-3 col-form-label">Kata Sandi Baru</label>
                                             <div class="col-sm-9">
                                                 <div class="input-group mb-3">
-                                                    <input type="password" class="form-control" placeholder="Masukkan kata sandi baru" aria-describedby="button-addon2" id="new-pass">
+                                                    <input type="password" name="newPass" class="form-control" placeholder="Masukkan kata sandi baru" aria-describedby="button-addon2" id="new-pass">
                                                     <div class="input-group-append">
                                                         <span class="btn btn-outline-secondary" type="button" id="new-visib" onclick="changeVisibility(this.innerHTML , this.id)"><i class="fa-solid fa-eye"></i></span>
                                                     </div>
@@ -118,7 +179,7 @@ require_once "../core/user-session-only.php";
                                             </div>
                                         </div>
                                         <br>
-                                        <button class="btn btn-primary d-flex justify-content-end">Perbarui Kata Sandi</button>
+                                        <button type="submit" name="btnUpdatePass" class="btn btn-primary d-flex justify-content-end">Perbarui Kata Sandi</button>
                                     </form>
                                 </div>
                             </div>
@@ -197,6 +258,9 @@ require_once "../core/user-session-only.php";
     <!-- Custom scripts for all pages-->
     <script src="../assets/js/sb-admin-2.min.js"></script>
 
+    <!-- SweetAlert2 JS -->
+    <script src="../assets/vendor/SweetAlert2/SweetAlert2.js"></script>
+
 </body>
 
 </html>
@@ -221,9 +285,65 @@ require_once "../core/user-session-only.php";
                 $("#new-visib").html('<i class="fa-solid fa-eye"></i>');
             }
         }
+    }
 
+    function emailUpdated() {
+        Swal.fire({
+            icon: 'success',
+            title: 'Perubahan Tersimpan',
+            text: 'Alamat email anda berhasil di perbarui',
+            confirmButtonColor: '#2b468b',
+            confirmButtonText: "Selesai"
+        })
+    }
 
+    function failedToUpdate() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Terjadi Kesalahan',
+            text: 'Alamat email anda gagal di perbarui',
+            confirmButtonColor: '#2b468b',
+            confirmButtonText: "Tutup"
+        })
+    }
 
+    function emailUsed() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Email Sudah Digunakan',
+            text: 'Alamat email yang anda masukkan sudah terdaftar pada akun lain',
+            confirmButtonColor: '#2b468b',
+            confirmButtonText: "Tutup"
+        })
+    }
 
+    function failedToUpdatePass() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Terjadi Kesalahan',
+            text: 'Password gagal diperbarui',
+            confirmButtonColor: '#2b468b',
+            confirmButtonText: "Tutup"
+        })
+    }
+
+    function failedPasswordInvalid() {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Kata Sandi Salah',
+            text: 'Kata sandi anda tidak sesuai, harap periksa kembali ejaan anda',
+            confirmButtonColor: '#2b468b',
+            confirmButtonText: "Selesai"
+        })
+    }
+
+    function passwordUpdated() {
+        Swal.fire({
+            icon: 'success',
+            title: 'Kata Sandi Berhasil Diperbarui',
+            text: 'Kata sandi anda telah berhasil diperbarui',
+            confirmButtonColor: '#2b468b',
+            confirmButtonText: "Selesai"
+        })
     }
 </script>

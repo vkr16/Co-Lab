@@ -21,7 +21,7 @@ $studentid = $data['studentid'];
     <!-- Topbar Search -->
     <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 navbar-search">
 
-        <span class="text-primary">Last refreshed : <?= date("j F Y, h:i A"); ?></span>
+        <span class="text-primary small">Halaman ini dimuat pada : <?= date("j/n/Y, h:i A"); ?></span>
 
 
     </form>
