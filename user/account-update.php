@@ -202,18 +202,21 @@ if (isset($_POST['btnUpdatePass'])) {
 
                                         ?>
                                         <dt class="col-sm-4">Nama Lengkap</dt>
-                                        <dd class="col-sm-8"><?= $data['fullname']; ?></dd>
+                                        <dd class="col-sm-8">: <?= $data['fullname']; ?></dd>
 
                                         <dt class="col-sm-4">NIM</dt>
-                                        <dd class="col-sm-8"><?= $data['studentid']; ?></dd>
+                                        <dd class="col-sm-8">: <?= $data['studentid']; ?></dd>
 
                                         <dt class="col-sm-4">Alamat Email</dt>
-                                        <dd class="col-sm-8"><?= $data['email']; ?></dd>
+                                        <dd class="col-sm-8">: <?= $data['email']; ?></dd>
 
                                         <dt class="col-sm-4">Nama Pengguna</dt>
-                                        <dd class="col-sm-8"><?= $data['username']; ?></dd>
+                                        <dd class="col-sm-8">: <?= $data['username']; ?></dd>
 
                                     </dl>
+
+                                    <hr>
+                                    <span class="text-secondary small mb-0 mt-0">* Perubahan pada nama lengkap, nomor induk mahasiswa (NIM), maupun nama pengguna hanya dapat dilakukan oleh administrator</span>
                                 </div>
                             </div>
 

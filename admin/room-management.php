@@ -37,7 +37,7 @@ require_once "../core/admin-session-only.php";
     <!-- Custom style -->
     <link rel="stylesheet" href="../assets/css/co-lab.css">
 
-    <title>Co-Lab | Admin Home</title>
+    <title>Manajemen Ruangan | Co-Lab</title>
 
 
 </head>
@@ -64,22 +64,22 @@ require_once "../core/admin-session-only.php";
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Room Management</h1>
-                        <a href="room-add.php" class="d-none d-sm-inline-block btn btn-sm btn-red shadow-sm"><i class="fas fa-plus fa-sm"></i> Add New Room</a>
+                        <h1 class="h3 mb-0 text-gray-800">Manajemen Ruangan</h1>
+                        <a href="room-add.php" class="d-none d-sm-inline-block btn btn-sm btn-red shadow-sm"><i class="fas fa-plus fa-sm"></i> Tambah Ruangan</a>
                     </div>
 
                     <div class="card shadow col-md-12 ">
                         <div class="card-body table-responsive">
-                            <h5 class="text-dark">Room List</h5><br>
+                            <h5 class="text-dark">Daftar Ruangan</h5><br>
                             <table class="table" id="rooms_table">
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Room Name</th>
-                                        <th>Capacity</th>
-                                        <th>Location</th>
+                                        <th>Nama Ruangan</th>
+                                        <th>Kapasitas</th>
+                                        <th>Lokasi</th>
                                         <th>Status</th>
-                                        <th>Action</th>
+                                        <th>Opsi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -93,11 +93,11 @@ require_once "../core/admin-session-only.php";
                                         <tr>
                                             <td><?= $i; ?></td>
                                             <td><?= $data['room_name']; ?></td>
-                                            <td><?= $data['capacity']; ?> Persons</td>
+                                            <td><?= $data['capacity']; ?> Orang</td>
                                             <td><?= $data['location']; ?></td>
-                                            <td><?= $data['status'] == 'inactive' ? '<i class="fa-regular fa-circle-xmark text-danger"></i> Inactive' : '<i class="fa-regular fa-circle-check text-success"></i> Active'; ?> </td>
-                                            <td><button class=" btn btn-sm btn-danger mr-3 mb-1" onclick="deleteRoom(<?= $data['id'] ?>)"><i class="fa-solid fa-ban"></i> &nbsp; Delete</button>
-                                                <a href="room-edit.php?id=<?= $data['id'] ?>" class=" btn btn-sm btn-blue mr-3 mb-1"><i class="fa-regular fa-pen-to-square"></i> &nbsp; Edit</a>
+                                            <td><?= $data['status'] == 'inactive' ? '<i class="fa-regular fa-circle-xmark text-danger"></i> Inactive' : '<i class="fa-regular fa-circle-check text-success"></i> Aktif'; ?> </td>
+                                            <td><button class=" btn btn-sm btn-danger mr-3 mb-1" onclick="deleteRoom(<?= $data['id'] ?>)"><i class="fa-solid fa-ban"></i> &nbsp; Hapus</button>
+                                                <a href="room-edit.php?id=<?= $data['id'] ?>" class=" btn btn-sm btn-blue mr-3 mb-1"><i class="fa-regular fa-pen-to-square"></i> &nbsp; Ubah</a>
                                                 <a href="room-detail.php?id=<?= $data['id'] ?>" class="btn btn-sm btn-orange mb-1"><i class="fa-solid fa-circle-info"></i> &nbsp; Detail</a>
                                             </td>
                                         </tr>
@@ -130,25 +130,6 @@ require_once "../core/admin-session-only.php";
         <i class="fas fa-angle-up"></i>
     </a>
 
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="../logout.php">Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Bootstrap core JavaScript-->
     <script src="../assets/vendor/jquery/jquery.min.js"></script>
     <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -172,31 +153,44 @@ require_once "../core/admin-session-only.php";
 
 <script>
     $(document).ready(function() {
-        $('#rooms_table').DataTable();
+        $('#rooms_table').DataTable({
+            "language": {
+                "search": "Cari : ",
+                "lengthMenu": "Tampilkan _MENU_ data per halaman",
+                "zeroRecords": "Tidak ada data yang cocok ditemukan.",
+                "info": "Menampilkan halaman _PAGE_ dari _PAGES_",
+                "infoEmpty": "Data tidak tersedia",
+                "infoFiltered": "(Difilter dari _MAX_ total data)",
+                "paginate": {
+                    "first": "Pertama",
+                    "last": "Terakhir",
+                    "next": "Selanjutnya",
+                    "previous": "Sebelumnya"
+                },
+            }
+        });
     });
 
     function deleteRoom(id) {
         Swal.fire({
-            title: 'Are you sure want to delete?',
+            title: 'Anda yakin ingin menghapus ruangan ini?',
             icon: 'question',
             showCancelButton: true,
-            confirmButtonText: 'Delete',
+            confirmButtonText: 'Hapus',
             confirmButtonColor: '#3085d6',
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire('Deleted!', '', 'success')
-                console.log("delete " + id)
                 $.post("room-delete.php", {
                         room_id: id
                     },
                     function(data) {
                         Swal.fire({
-                            title: 'Deleted',
-                            text: 'Room deleted successfully',
+                            title: 'Dihapus',
+                            text: 'Ruangan berhasil dihapus',
                             icon: 'success',
                             allowOutsideClick: false,
                             allowEscapeKey: false,
-                            confirmButtonText: 'OK',
+                            confirmButtonText: 'Selesai',
                             confirmButtonColor: '#3085d6',
                         }).then((result) => {
                             /* Read more about isConfirmed, isDenied below */

@@ -103,7 +103,7 @@ if (isset($_GET['id'])) {
     <!-- Custom style -->
     <link rel="stylesheet" href="../assets/css/co-lab.css">
 
-    <title>Edit User Information | Co-Lab</title>
+    <title>Ubah Informasi Pengguna | Co-Lab</title>
 
 
 </head>
@@ -129,48 +129,48 @@ if (isset($_GET['id'])) {
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">User Management</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Manajemen Pengguna</h1>
                     </div>
 
                     <div class="card shadow col-md-12 ">
                         <div class="card-body table-responsive">
-                            <h5 class="text-dark">User List</h5><br>
+                            <h5 class="text-dark">Daftar Pengguna</h5><br>
                             <form action="" method="POST">
                                 <div class="form-row">
                                     <div class="form-group col-md-5">
-                                        <label for="fullname">Full Name</label>
+                                        <label for="fullname">Nama Lengkap</label>
                                         <input required type="text" class="form-control" id="fullname" value="<?= $fullnameold ?>" name="fullname">
                                     </div>
                                     <div class="form-group col-md-7">
-                                        <label for="email">Email address</label>
+                                        <label for="email">Alamat Email</label>
                                         <input required type="email" class="form-control" value=<?= $emailold ?> id="email" name="email">
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-4">
-                                        <label for="studentid">Student ID</label>
+                                        <label for="studentid">Nomor Induk Mahasiswa</label>
                                         <input required type="number" class="form-control" value="<?= $studentidold ?>" id="studentid" name="studentid">
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label for="username">Username</label>
+                                        <label for="username">Nama Pengguna</label>
                                         <input required type="text" class="form-control" id="username" value="<?= $usernameold ?>" name="username">
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label for="username">User role</label>
+                                        <label for="username">Peran Pengguna</label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
-                                                <label class="input-group-text" for="inputGroupSelect01">Set as</label>
+                                                <label class="input-group-text" for="inputGroupSelect01">Tetapkan Sebagai</label>
                                             </div>
                                             <select class="custom-select" id="inputGroupSelect01" name="role">
-                                                <option <?= $roleold == "user" ? "selected" : ""; ?> value="user">Normal User</option>
-                                                <option <?= $roleold == "admin" ? "selected" : "";  ?> value="admin">Administrator</option>
+                                                <option <?= $roleold == "user" ? "selected" : ""; ?> value="user">Pengguna Standar</option>
+                                                <option <?= $roleold == "admin" ? "selected" : "";  ?> value="admin">Admin / Pengelola</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
 
-                                <a href="user-management.php" class="btn btn-secondary"><i class="fa-solid fa-chevron-left"></i> Back</a>
-                                <button type="submit" class="btn btn-red" name="btnsave"><i class="fa-regular fa-floppy-disk"></i> Save Changes</button>
+                                <a href="user-management.php" class="btn btn-secondary"><i class="fa-solid fa-chevron-left"></i> Kembali</a>
+                                <button type="submit" class="btn btn-red" name="btnsave"><i class="fa-regular fa-floppy-disk"></i> Simpan Perubahan</button>
                             </form>
                         </div>
                     </div>
@@ -242,8 +242,8 @@ if (isset($_GET['id'])) {
 
     function alertSuccess() {
         Swal.fire({
-            title: 'Success',
-            text: 'User information has been updated',
+            title: 'Berhasil',
+            text: 'Informasi pengguna telah diperbarui',
             icon: 'success',
             confirmButtonText: 'Done',
             confirmButtonColor: '#b6453d'

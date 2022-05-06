@@ -18,7 +18,7 @@ $fullname = $data['fullname'];
     <!-- Topbar Search -->
     <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 navbar-search">
 
-        <span class="text-red">Last refreshed : <?= date("j F Y, h:i A"); ?></span>
+        <span class="text-red small">Halaman ini dimuat pada : <?= date("j/n/Y, h:i A"); ?></span>
 
 
     </form>
@@ -86,9 +86,9 @@ $fullname = $data['fullname'];
             <!-- Dropdown - User Information -->
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
 
-                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                <a class="dropdown-item" href="<?= $home ?>/logout.php">
                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Logout
+                    Keluar
                 </a>
             </div>
         </li>

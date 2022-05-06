@@ -19,7 +19,7 @@ if (isset($_POST['keyword'])) {
                         <h6 class=" card-subtitle mb-2 text-muted">Max Capacity <?= $data['capacity']; ?> Persons</h6>
                     </div>
                     <div class="card-footer">
-                        <a href="#" class="btn btn-success">Available</a>
+                        <a href="room-detail.php?r=<?= $data['id'] ?>" class="btn btn-success">Available</a>
                     </div>
                 </div>
             </div>

@@ -16,7 +16,7 @@
     <li class="nav-item <?php echo $dashboard == true ? 'active' : '' ?>">
         <a class="nav-link" href="index.php">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a>
+            <span>Beranda</span></a>
     </li>
 
     <!-- Divider -->
@@ -30,12 +30,12 @@
     <li class="nav-item <?php echo $room_management == true ? 'active' : '' ?>">
         <a class="nav-link" href="room-management.php">
             <i class="fa-solid fa-building fa-fw"></i>
-            <span>Room Management</span></a>
+            <span>Manajemen Ruangan</span></a>
     </li>
     <li class="nav-item <?php echo $user_management == true ? 'active' : '' ?>">
         <a class="nav-link" href="user-management.php">
             <i class="fa-solid fa-user-gear fa-fw"></i>
-            <span>User Management</span></a>
+            <span>Manajemen Pengguna</span></a>
     </li>
 
 

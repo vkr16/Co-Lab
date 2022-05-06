@@ -37,7 +37,7 @@ require_once "../core/admin-session-only.php";
     <!-- Custom style -->
     <link rel="stylesheet" href="../assets/css/co-lab.css">
 
-    <title>User Management | Co-Lab</title>
+    <title>Manajemen Pengguna | Co-Lab</title>
 
 
 </head>
@@ -64,22 +64,22 @@ require_once "../core/admin-session-only.php";
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">User Management</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Manajemen Pengguna</h1>
                     </div>
 
                     <div class="card shadow col-md-12 ">
                         <div class="card-body table-responsive">
-                            <h5 class="text-dark">User List</h5><br>
+                            <h5 class="text-dark">Daftar Pengguna</h5><br>
                             <table class="table" id="rooms_table">
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Name</th>
-                                        <th>Student ID</th>
-                                        <th>Username</th>
+                                        <th>Nama Lengkap</th>
+                                        <th>NIM</th>
+                                        <th>Nama Pengguna</th>
                                         <th>Email</th>
                                         <th>Status</th>
-                                        <th>Action</th>
+                                        <th>Opsi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -101,9 +101,9 @@ require_once "../core/admin-session-only.php";
                                             <td><?= $data['studentid']; ?></td>
                                             <td><?= $data['username']; ?></td>
                                             <td><?= $data['email']; ?></td>
-                                            <td><?= $data['validity'] == 'invalid' ? '<i class="fa-regular fa-circle-xmark text-danger"></i> Not Verified' : '<i class="fa-regular fa-circle-check text-success"></i> Verified'; ?> </td>
-                                            <td><button class=" btn btn-sm btn-danger mr-3 mb-1" onclick="deleteUser(<?= $data['id'] ?>,'<?= $data['fullname'] ?>')"><i class="fa-solid fa-ban"></i> &nbsp; Delete</button>
-                                                <a href="user-edit.php?id=<?= $data['id'] ?>" class=" btn btn-sm btn-blue mr-3 mb-1"><i class="fa-regular fa-pen-to-square"></i> &nbsp; Edit</a>
+                                            <td><?= $data['validity'] == 'invalid' ? '<i class="fa-regular fa-circle-xmark text-danger"></i> Belum diverifikasi' : '<i class="fa-regular fa-circle-check text-success"></i> Terverifikasi'; ?> </td>
+                                            <td><button class=" btn btn-sm btn-danger mr-3 mb-1" onclick="deleteUser(<?= $data['id'] ?>,'<?= $data['fullname'] ?>')"><i class="fa-solid fa-ban"></i> &nbsp;Hapus</button>
+                                                <a href="user-edit.php?id=<?= $data['id'] ?>" class=" btn btn-sm btn-blue mr-3 mb-1"><i class="fa-regular fa-pen-to-square"></i> &nbsp;Ubah</a>
                                             </td>
                                         </tr>
                                     <?php
@@ -177,31 +177,44 @@ require_once "../core/admin-session-only.php";
 
 <script>
     $(document).ready(function() {
-        $('#rooms_table').DataTable();
+        $('#rooms_table').DataTable({
+            "language": {
+                "search": "Cari : ",
+                "lengthMenu": "Tampilkan _MENU_ data per halaman",
+                "zeroRecords": "Tidak ada data yang cocok ditemukan.",
+                "info": "Menampilkan halaman _PAGE_ dari _PAGES_",
+                "infoEmpty": "Data tidak tersedia",
+                "infoFiltered": "(Difilter dari _MAX_ total data)",
+                "paginate": {
+                    "first": "Pertama",
+                    "last": "Terakhir",
+                    "next": "Selanjutnya",
+                    "previous": "Sebelumnya"
+                },
+            }
+        });
     });
 
     function deleteUser(id, fullname) {
         Swal.fire({
-            title: 'Are you sure want to delete <br>' + fullname + '?',
+            title: 'Anda yakin ingin menghapus <br>' + fullname + '?',
             icon: 'question',
             showCancelButton: true,
-            confirmButtonText: 'Delete',
+            confirmButtonText: 'Hapus',
             confirmButtonColor: '#3085d6',
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire('Deleted!', '', 'success')
-                console.log("delete " + id)
                 $.post("user-delete.php", {
                         user_id: id
                     },
                     function(data) {
                         Swal.fire({
-                            title: 'Deleted',
-                            text: 'User account deleted successfully',
+                            title: 'Dihapus',
+                            text: 'Pengguna berhasil dihapus',
                             icon: 'success',
                             allowOutsideClick: false,
                             allowEscapeKey: false,
-                            confirmButtonText: 'OK',
+                            confirmButtonText: 'Selesai',
                             confirmButtonColor: '#3085d6',
                         }).then((result) => {
                             /* Read more about isConfirmed, isDenied below */

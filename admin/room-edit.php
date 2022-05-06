@@ -104,7 +104,7 @@ if (isset($_GET['id'])) {
     <!-- Custom style -->
     <link rel="stylesheet" href="../assets/css/co-lab.css">
 
-    <title>Co-Lab | Admin Home</title>
+    <title>Ubah Detail Ruangan | Co-Lab</title>
 
 
 </head>
@@ -127,61 +127,58 @@ if (isset($_GET['id'])) {
                 <?php include "views/topbar.php" ?>
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
+                <div class="container-fluid mb-4">
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Room Management</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Manajemen Ruangan</h1>
                     </div>
 
                     <div class="card shadow col-md-12 ">
                         <div class="card-body">
-                            <h5 class="text-dark">Edit Room Information</h5><br>
+                            <h5 class="text-dark">Ubah Detail Ruangan</h5><br>
 
                             <form action="" method="post" enctype="multipart/form-data">
                                 <form>
                                     <div class="form-row">
                                         <div class="form-group col-md-6">
-                                            <label for="room_name">Room Name</label>
+                                            <label for="room_name">Nama Ruangan</label>
                                             <input value="<?= $room_name ?>" type="text" class="form-control" id="room_name" name="room_name">
                                         </div>
                                         <div class="form-group col-md-6">
-                                            <label for="location">Location</label>
+                                            <label for="location">Lokasi</label>
                                             <input value="<?= $location ?>" type="text" class="form-control" id="location" name="location">
                                         </div>
                                     </div>
                                     <div class="form-row">
                                         <div class="form-group col-md-2">
 
-                                            <label for="capacity">Capacity</label>
+                                            <label for="capacity">Kapasitas</label>
                                             <div class="input-group">
                                                 <input value="<?= $capacity ?>" type="number" class="form-control" aria-describedby="basic-addon2" name="capacity">
                                                 <div class="input-group-append">
-                                                    <span class="input-group-text" id="basic-addon2">Persons</span>
+                                                    <span class="input-group-text" id="basic-addon2">Orang</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group col-md-6">
-                                            <label for="thumbnail">Thumbnail (Optional)</label>
+                                            <label for="thumbnail">Foto Ruangan (Opsional)</label>
                                             <div class="input-group mb-3">
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                                                    <span class="input-group-text" id="inputGroupFileAddon01">Unggah</span>
                                                 </div>
                                                 <div class="custom-file">
                                                     <input type="file" onchange="imageSelected()" class="custom-file-input" id="thumbnailSelect" aria-describedby="inputGroupFileAddon01" name="thumbnail">
-                                                    <label class="custom-file-label" id="labelThumbnailSelect" for="inputGroupFile01">Choose file</label>
+                                                    <label class="custom-file-label" id="labelThumbnailSelect" for="thumbnailSelect">Pilih gambar</label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group col-md-4">
                                             <label for="Status">Status</label>
                                             <div class="input-group mb-3">
-                                                <div class="input-group-prepend">
-                                                    <label class="input-group-text" for="inputGroupSelect01">Set</label>
-                                                </div>
                                                 <select class="custom-select" id="inputGroupSelect01" name="status">
-                                                    <option <?= $status == 'active' ? 'selected' : ''; ?> value="active">Active</option>
-                                                    <option <?= $status == 'inactive' ? 'selected' : ''; ?> value="inactive">Inactive</option>
+                                                    <option <?= $status == 'active' ? 'selected' : ''; ?> value="active">Aktif</option>
+                                                    <option <?= $status == 'inactive' ? 'selected' : ''; ?> value="inactive">Tidak Aktif</option>
 
                                                 </select>
                                             </div>
@@ -189,12 +186,12 @@ if (isset($_GET['id'])) {
                                     </div>
                                     <div class="form-row">
                                         <div class="form-group col-md-12">
-                                            <label for="description">Description</label>
+                                            <label for="description">Deskripsi</label>
                                             <textarea class="form-control desc-textarea" name="description" placeholder="Description or Facilities"><?= $description; ?></textarea>
                                         </div>
                                     </div>
-                                    <a href="room-management.php" class="btn btn-secondary">Cancel</a>
-                                    <button type="submit" class="btn btn-red" name="btnsave"><i class="fa-regular fa-floppy-disk"></i> Save Changes</button>
+                                    <a href="room-management.php" class="btn btn-secondary">Kembali</a>
+                                    <button type="submit" class="btn btn-red" name="btnsave"><i class="fa-regular fa-floppy-disk"></i> Simpan Perubahan</button>
                                 </form>
                             </form>
                         </div>
@@ -220,24 +217,6 @@ if (isset($_GET['id'])) {
         <i class="fas fa-angle-up"></i>
     </a>
 
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="../logout.php">Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Bootstrap core JavaScript-->
     <script src="../assets/vendor/jquery/jquery.min.js"></script>

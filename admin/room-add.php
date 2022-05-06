@@ -82,7 +82,7 @@ if (isset($_POST['save'])) {
     <!-- Custom style -->
     <link rel="stylesheet" href="../assets/css/co-lab.css">
 
-    <title>Co-Lab | Admin Home</title>
+    <title>Tambah Ruangan | Co-Lab</title>
 
 
 </head>
@@ -110,68 +110,66 @@ if (isset($_POST['save'])) {
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Room Management</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Manajemen Ruangan</h1>
                     </div>
 
                     <div class="card shadow col-md-12 ">
                         <div class="card-body">
-                            <h5 class="text-dark">Add New Room</h5><br>
+                            <h5 class="text-dark">Tambah Ruangan Baru</h5><br>
 
                             <form action="" method="POST" enctype="multipart/form-data">
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="room_name">Room Name</label>
-                                        <input type="text" class="form-control" id="room_name" placeholder="Multimedia Laboratory" name="room_name" required>
+                                        <label for="room_name">Nama Ruangan</label>
+                                        <input type="text" class="form-control" id="room_name" placeholder="contoh : Laboratorium Multimedia" name="room_name" required>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="location">Location</label>
-                                        <input type="text" class="form-control" id="location" placeholder="2nd Floor (A2.5)" name="location" required>
+                                        <label for="location">Lokasi</label>
+                                        <input type="text" class="form-control" id="location" placeholder="contoh : Lantai 2 Ruang A.2.12" name="location" required>
                                     </div>
                                 </div>
                                 <div class="form-row">
-                                    <div class="form-group col-md-2">
+                                    <div class="form-group col-md-3">
 
-                                        <label for="capacity">Capacity</label>
+                                        <label for="capacity">Kapasitas</label>
                                         <div class="input-group">
-                                            <input type="number" class="form-control" placeholder="30" aria-describedby="basic-addon2" name="capacity" required>
+                                            <input type="number" class="form-control" placeholder="contoh : 30" aria-describedby="basic-addon2" name="capacity" required min="1">
                                             <div class="input-group-append">
-                                                <span class="input-group-text" id="basic-addon2">Persons</span>
+                                                <span class="input-group-text" id="basic-addon2">Orang</span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="thumbnail">Thumbnail (Optional)</label>
+                                        <label for="thumbnail">Foto Ruangan (Opsional)</label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
-                                                <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                                                <span class="input-group-text" id="inputGroupFileAddon01">Unggah</span>
                                             </div>
                                             <div class="custom-file">
                                                 <input onchange="imageSelected()" type="file" class="custom-file-input" id="thumbnail" aria-describedby="inputGroupFileAddon01" name="thumbnail" accept=".jpg,.jpeg,.png">
-                                                <label class="custom-file-label" for="inputGroupFile01" id="labelThumbnail">Choose file</label>
+                                                <label class="custom-file-label" for="inputGroupFile01" id="labelThumbnail">Pilih gambar</label>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="availability">Availability</label>
+                                    <div class="form-group col-md-3">
+                                        <label for="availability">Status</label>
                                         <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <label class="input-group-text" for="inputGroupSelect01">Set</label>
-                                            </div>
+
                                             <select class="custom-select" id="inputGroupSelect01" name="status">
-                                                <option selected value="active">Active (Default)</option>
-                                                <option value="inactive">Inactive</option>
+                                                <option selected value="active">Aktif (Default)</option>
+                                                <option value="inactive">Tidak Aktif</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-12">
-                                        <label for="description">Description</label>
-                                        <textarea class="form-control desc-textarea" name="description" placeholder="Description or Facilities" required></textarea>
+                                        <label for="description">Deskripsi</label>
+                                        <textarea class="form-control desc-textarea" name="description" placeholder="Deskripsi atau fasilitas" required></textarea>
                                     </div>
                                 </div>
-                                <a href="room-management.php" class="btn btn-secondary"><i class="fa-solid fa-arrow-left-long"></i> Back</a>
-                                <button type="submit" class="btn btn-red" name="save"><i class="fa-regular fa-floppy-disk"></i> Save</button>
+                                <a href="room-management.php" class="btn btn-secondary"><i class="fa-solid fa-arrow-left-long"></i> Kembali</a>
+                                <button type="submit" class="btn btn-red" name="save"><i class="fa-regular fa-floppy-disk"></i> Simpan</button>
                             </form>
                         </div>
                     </div>

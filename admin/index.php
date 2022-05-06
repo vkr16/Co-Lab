@@ -37,7 +37,7 @@ require_once "../core/admin-session-only.php";
     <!-- Custom style -->
     <link rel="stylesheet" href="../assets/css/co-lab.css">
 
-    <title>Co-Lab | Admin Home</title>
+    <title>Panel Admin | Co-Lab</title>
 
 
 </head>
@@ -63,22 +63,22 @@ require_once "../core/admin-session-only.php";
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-4 text-gray-800">Admin Dashboard</h1>
+                    <h1 class="h3 mb-4 text-gray-800">Beranda Admin</h1>
 
                     <div class="card shadow col-md-12 ">
                         <div class="card-body table-responsive">
-                            <h5 class="text-dark">Room Availability Information</h5>
+                            <h5 class="text-dark">Informasi Ketersediaan Ruangan</h5>
                             <br>
 
                             <table class="table" id="rooms_table">
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Room Name</th>
-                                        <th>Capacity</th>
-                                        <th>Availability</th>
-                                        <th>PIC</th>
-                                        <th>Details</th>
+                                        <th>Nama Ruangan</th>
+                                        <th>Kapasitas</th>
+                                        <th>Ketersediaan</th>
+                                        <th>Penanggung Jawab</th>
+                                        <th>Detail</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -92,10 +92,10 @@ require_once "../core/admin-session-only.php";
                                         <tr>
                                             <td><?= $i; ?></td>
                                             <td><?= $data['room_name']; ?></td>
-                                            <td><?= $data['capacity'] . " Persons"; ?></td>
+                                            <td><?= $data['capacity'] . " Orang"; ?></td>
                                             <td>Available</td>
                                             <td>-</td>
-                                            <td><a href="room-detail.php?id=<?= $data['id'] ?>" class="btn btn-sm btn-orange">Check Details</a></td>
+                                            <td><a href="room-detail.php?id=<?= $data['id'] ?>" class="btn btn-sm btn-orange">Lihat Detail</a></td>
                                         </tr>
                                     <?php
                                     }
@@ -165,6 +165,21 @@ require_once "../core/admin-session-only.php";
 
 <script>
     $(document).ready(function() {
-        $('#rooms_table').DataTable();
+        $('#rooms_table').DataTable({
+            "language": {
+                "search": "Cari : ",
+                "lengthMenu": "Tampilkan _MENU_ data per halaman",
+                "zeroRecords": "Tidak ada data yang cocok ditemukan.",
+                "info": "Menampilkan halaman _PAGE_ dari _PAGES_",
+                "infoEmpty": "Data tidak tersedia",
+                "infoFiltered": "(Difilter dari _MAX_ total data)",
+                "paginate": {
+                    "first": "Pertama",
+                    "last": "Terakhir",
+                    "next": "Selanjutnya",
+                    "previous": "Sebelumnya"
+                },
+            }
+        })
     });
 </script>
