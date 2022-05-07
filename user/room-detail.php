@@ -191,7 +191,7 @@ require_once "../core/user-session-only.php";
                         <div class="form-group row">
                             <label for="timestart" class="col-sm-4 col-form-label">Pilih waktu mulai </label>
                             <div class="col-sm-3">
-                                <select class="custom-select custom-select-sm text-center" id="hour1" onchange="optCorrection1()">
+                                <select class="custom-select custom-select-sm text-center" id="hour1" onchange="optCorrection()">
                                     <option value="6">06</option>
                                     <option value="7">07</option>
                                     <option value="8">08</option>
@@ -212,7 +212,7 @@ require_once "../core/user-session-only.php";
                             </div>
                             <strong>:</strong>
                             <div class="col-sm-3">
-                                <select class="custom-select custom-select-sm text-center" id="minute1" onchange="optCorrection2()">
+                                <select class="custom-select custom-select-sm text-center" id="minute1" onchange="optCorrection()">
                                     <option value="0">00</option>
                                     <option value="10">10</option>
                                     <option value="20">20</option>
@@ -226,7 +226,7 @@ require_once "../core/user-session-only.php";
                         <div class="form-group row">
                             <label for="timestart" class="col-sm-4 col-form-label">Pilih waktu selesai </label>
                             <div class="col-sm-3">
-                                <select class="custom-select custom-select-sm text-center" id="hour2" onchange="optCorrection1()">
+                                <select class="custom-select custom-select-sm text-center" id="hour2" onchange="optCorrection()">
                                     <option value="6">06</option>
                                     <option value="7">07</option>
                                     <option value="8">08</option>
@@ -247,7 +247,7 @@ require_once "../core/user-session-only.php";
                             </div>
                             <strong>:</strong>
                             <div class="col-sm-3">
-                                <select class="custom-select custom-select-sm text-center" id="minute2" onchange="optCorrection2()">
+                                <select class="custom-select custom-select-sm text-center" id="minute2" oninput="optCorrection()">
                                     <option value="9">09</option>
                                     <option value="19">19</option>
                                     <option value="29">29</option>
@@ -305,27 +305,34 @@ require_once "../core/user-session-only.php";
         }).datepicker("setDate", 'now');
     });
 
-    function optCorrection1() {
+    function optCorrection() {
         $("#hour2 option").each(function() {
             if (parseInt($(this).val()) < parseInt($("#hour1").val())) {
                 $(this).attr("disabled", "disabled").attr("hidden", "hidden");
                 var selected = parseInt($("#hour1").val());
-                $("#hour2 option[value=" + selected + "]").attr("selected", "selected");
+                $("#hour2 option[value=" + selected + "]").attr("selected", "selected").siblings().removeAttr("selected");
+                if (!$("#hour2").val()) {
+                    $("#hour2 option[value=21]").attr("selected", "selected").siblings().removeAttr("selected");
+                }
             } else {
                 $(this).removeAttr("disabled").removeAttr("hidden");
             }
-            optCorrection2();
         });
-    }
 
-    function optCorrection2() {
-        if (parseInt($("#hour2").val()) === parseInt($("#hour1").val())) {
+        if (parseInt($("#hour1").val()) == parseInt($("#hour2").val())) {
             $("#minute2 option").each(function() {
                 if (parseInt($(this).val()) < parseInt($("#minute1").val())) {
                     $(this).attr("disabled", "disabled").attr("hidden", "hidden");
                     var selected = parseInt($("#minute1").val()) + 9;
-                    $("#minute2 option[value=" + selected + "]").attr("selected", "selected");
+                    $("#minute2 option[value='" + selected + "']").attr("selected", "selected").siblings().removeAttr("selected");
+
+                    if (!$("#minute2").val()) {
+                        $("#minute2 option[value=59]").attr("selected", "selected").siblings().removeAttr("selected");
+                    }
+                } else {
+                    $(this).removeAttr("disabled").removeAttr("hidden");
                 }
+
             });
         } else {
             $("#minute2 option").each(function() {
