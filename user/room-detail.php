@@ -3,6 +3,35 @@
 require_once "../core/init.php";
 require_once "../core/user-session-only.php";
 
+if (isset($_POST['submit'])) {
+
+    // Preprocess the date before inserted to database
+    $date = $_POST['date'];
+    $tgl = substr($date, 0, 2);
+    $bln = substr($date, 3, 2);
+    $thn = substr($date, 6, 4);
+    $date = $thn . "/" . $bln . "/" . $tgl;
+
+    $timeStart = $_POST['hour1'] . ":" . $_POST['minute1'];
+    $timeStart = date_format(date_create($timeStart), 'H:i');
+    $startDateTime = $date . " " . $timeStart;
+    $startDateTime = date_create($startDateTime);
+
+    $timeEnd = $_POST['hour2'] . ":" . $_POST['minute2'];
+    $timeEnd = date_format(date_create($timeEnd), 'H:i');
+    $endDateTime = $date . " " . $timeEnd;
+    $endDateTime = date_create($endDateTime);
+
+    $notes = $_POST['notes'];
+    $notes = str_replace(array(
+        "\r\n",
+        "\n"
+    ), '<br>', $notes);
+    // Preprocess end here
+
+
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -173,104 +202,106 @@ require_once "../core/user-session-only.php";
     <!-- Modal -->
     <div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="bookingModalLabel">Jadwalkan Peminjaman Ruangan</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="">
-                        <div class="form-group row">
-                            <label for="datepicker" class="col-sm-4 col-form-label">Pilih tanggal</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control form-control-sm" name="datepicker" id="datepicker" readonly />
+            <form action="" method="POST">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="bookingModalLabel">Jadwalkan Peminjaman Ruangan</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="">
+                            <div class="form-group row">
+                                <label for="datepicker" class="col-sm-4 col-form-label">Pilih tanggal</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control form-control-sm bg-white" name="date" id="datepicker" readonly />
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="timestart" class="col-sm-4 col-form-label">Pilih waktu mulai </label>
-                            <div class="col-sm-3">
-                                <select class="custom-select custom-select-sm text-center" id="hour1" onchange="optCorrection()">
-                                    <option value="6">06</option>
-                                    <option value="7">07</option>
-                                    <option value="8">08</option>
-                                    <option value="9">09</option>
-                                    <option value="10">10</option>
-                                    <option value="11">11</option>
-                                    <option value="12">12</option>
-                                    <option value="13">13</option>
-                                    <option value="14">14</option>
-                                    <option value="15">15</option>
-                                    <option value="16">16</option>
-                                    <option value="17">17</option>
-                                    <option value="18">18</option>
-                                    <option value="19">19</option>
-                                    <option value="20">20</option>
-                                    <option value="21">21</option>
-                                </select>
-                            </div>
-                            <strong>:</strong>
-                            <div class="col-sm-3">
-                                <select class="custom-select custom-select-sm text-center" id="minute1" onchange="optCorrection()">
-                                    <option value="0">00</option>
-                                    <option value="10">10</option>
-                                    <option value="20">20</option>
-                                    <option value="30">30</option>
-                                    <option value="40">40</option>
-                                    <option value="50">50</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="timestart" class="col-sm-4 col-form-label">Pilih waktu selesai </label>
-                            <div class="col-sm-3">
-                                <select class="custom-select custom-select-sm text-center" id="hour2" onchange="optCorrection()">
-                                    <option value="6">06</option>
-                                    <option value="7">07</option>
-                                    <option value="8">08</option>
-                                    <option value="9">09</option>
-                                    <option value="10">10</option>
-                                    <option value="11">11</option>
-                                    <option value="12">12</option>
-                                    <option value="13">13</option>
-                                    <option value="14">14</option>
-                                    <option value="15">15</option>
-                                    <option value="16">16</option>
-                                    <option value="17">17</option>
-                                    <option value="18">18</option>
-                                    <option value="19">19</option>
-                                    <option value="20">20</option>
-                                    <option value="21">21</option>
-                                </select>
-                            </div>
-                            <strong>:</strong>
-                            <div class="col-sm-3">
-                                <select class="custom-select custom-select-sm text-center" id="minute2" oninput="optCorrection()">
-                                    <option value="9">09</option>
-                                    <option value="19">19</option>
-                                    <option value="29">29</option>
-                                    <option value="39">39</option>
-                                    <option value="49">49</option>
-                                    <option value="59">59</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class=" form-group row">
-                            <label for="notes" class="col-sm-4 col-form-label">Catatan </label>
-                            <div class="col-sm-8">
-                                <textarea name="notes" id="notes" rows="10" class="form-control" style="min-height: 80px;height:80px;max-height:160px"></textarea>
+                            <div class="form-group row">
+                                <label for="timestart" class="col-sm-4 col-form-label">Pilih waktu mulai </label>
+                                <div class="col-sm-3">
+                                    <select class="custom-select custom-select-sm text-center" id="hour1" name="hour1" onchange="optCorrection()">
+                                        <option value="6">06</option>
+                                        <option value="7">07</option>
+                                        <option value="8">08</option>
+                                        <option value="9">09</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                        <option value="13">13</option>
+                                        <option value="14">14</option>
+                                        <option value="15">15</option>
+                                        <option value="16">16</option>
+                                        <option value="17">17</option>
+                                        <option value="18">18</option>
+                                        <option value="19">19</option>
+                                        <option value="20">20</option>
+                                        <option value="21">21</option>
+                                    </select>
+                                </div>
+                                <strong>:</strong>
+                                <div class="col-sm-3">
+                                    <select class="custom-select custom-select-sm text-center" id="minute1" name="minute1" onchange="optCorrection()">
+                                        <option value="0">00</option>
+                                        <option value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="30">30</option>
+                                        <option value="40">40</option>
+                                        <option value="50">50</option>
+                                    </select>
+                                </div>
                             </div>
 
-                        </div>
-                    </form>
+                            <div class="form-group row">
+                                <label for="timestart" class="col-sm-4 col-form-label">Pilih waktu selesai </label>
+                                <div class="col-sm-3">
+                                    <select class="custom-select custom-select-sm text-center" id="hour2" name="hour2" onchange="optCorrection()">
+                                        <option value="6">06</option>
+                                        <option value="7">07</option>
+                                        <option value="8">08</option>
+                                        <option value="9">09</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                        <option value="13">13</option>
+                                        <option value="14">14</option>
+                                        <option value="15">15</option>
+                                        <option value="16">16</option>
+                                        <option value="17">17</option>
+                                        <option value="18">18</option>
+                                        <option value="19">19</option>
+                                        <option value="20">20</option>
+                                        <option value="21">21</option>
+                                    </select>
+                                </div>
+                                <strong>:</strong>
+                                <div class="col-sm-3">
+                                    <select class="custom-select custom-select-sm text-center" id="minute2" name="minute2" oninput="optCorrection()">
+                                        <option value="9">09</option>
+                                        <option value="19">19</option>
+                                        <option value="29">29</option>
+                                        <option value="39">39</option>
+                                        <option value="49">49</option>
+                                        <option value="59">59</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class=" form-group row">
+                                <label for="notes" class="col-sm-4 col-form-label">Catatan / Informasi Kegiatan </label>
+                                <div class="col-sm-8">
+                                    <textarea required name="notes" id="notes" rows="10" class="form-control" style="min-height: 80px;height:80px;max-height:160px"></textarea>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary" name="submit"> <i class="fa-regular fa-calendar-plus"></i> &nbsp; Jadwalkan</button>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 
@@ -298,7 +329,7 @@ require_once "../core/user-session-only.php";
         $("#datepicker").datepicker({
             language: 'id',
             orientation: "auto right",
-            format: "d MM yyyy",
+            format: "dd/mm/yyyy",
             startView: "days",
             minViewMode: "days",
             startDate: "0d"
