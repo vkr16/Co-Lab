@@ -43,11 +43,14 @@ if (isset($_POST['submit'])) {
 
     $userdata = getUserDataBySession();
     $user_id = $userdata['id'];
-
-    if (openTicket($user_id, $room_id, $startDateTime, $endDateTime, $notes)) {
-        $loadThis = "ticketOpened()";
-    } else {
+    if (isConflict($room_id, $startDateTime, $endDateTime)) {
         $loadThis = "ticketOpenFailed()";
+    } else {
+        if (openTicket($user_id, $room_id, $startDateTime, $endDateTime, $notes)) {
+            $loadThis = "ticketOpened()";
+        } else {
+            $loadThis = "ticketOpenFailed()";
+        }
     }
 }
 
@@ -420,7 +423,7 @@ if (isset($_POST['submit'])) {
 
     function ticketOpenFailed() {
         Swal.fire({
-            icon: 'success',
+            icon: 'error',
             title: 'Gagal',
             text: 'Jadwal anda gagal dibukukan',
             confirmButtonColor: '#2b468b',

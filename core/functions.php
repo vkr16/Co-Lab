@@ -342,3 +342,34 @@ function isNowAvailable($room_id)
         return false;
     }
 }
+
+function isConflict($room_id, $start_time, $end_time)
+{
+    global $link;
+
+    $room_id = mysqli_real_escape_string($link, $room_id);
+
+
+    $query = "SELECT * FROM tickets WHERE room_id = '$room_id'";
+    $result = mysqli_query($link, $query);
+
+    while ($data = mysqli_fetch_assoc($result)) {
+        $conflict = false;
+        if ($start_time > $data['time_start'] && $start_time < $data['time_end']) {
+            $conflict = true;
+            break;
+        } elseif ($end_time > $data['time_start'] && $end_time < $data['time_end']) {
+            $conflict = true;
+            break;
+        } else {
+            $conflict = false;
+        }
+    }
+
+
+    if ($conflict == true) {
+        return true;
+    } else {
+        return false;
+    }
+}
