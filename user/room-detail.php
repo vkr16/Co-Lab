@@ -3,6 +3,17 @@
 require_once "../core/init.php";
 require_once "../core/user-session-only.php";
 
+if (isset($_GET['r'])) {
+    $room_id = $_GET['r'];
+    $room_data = getRoomDataById($room_id);
+
+    $room_name = $room_data['room_name'];
+    $room_capacity = $room_data['capacity'];
+    $room_location = $room_data['location'];
+    $room_description = $room_data['description'];
+    $room_thumbnail = $room_data['thumbnail'];
+}
+
 if (isset($_POST['submit'])) {
 
     // Preprocess the date before inserted to database
@@ -15,12 +26,13 @@ if (isset($_POST['submit'])) {
     $timeStart = $_POST['hour1'] . ":" . $_POST['minute1'];
     $timeStart = date_format(date_create($timeStart), 'H:i');
     $startDateTime = $date . " " . $timeStart;
-    $startDateTime = date_create($startDateTime);
+    $startDateTime = date_format(date_create($startDateTime), 'Y-m-d H:i');
+
 
     $timeEnd = $_POST['hour2'] . ":" . $_POST['minute2'];
     $timeEnd = date_format(date_create($timeEnd), 'H:i');
     $endDateTime = $date . " " . $timeEnd;
-    $endDateTime = date_create($endDateTime);
+    $endDateTime = date_format(date_create($endDateTime), 'Y-m-d H:i');
 
     $notes = $_POST['notes'];
     $notes = str_replace(array(
@@ -29,8 +41,17 @@ if (isset($_POST['submit'])) {
     ), '<br>', $notes);
     // Preprocess end here
 
+    $userdata = getUserDataBySession();
+    $user_id = $userdata['id'];
 
+    if (openTicket($user_id, $room_id, $startDateTime, $endDateTime, $notes)) {
+        $loadThis = "ticketOpened()";
+    } else {
+        $loadThis = "ticketOpenFailed()";
+    }
 }
+
+
 
 ?>
 
@@ -68,7 +89,7 @@ if (isset($_POST['submit'])) {
 
 </head>
 
-<body id="page-top">
+<body id="page-top" onload="<?= $loadThis ?>">
 
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -107,23 +128,31 @@ if (isset($_POST['submit'])) {
                                     <div class="row">
 
                                         <div class="col-md-4">
-                                            <img src="../assets/img/rooms/5005c850e804963b7d5f.jpeg" class="img-fluid rounded mb-2" style="width: 100%;height: 200px;object-fit: cover; ">
-                                            <span class="btn btn-sm btn-block btn-danger disabled">Sedang Digunakan</span>
+                                            <img src="../assets/img/rooms/<?= $room_thumbnail ?>" class="img-fluid rounded mb-2" style="width: 100%;height: 200px;object-fit: cover; ">
+
+                                            <?php if (isNowAvailable($room_id)) { ?>
+                                                <span class="btn btn-sm btn-block btn-success disabled">Tersedia Saat Ini</span>
+                                            <?php } else { ?>
+                                                <span class="btn btn-sm btn-block btn-danger disabled">Sedang Digunakan</span>
+                                            <?php } ?>
+
+
+
                                             <button class="btn btn-block btn-primary" data-toggle="modal" data-target="#bookingModal"> <i class="fa-regular fa-calendar-plus"></i> &nbsp;Buat Jadwal</button>
                                         </div>
                                         <div class="col-md-8">
                                             <dl class="row">
                                                 <dt class="col-sm-5"><i class="fa-solid fa-building fa-fw"></i> &nbsp; Nama Ruangan</dt>
-                                                <dd class="col-sm-7">Ruang Rapat Bersama 2</dd>
+                                                <dd class="col-sm-7"><?= $room_name; ?></dd>
 
                                                 <dt class="col-sm-5"><i class="fa-solid fa-people-group fa-fw"></i> &nbsp; Kapasitas</dt>
-                                                <dd class="col-sm-7">27 Orang</dd>
+                                                <dd class="col-sm-7"><?= $room_capacity; ?> Orang</dd>
 
                                                 <dt class="col-sm-5"><i class="fa-solid fa-location-dot fa-fw"></i> &nbsp; Lokasi</dt>
-                                                <dd class="col-sm-7">Lantai 3 Ruang A3.2</dd>
+                                                <dd class="col-sm-7"><?= $room_location; ?></dd>
 
                                                 <dt class="col-sm-5"><i class="fa-solid fa-align-left fa-fw"></i> &nbsp; Deskripsi</dt>
-                                                <dd class="col-sm-7">Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis vitae, aliquam suscipit tempore harum, facilis quasi at esse cumque, optio velit perferendis reiciendis expedita repellat quas. Minus culpa repellendus quibusdam!</dd>
+                                                <dd class="col-sm-7"><?= $room_description; ?></dd>
 
 
                                             </dl>
@@ -138,35 +167,27 @@ if (isset($_POST['submit'])) {
                                     Daftar Pembukuan
                                 </div>
                                 <div class="card-body">
-                                    <table class="table table-sm">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">#</th>
-                                                <th scope="col">First</th>
-                                                <th scope="col">Last</th>
-                                                <th scope="col">Handle</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <th scope="row">1</th>
-                                                <td>Mark</td>
-                                                <td>Otto</td>
-                                                <td>@mdo</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">2</th>
-                                                <td>Jacob</td>
-                                                <td>Thornton</td>
-                                                <td>@fat</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">3</th>
-                                                <td colspan="2">Larry the Bird</td>
-                                                <td>@twitter</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    <div class="form-group row">
+                                        <label for="datepicker2" class="col-sm-7 col-form-label">Tampilkan jadwal untuk tanggal</label>
+                                        <div class="col-sm-5">
+                                            <input type="text" class="form-control form-control-sm bg-white" name="date" id="datepicker2" readonly onchange="getBookingList(<?= $_GET['r'] ?>)" />
+                                        </div>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-sm">
+                                            <thead>
+                                                <tr class="bg-info text-light">
+                                                    <th scope="col" class="col-sm-1">No.</th>
+                                                    <th scope="col" class="col-sm-7">Pengguna</th>
+                                                    <th scope="col" class="col-sm-2">Mulai</th>
+                                                    <th scope="col" class="col-sm-2">Selesai</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="bookingtable">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -320,6 +341,10 @@ if (isset($_POST['submit'])) {
     <script src="../assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
     <script src="../assets/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.id.min.js"></script>
 
+    <!-- SweetAlert2 JS -->
+    <script src="../assets/vendor/SweetAlert2/SweetAlert2.js"></script>
+
+
 </body>
 
 </html>
@@ -334,6 +359,17 @@ if (isset($_POST['submit'])) {
             minViewMode: "days",
             startDate: "0d"
         }).datepicker("setDate", 'now');
+
+        $("#datepicker2").datepicker({
+            language: 'id',
+            orientation: "auto bottom",
+            format: "dd/mm/yyyy",
+            startView: "days",
+            minViewMode: "days",
+            startDate: "0d"
+        }).datepicker("setDate", 'now');
+
+        getBookingList(<?= $_GET['r'] ?>);
     });
 
     function optCorrection() {
@@ -370,5 +406,35 @@ if (isset($_POST['submit'])) {
                 $(this).removeAttr("disabled").removeAttr("hidden");
             });
         }
+    }
+
+    function ticketOpened() {
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil',
+            text: 'Jadwal anda telah dibukukan dan tiket berhasil di terbitkan, lihat tiket anda pada bagian "Tiket Saya"',
+            confirmButtonColor: '#2b468b',
+            confirmButtonText: "Selesai"
+        })
+    }
+
+    function ticketOpenFailed() {
+        Swal.fire({
+            icon: 'success',
+            title: 'Gagal',
+            text: 'Jadwal anda gagal dibukukan',
+            confirmButtonColor: '#2b468b',
+            confirmButtonText: "Selesai"
+        })
+    }
+
+    function getBookingList(room_id) {
+        $.post("views/remote-room-bookinglist.php", {
+                date: $("#datepicker2").val(),
+                room_id: room_id,
+            },
+            function(data) {
+                $("#bookingtable").html(data);
+            });
     }
 </script>

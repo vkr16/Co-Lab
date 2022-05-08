@@ -13,10 +13,15 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
+    <li class="nav-item <?php echo $dashboard == true ? 'active' : '' ?>">
         <a class="nav-link" href="index.php">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Beranda</span></a>
+    </li>
+    <li class="nav-item <?php echo $myTickets == true ? 'active' : '' ?>">
+        <a class="nav-link" href="my-tickets.php">
+            <i class="fa-solid fa-ticket"></i>
+            <span>Tiket Saya</span></a>
     </li>
 
     <!-- <div class="sidebar-heading">

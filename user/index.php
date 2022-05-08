@@ -1,5 +1,5 @@
 <?php
-
+$dashboard = true;
 require_once "../core/init.php";
 require_once "../core/user-session-only.php";
 

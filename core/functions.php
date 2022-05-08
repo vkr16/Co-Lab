@@ -281,3 +281,64 @@ function updatePass($username, $password)
         return false;
     }
 }
+
+function openTicket($user_id, $room_id, $time_start, $time_end, $notes)
+{
+    global $link;
+
+    $user_id = mysqli_real_escape_string($link, $user_id);
+    $room_id = mysqli_real_escape_string($link, $room_id);
+    $notes = mysqli_real_escape_string($link, $notes);
+
+    $query = "INSERT INTO tickets (user_id, room_id,time_start,time_end,notes) VALUES ('$user_id','$room_id','$time_start','$time_end','$notes')";
+    if (mysqli_query($link, $query)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function getUserDataBySession()
+{
+    global $link;
+
+    $username = $_SESSION['cl_user'];
+
+    $username = mysqli_real_escape_string($link, $username);
+    $query = "SELECT * FROM users WHERE username = '$username'";
+
+    $result = mysqli_query($link, $query);
+    $data = mysqli_fetch_assoc($result);
+
+    return $data;
+}
+
+function getRoomDataById($room_id)
+{
+    global $link;
+
+    $room_id = mysqli_real_escape_string($link, $room_id);
+
+    $query = "SELECT * FROM rooms WHERE id = '$room_id'";
+
+    $result = mysqli_query($link, $query);
+    $data = mysqli_fetch_assoc($result);
+
+    return $data;
+}
+
+function isNowAvailable($room_id)
+{
+    global $link;
+    $room_id = mysqli_real_escape_string($link, $room_id);
+
+    $query = "SELECT * FROM tickets WHERE time_start < CURTIME() AND time_end > CURTIME() AND room_id = $room_id";
+    $result = mysqli_query($link, $query);
+
+    $count = mysqli_num_rows($result);
+    if ($count == 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
