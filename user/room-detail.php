@@ -172,8 +172,14 @@ if (isset($_POST['submit'])) {
                                 <div class="card-body">
                                     <div class="form-group row">
                                         <label for="datepicker2" class="col-sm-7 col-form-label">Tampilkan jadwal untuk tanggal</label>
+
                                         <div class="col-sm-5">
-                                            <input type="text" class="form-control form-control-sm bg-white" name="date" id="datepicker2" readonly onchange="getBookingList(<?= $_GET['r'] ?>)" />
+                                            <div class="input-group mb-3">
+                                                <input type="text" class="form-control form-control-sm bg-white" name="date" id="datepicker2" readonly onchange="getBookingList(<?= $_GET['r'] ?>)" />
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-sm btn-outline-secondary" onclick="$('#datepicker2').focus()" type="button" id="button-addon2"><i class="fa-solid fa-calendar-days"></i></button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="table-responsive">
@@ -365,7 +371,7 @@ if (isset($_POST['submit'])) {
 
         $("#datepicker2").datepicker({
             language: 'id',
-            orientation: "auto bottom",
+            orientation: "bottom right",
             format: "dd/mm/yyyy",
             startView: "days",
             minViewMode: "days",
