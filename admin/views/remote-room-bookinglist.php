@@ -1,6 +1,6 @@
 <?php
 require_once "../../core/init.php";
-require_once "../../core/user-session-only.php";
+require_once "../../core/admin-session-only.php";
 
 $date = $_POST['date'];
 $tgl = substr($date, 0, 2);
@@ -14,8 +14,9 @@ $tomorrow = date_format(date_create($tomorrow), 'Y-m-d H:i:s');
 
 $room_id = $_POST['room_id'];
 
-$query = "SELECT * FROM tickets WHERE time_start >= '$date' AND time_end < '$tomorrow' AND room_id = $room_id ORDER BY time_start";
+$query = "SELECT * FROM tickets WHERE time_start >= '$date' AND time_end < '$tomorrow' AND room_id = '$room_id' ORDER BY time_start";
 $result = mysqli_query($link, $query);
+echo $date;
 $i = 1;
 
 if (mysqli_num_rows($result) > 0) {
@@ -28,7 +29,7 @@ if (mysqli_num_rows($result) > 0) {
         $tmrw = date('Y-m-d H:i:s', strtotime($now . ' + 1 days'));
         if ($data['time_start'] <= $now && $data['time_end'] >= $now) {
 ?>
-            <tr class="text-danger">
+            <tr class="table-primary text-dark">
                 <th scope="row"><?= $i; ?></th>
                 <td><?= $data2['fullname']; ?></td>
                 <td><?= date('H:i', strtotime($data['time_start'])); ?></td>

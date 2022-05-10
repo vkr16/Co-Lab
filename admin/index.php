@@ -31,6 +31,9 @@ require_once "../core/admin-session-only.php";
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="../assets/vendor/datatables/DataTables-1.11.5/css/dataTables.bootstrap4.min.css">
 
+    <link rel="stylesheet" href="../assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css">
+
+
     <!-- Custom styles for navigation-->
     <link href="../assets/css/sb-admin-2.min.css" rel="stylesheet">
 
@@ -78,7 +81,7 @@ require_once "../core/admin-session-only.php";
                                         <th>Kapasitas</th>
                                         <th>Ketersediaan</th>
                                         <th>Penanggung Jawab</th>
-                                        <th>Detail</th>
+                                        <th>Jadwal</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -86,16 +89,36 @@ require_once "../core/admin-session-only.php";
                                     $query = "SELECT * FROM rooms WHERE status = 'active'";
                                     $result  = mysqli_query($link, $query);
                                     $i = 0;
+                                    $now = date("Y-m-d H:i:s");
                                     while ($data = mysqli_fetch_assoc($result)) {
                                         $i++;
+                                        $room_id = $data['id'];
+                                        $query2 = "SELECT * FROM tickets WHERE room_id='$room_id' AND time_start <= '$now' AND time_end >= '$now'";
+                                        $result2 = mysqli_query($link, $query2);
+                                        if (mysqli_num_rows($result2) > 0) {
+                                            $data2 = mysqli_fetch_assoc($result2);
+
+                                            $user_id = $data2['user_id'];
+                                            $query3 = "SELECT * FROM users WHERE id = '$user_id'";
+                                            $result3 = mysqli_query($link, $query3);
+                                            $data3 = mysqli_fetch_assoc($result3);
+                                            $empty = false;
+                                        } else {
+                                            $empty = true;
+                                        }
+
                                     ?>
                                         <tr>
                                             <td><?= $i; ?></td>
-                                            <td><?= $data['room_name']; ?></td>
+                                            <td><?= $data['room_name'] . $data['id']; ?></td>
                                             <td><?= $data['capacity'] . " Orang"; ?></td>
-                                            <td>Available</td>
-                                            <td>-</td>
-                                            <td><a href="room-detail.php?id=<?= $data['id'] ?>" class="btn btn-sm btn-orange">Lihat Detail</a></td>
+                                            <td><?php if (isNowAvailable($data['id'])) {
+                                                    echo '<i class="fa-regular fa-circle-check text-success"></i> &nbsp; Tersedia Saat Ini';
+                                                } else {
+                                                    echo '<i class="fa-regular fa-hourglass text-danger"></i> &nbsp; Sedang Digunakan';
+                                                } ?></td>
+                                            <td><?= $empty == false ? $data3['fullname'] : "-" ?></td>
+                                            <td><button class="btn btn-sm btn-orange" onclick="copyRomid(<?= $data['id'] ?>,'<?= $data['room_name'] ?>')">Lihat Jadwal</button></td>
                                         </tr>
                                     <?php
                                     }
@@ -125,20 +148,48 @@ require_once "../core/admin-session-only.php";
         <i class="fas fa-angle-up"></i>
     </a>
 
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="scheduleModal" tabindex="-1" aria-labelledby="scheduleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
+                <!-- <div class="modal-header">
+                    <h5 class="modal-title" id="scheduleModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
                     </button>
+                </div> -->
+                <div class="modal-body">
+                    <h5>Jadwal penggunaan <strong id="roname"></strong></h5>
+                    <br>
+                    <div class="form-group row">
+                        <label for="datepicker2" class="col-sm-7 col-form-label">Tampilkan jadwal untuk tanggal</label>
+
+                        <div class="col-sm-5">
+                            <input type="text" id="hiddenRomid" hidden>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control form-control-sm bg-white" name="date" id="datepicker2" readonly onchange="getBookingList()" />
+                                <div class="input-group-append">
+                                    <button class="btn btn-sm btn-outline-secondary" onclick="$('#datepicker2').focus()" type="button" id="button-addon2"><i class="fa-solid fa-calendar-days"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr class="bg-primary text-light">
+                                <th scope="col" class="col-sm-1">No.</th>
+                                <th scope="col" class="col-sm-7">Pengguna</th>
+                                <th scope="col" class="col-sm-2">Mulai</th>
+                                <th scope="col" class="col-sm-2">Selesai</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookingtable">
+
+                        </tbody>
+                    </table>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="../logout.php">Logout</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
@@ -154,6 +205,11 @@ require_once "../core/admin-session-only.php";
     <!-- DataTable JavaScript -->
     <script src="../assets/vendor/datatables/DataTables-1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="../assets/vendor/datatables/DataTables-1.11.5/js/dataTables.bootstrap4.min.js"></script>
+
+
+    <!-- datepicker js -->
+    <script src="../assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src="../assets/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.id.min.js"></script>
 
 
     <!-- Custom scripts for all pages-->
@@ -181,5 +237,34 @@ require_once "../core/admin-session-only.php";
                 },
             }
         })
+
+
+        $("#datepicker2").datepicker({
+            language: 'id',
+            orientation: "bottom right",
+            format: "dd/mm/yyyy",
+            startView: "days",
+            minViewMode: "days",
+            startDate: "0d"
+        }).datepicker("setDate", 'now');
+
     });
+
+    function copyRomid(Romid, Roname) {
+        $("#roname").html(Roname);
+        $('#scheduleModal').modal('show');
+        console.log(Romid);
+        $("#hiddenRomid").val(Romid);
+        getBookingList();
+    }
+
+    function getBookingList() {
+        $.post("views/remote-room-bookinglist.php", {
+                date: $("#datepicker2").val(),
+                room_id: $("#hiddenRomid").val(),
+            },
+            function(data) {
+                $("#bookingtable").html(data)
+            });
+    }
 </script>

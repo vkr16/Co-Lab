@@ -3,6 +3,9 @@ $room_management = true;
 
 require_once "../core/init.php";
 require_once "../core/admin-session-only.php";
+
+$now = date("Y-m-d H:i:s");
+
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
 
@@ -16,6 +19,22 @@ if (isset($_GET['id'])) {
     $capacity = $data['capacity'];
     $description = $data['description'];
     $status = $data['status'];
+
+    $room_id = $data['id'];
+    $query2 = "SELECT * FROM tickets WHERE room_id='$room_id' AND time_start <= '$now' AND time_end >= '$now'";
+    $result2 = mysqli_query($link, $query2);
+
+    if (mysqli_num_rows($result2) > 0) {
+        $data2 = mysqli_fetch_assoc($result2);
+
+        $user_id = $data2['user_id'];
+        $query3 = "SELECT * FROM users WHERE id = '$user_id'";
+        $result3 = mysqli_query($link, $query3);
+        $data3 = mysqli_fetch_assoc($result3);
+        $empty = false;
+    } else {
+        $empty = true;
+    }
 }
 ?>
 
@@ -102,9 +121,9 @@ if (isset($_GET['id'])) {
                                         <dt class="col-sm-4"><i class="fa-solid fa-toggle-<?= $status == 'active' ? 'on' : 'off'; ?> fa-fw"></i> Status</dt>
                                         <dd class="col-sm-8"><?= $status == 'active' ? 'Aktif' : 'Tidak Aktif'; ?></dd>
                                         <dt class="col-sm-4"><i class="fa-solid fa-clipboard-check fa-fw"></i> Ketersediaan</dt>
-                                        <dd class="col-sm-8">Booked(masih statis)</dd>
+                                        <dd class="col-sm-8"><?= $empty == true ? "<span class='text-success'>Tersedia Saat Ini</span>" : "<span class='text-danger'>Sedang Digunakan</span>"; ?></dd>
                                         <dt class="col-sm-4"><i class="fa-solid fa-user-tie fa-fw"></i> Penanggung Jawab</dt>
-                                        <dd class="col-sm-8">Aditya Kurniawan(masih statis)</dd>
+                                        <dd class="col-sm-8"><?= $empty == false ? $data3['fullname'] : "-" ?></dd>
                                     </dl>
                                 </div>
                             </div>
