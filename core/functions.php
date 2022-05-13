@@ -404,3 +404,20 @@ function isPast($startDateTime)
         return false;
     }
 }
+
+function updateUsername($newUsername, $oldUsername)
+{
+    global $link;
+
+    $newUsername = mysqli_real_escape_string($link, $newUsername);
+    $oldUsername = mysqli_real_escape_string($link, $oldUsername);
+
+    $query = "UPDATE users SET username = '$newUsername' WHERE username = '$oldUsername'";
+
+    if (mysqli_query($link, $query)) {
+        $_SESSION['cl_user'] = $newUsername;
+        return true;
+    } else {
+        return false;
+    }
+}
