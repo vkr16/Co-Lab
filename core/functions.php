@@ -361,6 +361,9 @@ function isConflict($room_id, $start_time, $end_time)
         } elseif ($end_time > $data['time_start'] && $end_time < $data['time_end']) {
             $conflict = true;
             break;
+        } elseif (($start_time < $data['time_start'] && $start_time < $data['time_end']) && ($end_time > $data['time_start'] && $end_time > $data['time_end'])) {
+            $conflict = true;
+            break;
         } else {
             $conflict = false;
         }
@@ -368,6 +371,34 @@ function isConflict($room_id, $start_time, $end_time)
 
 
     if ($conflict == true) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function getUserIdByUsername($username)
+{
+
+    global $link;
+
+    $username = mysqli_real_escape_string($link, $username);
+
+    $query = "SELECT * FROM users WHERE username = '$username'";
+    $result = mysqli_query($link, $query);
+    $data = mysqli_fetch_assoc($result);
+
+    $userid = $data['id'];
+    return $userid;
+}
+
+function isPast($startDateTime)
+{
+    $now = date("Y-m-d H:i:s");
+    $now_tolerated = date('Y-m-d H:i:s', strtotime($now . ' - 9 Minutes'));
+
+
+    if ($startDateTime < $now_tolerated) {
         return true;
     } else {
         return false;

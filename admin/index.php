@@ -158,7 +158,7 @@ require_once "../core/admin-session-only.php";
                     </button>
                 </div> -->
                 <div class="modal-body">
-                    <h5>Jadwal penggunaan <strong id="roname"></strong></h5>
+                    <h5 id="roname"></h5>
                     <br>
                     <div class="form-group row">
                         <label for="datepicker2" class="col-sm-7 col-form-label">Tampilkan jadwal untuk tanggal</label>

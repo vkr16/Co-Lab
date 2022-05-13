@@ -28,7 +28,17 @@ if (mysqli_num_rows($result) > 0) {
         $tmrw = date('Y-m-d H:i:s', strtotime($now . ' + 1 days'));
         if ($data['time_start'] <= $now && $data['time_end'] >= $now) {
 ?>
-            <tr class="text-danger">
+            <tr class="bg-success text-white">
+                <th scope="row"><?= $i; ?></th>
+                <td><?= $data2['fullname']; ?></td>
+                <td><?= date('H:i', strtotime($data['time_start'])); ?></td>
+                <td><?= date('H:i', strtotime($data['time_end'])); ?></td>
+            </tr>
+        <?php
+            $i++;
+        } elseif ($data['time_start'] > $now && $data['time_end'] > $now) {
+        ?>
+            <tr class="text-info">
                 <th scope="row"><?= $i; ?></th>
                 <td><?= $data2['fullname']; ?></td>
                 <td><?= date('H:i', strtotime($data['time_start'])); ?></td>

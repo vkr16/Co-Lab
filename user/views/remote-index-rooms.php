@@ -5,6 +5,10 @@ if (isset($_POST['getrooms'])) {
 
     $query = "SELECT * FROM rooms WHERE status = 'active'";
     $result = mysqli_query($link, $query);
+
+    if (mysqli_num_rows($result) == 0) {
+        echo '<h4 class="p-3">Belum ada ruangan yang tersedia saat ini</h4>';
+    }
     while ($data = mysqli_fetch_assoc($result)) {
 ?>
 
