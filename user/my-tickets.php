@@ -36,7 +36,7 @@ $user_id = getUserIdByUsername($_SESSION['cl_user']);
     <!-- Custom styles for navigation-->
     <link href="../assets/css/sb-admin-2.min.css" rel="stylesheet">
 
-    <title>Beranda | Co-Lab</title>
+    <title>Tiket Saya | Co-Lab</title>
 
 
 </head>
@@ -115,21 +115,20 @@ $user_id = getUserIdByUsername($_SESSION['cl_user']);
     </div>
     <!-- End of Page Wrapper -->
 
-    <div class="modal fade" id="activeTicketModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="activeTicketModalLabel" aria-hidden="true">
+    <div class="modal fade" id="activeTicketModal" tabindex="-1" aria-labelledby="activeTicketModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="activeTicketModalLabel">Modal title</h5>
+                <div class=" modal-header">
+                    <h5 class="modal-title" id="activeTicketModalLabel">Tiket Pembukuan Ruangan</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    ...
+                <div class="modal-body" id="ticketmodaldata">
+
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Understood</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
                 </div>
             </div>
         </div>
@@ -153,6 +152,8 @@ $user_id = getUserIdByUsername($_SESSION['cl_user']);
 
     <!-- Custom scripts for all pages-->
     <script src="../assets/js/sb-admin-2.min.js"></script>
+
+    <script src="../assets/vendor/SweetAlert2/SweetAlert2.js"></script>
 
 </body>
 
@@ -195,6 +196,35 @@ $user_id = getUserIdByUsername($_SESSION['cl_user']);
     }
 
     function showTicket(ticketID) {
-        $('#activeTicketModal').modal('show')
+        $('#activeTicketModal').modal('show');
+
+        $.post("views/remote-index-ticketsShow.php", {
+                ticketID: ticketID
+            },
+            function(data) {
+                $("#ticketmodaldata").html(data);
+            });
+    }
+
+    function cancelPrompt(ticketID) {
+        Swal.fire({
+            icon: 'question',
+            title: 'Apakah Anda Yakin?',
+            text: 'Menghapus tiket akan membatalkan pembukuan yang sudah anda buat',
+            showCancelButton: true,
+            cancelButtonText: "Batal",
+            confirmButtonText: "Ya, Hapus dan Batalkan"
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.post("views/remote-delete-ticket.php", {
+                        ticketID: ticketID
+                    },
+                    function(data) {
+                        $('#activeTicketModal').modal('hide');
+                        gettickets(<?= $user_id ?>);
+                    });
+            }
+        })
     }
 </script>

@@ -149,7 +149,7 @@ require_once "../core/admin-session-only.php";
     </a>
 
     <div class="modal fade" id="scheduleModal" tabindex="-1" aria-labelledby="scheduleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <!-- <div class="modal-header">
                     <h5 class="modal-title" id="scheduleModalLabel"></h5>
@@ -177,9 +177,10 @@ require_once "../core/admin-session-only.php";
                         <thead>
                             <tr class="bg-primary text-light">
                                 <th scope="col" class="col-sm-1">No.</th>
-                                <th scope="col" class="col-sm-7">Pengguna</th>
-                                <th scope="col" class="col-sm-2">Mulai</th>
-                                <th scope="col" class="col-sm-2">Selesai</th>
+                                <th scope="col" class="col-sm-3">Pengguna</th>
+                                <th scope="col" class="col-sm-1">Mulai</th>
+                                <th scope="col" class="col-sm-1">Selesai</th>
+                                <th scope="col" class="col-sm-6">Catatan</th>
                             </tr>
                         </thead>
                         <tbody id="bookingtable">

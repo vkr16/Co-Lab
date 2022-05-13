@@ -34,6 +34,7 @@ if (mysqli_num_rows($result) > 0) {
                 <td><?= $data2['fullname']; ?></td>
                 <td><?= date('H:i', strtotime($data['time_start'])); ?></td>
                 <td><?= date('H:i', strtotime($data['time_end'])); ?></td>
+                <td><?= $data['notes'] ?></td>
             </tr>
         <?php
             $i++;
@@ -44,6 +45,7 @@ if (mysqli_num_rows($result) > 0) {
                 <td><?= $data2['fullname']; ?></td>
                 <td><?= date('H:i', strtotime($data['time_start'])); ?></td>
                 <td><?= date('H:i', strtotime($data['time_end'])); ?></td>
+                <td><?= $data['notes'] ?></td>
             </tr>
     <?php
             $i++;

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 09, 2022 at 08:34 AM
+-- Generation Time: May 13, 2022 at 03:35 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 7.4.27
 
@@ -36,15 +36,6 @@ CREATE TABLE `rooms` (
   `thumbnail` varchar(60) NOT NULL DEFAULT 'default_thumbnail.jpg',
   `status` enum('active','inactive') NOT NULL DEFAULT 'active'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `rooms`
---
-
-INSERT INTO `rooms` (`id`, `room_name`, `location`, `capacity`, `description`, `thumbnail`, `status`) VALUES
-(1, 'Laboratorium Fisika 4 (Ruang Meeting Bersama)', 'Lantai 2 Ruang A2.4', 20, 'Laboratorium ini di lengkapi dengan fasilitas-fasilitas pendukung seperti berikut: <br><br>- Alat-alat Praktik<br>- Komponen2 Elektronika dasar <br>- dll', '9cd259383781c0f13756.jpg', 'active'),
-(2, 'Laboratorium Komputer', 'Lantai 3 Ruang A3.15', 31, 'Laboratorium Komputer ini di lengkapi dengan fasilitas pendukung berupa :<br><br>- Komputer desktop x30<br>- Proyektor x2 <br>- AC x2<br>- dll<br><br>', '116a65be879b253b786f.jpg', 'active'),
-(3, 'Ruang Meeting Bersama 2 ', 'Lantai 3 Ruang A3.22', 27, 'Berikut adalah contoh deskripsi untuk ruang meeting<br><br>Ruang meeting terdiri dari banyak kursi yang dijejer rapih<br><br>fasilitas yang tersedia antara lain:<br>- Kursi 27x<br>- Meja Besar <br>- Proyektor 2x<br>- AC 1x<br>- dll<br>', '5005c850e804963b7d5f.jpeg', 'active');
 
 -- --------------------------------------------------------
 
@@ -84,9 +75,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `fullname`, `studentid`, `username`, `email`, `password`, `role`, `validity`, `uniqueid`) VALUES
-(2, 'Administrator', '000000000000001', 'admin', 'fikri.droid16@gmail.com', '$2y$10$a2yx4CSx.VRdN4LXaORhk.kw.pwJh.Jp2.kQ3xflAR2/OmWEyGYSu', 'admin', 'valid', 'faaee5e5281ee9448af3a38136b5e612125a6788'),
+(2, 'Administrator', '000000000000001', 'admin', 'not.gamer16@gmail.com', '$2y$10$TnHNhl4EE.wHGPBtmyFxnOFG4XLvly0bdtbf9EbmQqfkZLyY8OI7W', 'admin', 'valid', 'faaee5e5281ee9448af3a38136b5e612125a6788'),
 (3, 'Fikri Miftah Akmaludin', '185150301111043', 'user', 'contact.fikmif16@gmail.com', '$2y$10$hsjcI.B1fccsviGcvoCqLuwAOVyieEqvR2RC3rqSRTGh2ChOhSidW', 'user', 'valid', 'c7f25df5d1e769249d9c8daa24ffce593be88866'),
-(6, 'Developer ', '000000000000000', 'dev', 'developer.colab@gmail.com', '$2y$10$wYZYLCdtyvqBpGKujTRz5OZJW/DqM5Vb0/eHyGYys0a2la.Bsusl.', 'admin', 'valid', '8b4e9e243325f9fdd17eb24c83ea3b1a5c8062fd');
+(6, 'Developer ', '000000000000000', 'dev', 'developer.colab@gmail.com', '$2y$10$wYZYLCdtyvqBpGKujTRz5OZJW/DqM5Vb0/eHyGYys0a2la.Bsusl.', 'admin', 'valid', '8b4e9e243325f9fdd17eb24c83ea3b1a5c8062fd'),
+(7, 'Muhammad Fawwaz', '185150301111044', 'innoe', 'mfawwaz@colab.com', '$2y$10$hsjcI.B1fccsviGcvoCqLuwAOVyieEqvR2RC3rqSRTGh2ChOhSidW', 'user', 'valid', 'c7f25df5d1e769249d9c8daa24ffce593be88866');
 
 --
 -- Indexes for dumped tables
@@ -118,7 +110,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tickets`
@@ -130,7 +122,7 @@ ALTER TABLE `tickets`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
