@@ -68,6 +68,30 @@ if (isset($_POST['btnUpdatePass'])) {
     }
 }
 
+if (isset($_POST['btnUpdatePhoto'])) {
+    if ($_FILES['profilepic']['size'] != 0 && $_FILES['profilepic']['error'] == 0) {
+        $randStr = bin2hex(random_bytes(10));
+        $path  = $_SERVER["DOCUMENT_ROOT"] . "/co-lab/assets/img/users/";
+        $path2 = $_FILES['profilepic']['name'];
+        $ext   = pathinfo($path2, PATHINFO_EXTENSION);
+        $path  = $path . $randStr . '.' . $ext;
+
+        $filenameondb = $randStr . '.' . $ext;
+
+        move_uploaded_file($_FILES['profilepic']['tmp_name'], $path);
+    } else {
+        $filenameondb = 'default.png';
+    }
+
+    $query = "UPDATE users SET photo = '$filenameondb' WHERE username = '$activeUsername'";
+
+    if (mysqli_query($link, $query)) {
+        $loadThis = "photoUpdated()";
+    } else {
+        $loadThis = "photoUpdateFailed()";
+    }
+}
+
 
 
 ?>
@@ -181,6 +205,30 @@ if (isset($_POST['btnUpdatePass'])) {
                                         <br>
                                         <button type="submit" name="btnUpdatePass" class="btn btn-primary d-flex justify-content-end">Perbarui Kata Sandi</button>
                                     </form>
+
+
+                                    <br>
+                                    <hr>
+
+                                    <h5> <i class="fa-solid fa-image-portrait fa-fw"></i> Ubah Foto Profil</h5>
+                                    <br>
+
+                                    <form action="" method="POST" enctype="multipart/form-data">
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Pilih File Foto</label>
+                                            <div class="col-sm-9">
+                                                <div class="input-group mb-3">
+                                                    <div class="custom-file">
+                                                        <input type="file" name="profilepic" class="custom-file-input" id="profilepic" aria-describedby="inputGroupFileAddon01" onchange="imageSelected()">
+                                                        <label class="custom-file-label" for="profilepic" id="labelprofilepic">Pilih gambar</label>
+                                                    </div>
+                                                </div>
+                                                <small>Hanya gunakan foto dengan rasio 1:1 untuk hasil terbaik</small>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <button type="submit" name="btnUpdatePhoto" class="btn btn-primary d-flex justify-content-end">Unggah Foto</button>
+                                    </form>
                                 </div>
                             </div>
 
@@ -287,6 +335,13 @@ if (isset($_POST['btnUpdatePass'])) {
                 $("#new-pass").attr("type", "password");
                 $("#new-visib").html('<i class="fa-solid fa-eye"></i>');
             }
+        }
+    }
+
+    function imageSelected() {
+        if (document.getElementById("profilepic").value != '') {
+            var input = document.getElementById("profilepic");
+            document.getElementById("labelprofilepic").innerHTML = input.files.item(0).name;
         }
     }
 
