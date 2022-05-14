@@ -54,7 +54,7 @@ if (mysqli_num_rows($result) > 0) {
 } else {
     ?>
     <tr>
-        <th scope="row" colspan="4" class="text-center">Tidak Ada Jadwal Hari Ini</th>
+        <th scope="row" colspan="5" class="text-center">Tidak Ada Jadwal Hari Ini</th>
     </tr>
 <?php
 }
