@@ -19,8 +19,9 @@ require_once "../../core/user-session-only.php";
     if (isset($_POST['userid'])) {
 
         $userid = $_POST['userid'];
+        $now = date("Y-m-d H:i:s");
 
-        $query = "SELECT * FROM tickets WHERE user_id = '$userid' AND time_end<CURTIME()";
+        $query = "SELECT * FROM tickets WHERE user_id = '$userid' AND time_end<'$now'";
         $result = mysqli_query($link, $query);
         if (mysqli_num_rows($result) == 0) {
     ?>

@@ -20,8 +20,20 @@ if (isset($_POST['getrooms'])) {
                     <h5 class="card-title text-dark"><?= $data['room_name'] ?></h5>
                     <h6 class=" card-subtitle mb-2 text-muted">Max Capacity <?= $data['capacity']; ?> Persons</h6>
                 </div>
-                <div class="card-footer">
-                    <a href="room-detail.php?r=<?= $data['id'] ?>" class="btn btn-success">Available</a>
+                <div class="card-footer d-flex justify-content-between">
+                    <?php
+                    if (isNowAvailable($data['id'])) {
+                    ?>
+                        <a href="room-detail.php?r=<?= $data['id'] ?>" class="btn btn-primary">Lihat Detail</a>
+                        <button class="btn btn-sm btn-success disabled">Tersedia</button>
+                    <?php
+                    } else {
+                    ?>
+                        <a href="room-detail.php?r=<?= $data['id'] ?>" class="btn btn-primary">Lihat Detail</a>
+                        <button class="btn btn-sm btn-danger disabled">Digunakan</button>
+                    <?php
+                    }
+                    ?>
                 </div>
             </div>
         </div>
