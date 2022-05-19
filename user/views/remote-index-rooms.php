@@ -18,7 +18,7 @@ if (isset($_POST['getrooms'])) {
                 <img src="../assets/img/rooms/<?= $data['thumbnail'] ?>" class="card-img-top thumbnail-card-img" alt="...">
                 <div class="card-body">
                     <h5 class="card-title text-dark"><?= $data['room_name'] ?></h5>
-                    <h6 class=" card-subtitle mb-2 text-muted">Max Capacity <?= $data['capacity']; ?> Persons</h6>
+                    <h6 class=" card-subtitle mb-2 text-muted">Kapasitas maksimal <?= $data['capacity']; ?> Orang</h6>
                 </div>
                 <div class="card-footer d-flex justify-content-between">
                     <?php
