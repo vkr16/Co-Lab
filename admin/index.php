@@ -110,7 +110,7 @@ require_once "../core/admin-session-only.php";
                                     ?>
                                         <tr>
                                             <td><?= $i; ?></td>
-                                            <td><?= $data['room_name'] . $data['id']; ?></td>
+                                            <td><?= $data['room_name']; ?></td>
                                             <td><?= $data['capacity'] . " Orang"; ?></td>
                                             <td><?php if (isNowAvailable($data['id'])) {
                                                     echo '<i class="fa-regular fa-circle-check text-success"></i> &nbsp; Tersedia Saat Ini';

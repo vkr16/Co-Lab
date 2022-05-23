@@ -69,6 +69,10 @@ if (isset($_POST['btnUpdatePass'])) {
 }
 
 if (isset($_POST['btnUpdatePhoto'])) {
+    $query = "SELECT * FROM users WHERE username = '$activeUsername'";
+    $result = mysqli_query($link, $query);
+    $data = mysqli_fetch_assoc($result);
+    $oldpic = $data['photo'];
     if ($_FILES['profilepic']['size'] != 0 && $_FILES['profilepic']['error'] == 0) {
         $randStr = bin2hex(random_bytes(10));
         $path  = $_SERVER["DOCUMENT_ROOT"] . "/co-lab/assets/img/users/";
@@ -79,7 +83,13 @@ if (isset($_POST['btnUpdatePhoto'])) {
         $filenameondb = $randStr . '.' . $ext;
 
         move_uploaded_file($_FILES['profilepic']['tmp_name'], $path);
+        if ($oldpic != 'default.png') {
+            unlink('../assets/img/users/' . $oldpic);
+        }
     } else {
+        if ($oldpic != 'default.png') {
+            unlink('../assets/img/users/' . $oldpic);
+        }
         $filenameondb = 'default.png';
     }
 
@@ -355,11 +365,31 @@ if (isset($_POST['btnUpdatePhoto'])) {
         })
     }
 
+    function photoUpdated() {
+        Swal.fire({
+            icon: 'success',
+            title: 'Perubahan Tersimpan',
+            text: 'Foto profil anda berhasil di perbarui',
+            confirmButtonColor: '#2b468b',
+            confirmButtonText: "Selesai"
+        })
+    }
+
     function failedToUpdate() {
         Swal.fire({
             icon: 'error',
             title: 'Terjadi Kesalahan',
             text: 'Alamat email anda gagal di perbarui',
+            confirmButtonColor: '#2b468b',
+            confirmButtonText: "Tutup"
+        })
+    }
+
+    function photoUpdateFailed() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Terjadi Kesalahan',
+            text: 'Foto profil   anda gagal di perbarui',
             confirmButtonColor: '#2b468b',
             confirmButtonText: "Tutup"
         })
