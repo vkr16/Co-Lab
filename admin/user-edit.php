@@ -39,7 +39,7 @@ if (isset($_GET['id'])) {
                 $mail           = new PHPMailer;
                 $mail->isSMTP();
                 $mail->SMTPAuth = true;
-                $mail->Host     = 'smtp.gmail.com';
+                $mail->Host     = 'smtp.mail.yahoo.com';
                 $mail->Port     = 587;
                 $mail->Username = $email_address;
                 $mail->Password = $email_password;
