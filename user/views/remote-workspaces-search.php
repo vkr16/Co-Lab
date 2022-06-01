@@ -3,7 +3,7 @@ require_once "../../core/init.php";
 require_once "../../core/user-session-only.php";
 if (isset($_POST['keyword'])) {
     $keyword = $_POST['keyword'];
-    $query = "SELECT * FROM rooms WHERE status = 'active' AND room_name LIKE '%$keyword%'";
+    $query = "SELECT * FROM areas WHERE status = 'active' AND name LIKE '%$keyword%'";
     $result = mysqli_query($link, $query);
     if (mysqli_num_rows($result) > 0) {
 
@@ -13,25 +13,13 @@ if (isset($_POST['keyword'])) {
             <!-- row item -->
             <div class="col-md-3 px-2">
                 <div class="card shadow mb-3" style="min-height: 420px;">
-                    <img src="../assets/img/rooms/<?= $data['thumbnail'] ?>" class="card-img-top thumbnail-card-img" alt="...">
+                    <img src="../assets/img/areas/<?= $data['thumbnail'] ?>" class="card-img-top thumbnail-card-img">
                     <div class="card-body">
-                        <h5 class="card-title text-dark"><?= $data['room_name'] ?></h5>
+                        <h5 class="card-title text-dark"><?= $data['name'] ?></h5>
                         <h6 class=" card-subtitle mb-2 text-muted">Max Capacity <?= $data['capacity']; ?> Persons</h6>
                     </div>
                     <div class="card-footer d-flex justify-content-between">
-                        <?php
-                        if (isNowAvailable($data['id'])) {
-                        ?>
-                            <a href="room-detail.php?r=<?= $data['id'] ?>" class="btn btn-primary">Lihat Detail</a>
-                            <button class="btn btn-sm btn-success disabled">Tersedia</button>
-                        <?php
-                        } else {
-                        ?>
-                            <a href="room-detail.php?r=<?= $data['id'] ?>" class="btn btn-primary">Lihat Detail</a>
-                            <button class="btn btn-sm btn-danger disabled">Digunakan</button>
-                        <?php
-                        }
-                        ?>
+                        <a href="area-detail.php?r=<?= $data['id'] ?>" class="btn btn-primary">Lihat Detail</a>
                     </div>
                 </div>
             </div>

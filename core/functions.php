@@ -327,6 +327,20 @@ function getRoomDataById($room_id)
     return $data;
 }
 
+function getAreaDataById($area_id)
+{
+    global $link;
+
+    $area_id = mysqli_real_escape_string($link, $area_id);
+
+    $query = "SELECT * FROM areas WHERE id = '$area_id'";
+
+    $result = mysqli_query($link, $query);
+    $data = mysqli_fetch_assoc($result);
+
+    return $data;
+}
+
 function isNowAvailable($room_id)
 {
     global $link;
@@ -418,6 +432,41 @@ function updateUsername($newUsername, $oldUsername)
 
     if (mysqli_query($link, $query)) {
         $_SESSION['cl_user'] = $newUsername;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function isSpaceConflict($space_no, $area_id, $start_time, $end_time)
+{
+    global $link;
+
+
+    $query = "SELECT * FROM space_tickets WHERE area_id = '$area_id' AND space_no = '$space_no'";
+    $result = mysqli_query($link, $query);
+
+    if (mysqli_num_rows($result) == 0) {
+        $conflict = false;
+    }
+
+    while ($data = mysqli_fetch_assoc($result)) {
+        $conflict = false;
+        if ($start_time > $data['time_start'] && $start_time < $data['time_end']) {
+            $conflict = true;
+            break;
+        } elseif ($end_time > $data['time_start'] && $end_time < $data['time_end']) {
+            $conflict = true;
+            break;
+        } elseif (($start_time < $data['time_start'] && $start_time < $data['time_end']) && ($end_time > $data['time_start'] && $end_time > $data['time_end'])) {
+            $conflict = true;
+            break;
+        } else {
+            $conflict = false;
+        }
+    }
+
+    if ($conflict == true) {
         return true;
     } else {
         return false;
