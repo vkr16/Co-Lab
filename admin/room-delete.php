@@ -11,6 +11,8 @@ if (isset($_POST['room_id'])) {
 
     $query = "DELETE FROM rooms WHERE id = '$id'";
     if (mysqli_query($link, $query)) {
-        unlink('../assets/img/rooms/' . $thumbnail);
+        if ($thumbnail != 'default_thumbnail.jpg') {
+            unlink('../assets/img/rooms/' . $thumbnail);
+        }
     }
 }

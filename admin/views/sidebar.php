@@ -32,6 +32,11 @@
             <i class="fa-solid fa-building fa-fw"></i>
             <span>Manajemen Ruangan</span></a>
     </li>
+    <li class="nav-item <?php echo $space == true ? 'active' : '' ?>">
+        <a class="nav-link" href="area-management.php">
+            <i class="fa-solid fa-chair fa-fw"></i>
+            <span>Manajemen Area Bersama</span></a>
+    </li>
     <li class="nav-item <?php echo $user_management == true ? 'active' : '' ?>">
         <a class="nav-link" href="user-management.php">
             <i class="fa-solid fa-user-gear fa-fw"></i>

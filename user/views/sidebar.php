@@ -15,8 +15,13 @@
     <!-- Nav Item - Dashboard -->
     <li class="nav-item <?php echo $dashboard == true ? 'active' : '' ?>">
         <a class="nav-link" href="index.php">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Beranda</span></a>
+            <i class="fa-solid fa-flask-vial"></i>
+            <span>Laboratorium</span></a>
+    </li>
+    <li class="nav-item <?php echo $space == true ? 'active' : '' ?>">
+        <a class="nav-link" href="workspaces.php">
+            <i class="fa-solid fa-house-laptop"></i>
+            <span>Ruang Kerja Bersama</span></a>
     </li>
     <li class="nav-item <?php echo $myTickets == true ? 'active' : '' ?>">
         <a class="nav-link" href="my-tickets.php">

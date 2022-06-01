@@ -74,12 +74,12 @@ require_once "../core/admin-session-only.php";
                             <table class="table" id="rooms_table">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
-                                        <th>Nama Ruangan</th>
-                                        <th>Kapasitas</th>
-                                        <th>Lokasi</th>
-                                        <th>Status</th>
-                                        <th>Opsi</th>
+                                        <th class="col-md-1">No</th>
+                                        <th class="col-md-3">Nama Ruangan</th>
+                                        <th class="col-md-1">Kapasitas</th>
+                                        <th class="col-md-3">Lokasi</th>
+                                        <th class="col-md-1">Status</th>
+                                        <th class="col-md-3">Opsi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -91,13 +91,14 @@ require_once "../core/admin-session-only.php";
                                         $i++;
                                     ?>
                                         <tr>
-                                            <td><?= $i; ?></td>
-                                            <td><?= $data['room_name']; ?></td>
-                                            <td><?= $data['capacity']; ?> Orang</td>
-                                            <td><?= $data['location']; ?></td>
-                                            <td><?= $data['status'] == 'inactive' ? '<i class="fa-regular fa-circle-xmark text-danger"></i> Inactive' : '<i class="fa-regular fa-circle-check text-success"></i> Aktif'; ?> </td>
-                                            <td><button class=" btn btn-sm btn-danger mr-3 mb-1" onclick="deleteRoom(<?= $data['id'] ?>)"><i class="fa-solid fa-ban"></i> &nbsp; Hapus</button>
-                                                <a href="room-edit.php?id=<?= $data['id'] ?>" class=" btn btn-sm btn-blue mr-3 mb-1"><i class="fa-regular fa-pen-to-square"></i> &nbsp; Ubah</a>
+                                            <td class="align-middle"><?= $i; ?></td>
+                                            <td class="align-middle"><?= $data['room_name']; ?></td>
+                                            <td class="align-middle"><?= $data['capacity']; ?> Orang</td>
+                                            <td class="align-middle"><?= $data['location']; ?></td>
+                                            <td class="align-middle"><?= $data['status'] == 'inactive' ? '<i class="fa-regular fa-circle-xmark text-danger"></i> Inactive' : '<i class="fa-regular fa-circle-check text-success"></i> Aktif'; ?> </td>
+                                            <td class="align-middle">
+                                                <button class=" btn btn-sm btn-danger mr-1 mb-1" onclick="deleteRoom(<?= $data['id'] ?>)"><i class="fa-solid fa-ban"></i> &nbsp; Hapus</button>
+                                                <a href="room-edit.php?id=<?= $data['id'] ?>" class=" btn btn-sm btn-blue mr-1 mb-1"><i class="fa-regular fa-pen-to-square"></i> &nbsp; Ubah</a>
                                                 <a href="room-detail.php?id=<?= $data['id'] ?>" class="btn btn-sm btn-orange mb-1"><i class="fa-solid fa-circle-info"></i> &nbsp; Detail</a>
                                             </td>
                                         </tr>
