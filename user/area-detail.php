@@ -4,11 +4,18 @@ $space = true;
 require_once "../core/init.php";
 require_once "../core/user-session-only.php";
 
+$loadThis = '';
+
+$activeUser = $_SESSION['cl_user'];
+$user_id = getUserIdByUsername($activeUser);
+
+
 if (isset($_GET['r'])) {
     $area_id = $_GET['r'];
     $area_data = getAreaDataById($area_id);
 
     $area_name = $area_data['name'];
+    $area_code = $area_data['code'];
     $area_capacity = $area_data['capacity'];
     $area_location = $area_data['location'];
     $area_description = $area_data['description'];
@@ -144,20 +151,15 @@ if (isset($_POST['submit'])) {
                                         <div class="col-md-4">
                                             <img src="../assets/img/areas/<?= $area_thumbnail ?>" class="img-fluid rounded mb-2" style="width: 100%;height: 200px;object-fit: cover; ">
 
-                                            <!-- <?php if (isNowAvailable($room_id)) { ?>
-                                                <span class="btn btn-sm btn-block btn-success disabled">Tersedia Saat Ini</span>
-                                            <?php } else { ?>
-                                                <span class="btn btn-sm btn-block btn-danger disabled">Sedang Digunakan</span>
-                                            <?php } ?> -->
-
-
-
                                             <button class="btn btn-block btn-primary" data-toggle="modal" data-target="#bookingModal"> <i class="fa-regular fa-calendar-plus"></i> &nbsp;Buat Jadwal</button>
                                         </div>
                                         <div class="col-md-8">
                                             <dl class="row">
-                                                <dt class="col-sm-5"><i class="fa-solid fa-building fa-fw"></i> &nbsp; Nama Ruangan</dt>
+                                                <dt class="col-sm-5"><i class="fa-solid fa-building fa-fw"></i> &nbsp; Nama Area</dt>
                                                 <dd class="col-sm-7"><?= $area_name; ?></dd>
+
+                                                <dt class="col-sm-5"><i class="fa-solid fa-key fa-fw"></i> &nbsp; Kode Area</dt>
+                                                <dd class="col-sm-7"><?= $area_code; ?></dd>
 
                                                 <dt class="col-sm-5"><i class="fa-solid fa-people-group fa-fw"></i> &nbsp; Kapasitas</dt>
                                                 <dd class="col-sm-7"><?= $area_capacity; ?> Orang</dd>
@@ -304,7 +306,7 @@ if (isset($_POST['submit'])) {
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary" onclick="selectSpacePrompt(<?= $area_id ?>)"> <i class="fa-regular fa-calendar-plus"></i> &nbsp; Jadwalkan</button>
+                    <button type="submit" class="btn btn-primary" onclick="selectSpacePrompt(<?= $area_id ?>)"><i class="fa-solid fa-clock"></i> &nbsp; Cek Ketersediaan</button>
                 </div>
             </div>
         </div>
@@ -329,8 +331,8 @@ if (isset($_POST['submit'])) {
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#selectSpaceModal').modal('hide');$('#bookingModal').modal('show')">Kembali</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#bookingModal').modal('show');$('#selectSpaceModal').modal('hide')">Kembali</button>
+                    <button type="button" class="btn btn-primary" onclick="bookNow()" id="bookButton" disabled><i class="fa-solid fa-calendar-plus"></i> &nbsp; Jadwalkan</button>
                 </div>
             </div>
         </div>
@@ -440,6 +442,11 @@ if (isset($_POST['submit'])) {
             text: 'Jadwal anda telah dibukukan dan tiket berhasil di terbitkan, lihat tiket anda pada bagian "Tiket Saya"',
             confirmButtonColor: '#2b468b',
             confirmButtonText: "Selesai"
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                location.reload();
+            }
         })
     }
 
@@ -450,6 +457,11 @@ if (isset($_POST['submit'])) {
             text: 'Jadwal anda gagal dibukukan',
             confirmButtonColor: '#2b468b',
             confirmButtonText: "Selesai"
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                location.reload();
+            }
         })
     }
 
@@ -461,6 +473,11 @@ if (isset($_POST['submit'])) {
             text: 'Jadwal yang anda masukkan terlalu lampau',
             confirmButtonColor: '#2b468b',
             confirmButtonText: "Selesai"
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                location.reload();
+            }
         })
     }
 
@@ -471,6 +488,11 @@ if (isset($_POST['submit'])) {
             text: 'Jadwal yang anda masukkan tidak tersedia',
             confirmButtonColor: '#2b468b',
             confirmButtonText: "Selesai"
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                location.reload();
+            }
         })
     }
 
@@ -513,4 +535,51 @@ if (isset($_POST['submit'])) {
                 $("#availableSpace").html(data);
             });
     }
+
+    function bookNow() {
+        var user_id = <?= $user_id ?>;
+        var area_id = <?= $area_id ?>;
+        var space_no = $('input[name="spaceOptions"]:checked').val();
+        var time_start = $('#datepicker').val() + ' ' + $('#hour1').val() + ':' + $('#minute1').val();
+        var time_end = $('#datepicker').val() + ' ' + $('#hour2').val() + ':' + $('#minute2').val();
+
+        $.post("func-book-space.php", {
+                user_id: user_id,
+                area_id: area_id,
+                space_no: space_no,
+                time_start: time_start,
+                time_end: time_end
+            },
+            function(data) {
+                console.log(data)
+                if (data == "ok") {
+                    ticketOpened()
+                } else if (data == "failed") {
+                    ticketOpenFailed()
+                } else if (data == "past") {
+                    ticketOpenPast()
+                }
+            });
+
+
+        console.log("User ID - > " + user_id);
+        console.log("Area ID - > " + area_id);
+        console.log("Space No - > " + space_no);
+        console.log(time_start);
+        console.log(time_end);
+        spaceSelected();
+    }
+
+    function spaceSelected() {
+        var selected = $('input[name="spaceOptions"]:checked').val()
+        if (!selected) {
+            $('#bookButton').prop('disabled', true);
+        } else {
+            $('#bookButton').prop('disabled', false);
+        }
+    }
+
+    $('#selectSpaceModal').on('hidden.bs.modal', function(event) {
+        $('#bookButton').prop('disabled', true);
+    })
 </script>

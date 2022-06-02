@@ -17,10 +17,9 @@
     <table class="table table-sm" id="bookinglist">
         <thead>
             <tr class="bg-info text-light">
-                <th scope="col" class="col-sm-1">No.</th>
-                <th scope="col" class="col-sm-7">Pengguna</th>
-                <th scope="col" class="col-sm-2">Mulai</th>
-                <th scope="col" class="col-sm-2">Selesai</th>
+                <th scope="col" class="col-sm-3">Space</th>
+                <th scope="col" class="col-sm-6">Pengguna</th>
+                <th scope="col" class="col-sm-3">Waktu</th>
             </tr>
         </thead>
         <tbody>
@@ -51,35 +50,40 @@
                     $query2 = "SELECT * FROM users WHERE id = '$user_id'";
                     $result2 = mysqli_query($link, $query2);
                     $data2 = mysqli_fetch_assoc($result2);
+
+                    $area_id = $data['area_id'];
+
+                    $query3 = "SELECT * FROM areas WHERE id = '$area_id'";
+                    $result3 = mysqli_query($link, $query3);
+                    $data3 = mysqli_fetch_assoc($result3);
+                    $area_code = $data3['code'];
+
                     $now = date("Y-m-d H:i:s");
                     $tmrw = date('Y-m-d H:i:s', strtotime($now . ' + 1 days'));
                     if ($data['time_start'] <= $now && $data['time_end'] >= $now) {
             ?>
                         <tr class="bg-success text-white">
-                            <th scope="row"><?= $i; ?></th>
+                            <td><?= $area_code . '-' . $data['space_no']; ?></td>
                             <td><?= $data2['fullname']; ?></td>
-                            <td><?= date('H:i', strtotime($data['time_start'])); ?></td>
-                            <td><?= date('H:i', strtotime($data['time_end'])); ?></td>
+                            <td><?= date('H:i', strtotime($data['time_start'])) . ' - ' . date('H:i', strtotime($data['time_end'])); ?></td>
                         </tr>
                     <?php
                         $i++;
                     } elseif ($data['time_start'] > $now && $data['time_end'] > $now) {
                     ?>
                         <tr class="text-info">
-                            <th scope="row"><?= $i; ?></th>
+                            <td><?= $area_code . '-' . $data['space_no']; ?></td>
                             <td><?= $data2['fullname']; ?></td>
-                            <td><?= date('H:i', strtotime($data['time_start'])); ?></td>
-                            <td><?= date('H:i', strtotime($data['time_end'])); ?></td>
+                            <td><?= date('H:i', strtotime($data['time_start'])) . ' - ' . date('H:i', strtotime($data['time_end'])); ?></td>
                         </tr>
                     <?php
                         $i++;
                     } else {
                     ?>
                         <tr>
-                            <th scope="row"><?= $i; ?></th>
+                            <td><?= $area_code . '-' . $data['space_no']; ?></td>
                             <td><?= $data2['fullname']; ?></td>
-                            <td><?= date('H:i', strtotime($data['time_start'])); ?></td>
-                            <td><?= date('H:i', strtotime($data['time_end'])); ?></td>
+                            <td><?= date('H:i', strtotime($data['time_start'])) . ' - ' . date('H:i', strtotime($data['time_end'])); ?></td>
                         </tr>
                 <?php
                         $i++;

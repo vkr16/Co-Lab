@@ -441,8 +441,6 @@ function updateUsername($newUsername, $oldUsername)
 function isSpaceConflict($space_no, $area_id, $start_time, $end_time)
 {
     global $link;
-
-
     $query = "SELECT * FROM space_tickets WHERE area_id = '$area_id' AND space_no = '$space_no'";
     $result = mysqli_query($link, $query);
 
@@ -452,13 +450,16 @@ function isSpaceConflict($space_no, $area_id, $start_time, $end_time)
 
     while ($data = mysqli_fetch_assoc($result)) {
         $conflict = false;
-        if ($start_time > $data['time_start'] && $start_time < $data['time_end']) {
+        if ($start_time >= $data['time_start'] && $start_time <= $data['time_end']) {
             $conflict = true;
             break;
-        } elseif ($end_time > $data['time_start'] && $end_time < $data['time_end']) {
+        } elseif ($end_time >= $data['time_start'] && $end_time <= $data['time_end']) {
             $conflict = true;
             break;
-        } elseif (($start_time < $data['time_start'] && $start_time < $data['time_end']) && ($end_time > $data['time_start'] && $end_time > $data['time_end'])) {
+        } elseif (($start_time <= $data['time_start'] && $start_time <= $data['time_end']) && ($end_time >= $data['time_start'] && $end_time >= $data['time_end'])) {
+            $conflict = true;
+            break;
+        } elseif (($start_time <= $data['time_start'] && $start_time <= $data['time_end']) && ($end_time >= $data['time_start'] && $end_time <= $data['time_end'])) {
             $conflict = true;
             break;
         } else {

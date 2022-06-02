@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.1
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Waktu pembuatan: 22 Bulan Mei 2022 pada 15.59
--- Versi server: 10.4.11-MariaDB
--- Versi PHP: 7.4.1
+-- Host: 127.0.0.1
+-- Generation Time: Jun 02, 2022 at 12:42 PM
+-- Server version: 10.4.22-MariaDB
+-- PHP Version: 7.4.27
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -25,7 +24,25 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `rooms`
+-- Table structure for table `areas`
+--
+
+CREATE TABLE `areas` (
+  `id` int(10) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `location` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `thumbnail` varchar(255) NOT NULL DEFAULT 'thumbnail_default.png',
+  `layout` varchar(255) NOT NULL DEFAULT 'layout_default.png',
+  `capacity` int(10) NOT NULL,
+  `code` varchar(4) NOT NULL,
+  `status` enum('active','inactive') NOT NULL DEFAULT 'active'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `rooms`
 --
 
 CREATE TABLE `rooms` (
@@ -39,7 +56,7 @@ CREATE TABLE `rooms` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `rooms`
+-- Dumping data for table `rooms`
 --
 
 INSERT INTO `rooms` (`id`, `room_name`, `location`, `capacity`, `description`, `thumbnail`, `status`) VALUES
@@ -70,7 +87,37 @@ INSERT INTO `rooms` (`id`, `room_name`, `location`, `capacity`, `description`, `
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `tickets`
+-- Table structure for table `spaces`
+--
+
+CREATE TABLE `spaces` (
+  `id` int(10) NOT NULL,
+  `area_id` int(10) NOT NULL,
+  `space_no` int(10) NOT NULL,
+  `color_code` varchar(7) NOT NULL DEFAULT '#000000'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `space_tickets`
+--
+
+CREATE TABLE `space_tickets` (
+  `id` int(10) NOT NULL,
+  `user_id` int(10) NOT NULL,
+  `area_id` int(10) NOT NULL,
+  `space_no` int(11) NOT NULL,
+  `time_start` datetime NOT NULL,
+  `time_end` datetime NOT NULL,
+  `status` enum('valid','invalid') NOT NULL DEFAULT 'valid',
+  `invalidated` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tickets`
 --
 
 CREATE TABLE `tickets` (
@@ -82,28 +129,10 @@ CREATE TABLE `tickets` (
   `notes` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data untuk tabel `tickets`
---
-
-INSERT INTO `tickets` (`id`, `user_id`, `room_id`, `time_start`, `time_end`, `notes`) VALUES
-(39, 3, 2, '2022-05-12 09:30:00', '2022-05-13 09:39:00', 'Now'),
-(40, 3, 2, '2022-05-13 09:00:00', '2022-05-13 09:09:00', 'Past'),
-(41, 3, 2, '2022-05-13 10:10:00', '2022-05-13 11:09:00', 'Later'),
-(42, 3, 1, '2022-05-13 09:30:00', '2022-05-13 09:39:00', 'Now'),
-(43, 3, 2, '2022-05-13 10:00:00', '2022-05-13 10:09:00', 'gg'),
-(44, 3, 3, '2022-05-13 10:30:00', '2022-05-13 10:39:00', 'aa'),
-(45, 7, 2, '2022-05-13 17:50:00', '2022-05-13 17:59:00', 'Innoe'),
-(46, 3, 1, '2022-05-13 17:50:00', '2022-05-13 18:49:00', 'aa'),
-(51, 9, 5, '2022-05-31 09:00:00', '2022-05-31 16:59:00', 'Untuk penelitian'),
-(52, 9, 7, '2022-05-31 06:00:00', '2022-05-31 21:09:00', 'Untuk Praktikum'),
-(53, 9, 1, '2022-05-23 09:00:00', '2022-05-23 17:09:00', 'ami'),
-(54, 9, 7, '2022-05-26 06:00:00', '2022-05-26 16:09:00', 'Praktikum');
-
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `users`
+-- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
@@ -120,57 +149,94 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `users`
+-- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `fullname`, `studentid`, `username`, `email`, `password`, `role`, `validity`, `uniqueid`, `photo`) VALUES
-(2, 'Administrator', '000000000000001', 'admin', 'not.gamer16@gmail.com', '$2y$10$TnHNhl4EE.wHGPBtmyFxnOFG4XLvly0bdtbf9EbmQqfkZLyY8OI7W', 'admin', 'valid', 'faaee5e5281ee9448af3a38136b5e612125a6788', '5b9e94343456cd8c74ff.png'),
+(2, 'Administrator', '000000000000001', 'admin', 'not.gamer16@gmail.com', '$2y$10$TnHNhl4EE.wHGPBtmyFxnOFG4XLvly0bdtbf9EbmQqfkZLyY8OI7W', 'admin', 'valid', 'faaee5e5281ee9448af3a38136b5e612125a6788', '2482b3210d4167ec1872.jfif'),
 (9, 'Nur Amalia Asmi susanteo', '193140714111050', 'amiisteo_', 'namaliaamiisteo@gmail.com', '$2y$10$J9V4Gw05WnyD0CNOAQGK/.e7SWMJGOnuydK16ssnbKiI50uUKYi1W', 'user', 'valid', '3dc73702b0a3599419a873fa5b2670890eae6992', 'c9dad0fe660754e7c5cf.png'),
-(10, 'Amalia Asmi', '193140714111051', 'amii_', 'nuramaliaasmisteo@icloud.com', '$2y$10$Ix/I79Y6DAWFGd.MoaaaeeXCMPX2iJYPhA6OsALBapVuh1ArpF3Yq', 'user', 'invalid', '4053f840a5c973f4d0788da1e839120401baddfb', 'default.png');
+(10, 'Amalia Asmi', '193140714111051', 'amii_', 'nuramaliaasmisteo@icloud.com', '$2y$10$Ix/I79Y6DAWFGd.MoaaaeeXCMPX2iJYPhA6OsALBapVuh1ArpF3Yq', 'user', 'invalid', '4053f840a5c973f4d0788da1e839120401baddfb', 'default.png'),
+(11, 'Fikri Miftah Akmaludin', '185150301111043', 'vkr16', 'fikri.droid16@gmail.com', '$2y$10$gY7p/8wXF5SSD8lYqndUOuGqvql7Re.uS.SlPZBaIJ8eEeRS1eHAa', 'user', 'valid', '6f3e50da82785e690cc252164bcbff841016f8ba', 'default.png');
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indeks untuk tabel `rooms`
+-- Indexes for table `areas`
+--
+ALTER TABLE `areas`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `rooms`
 --
 ALTER TABLE `rooms`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `tickets`
+-- Indexes for table `spaces`
+--
+ALTER TABLE `spaces`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `space_tickets`
+--
+ALTER TABLE `space_tickets`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tickets`
 --
 ALTER TABLE `tickets`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `users`
+-- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT untuk tabel yang dibuang
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT untuk tabel `rooms`
+-- AUTO_INCREMENT for table `areas`
+--
+ALTER TABLE `areas`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
--- AUTO_INCREMENT untuk tabel `tickets`
+-- AUTO_INCREMENT for table `spaces`
 --
-ALTER TABLE `tickets`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+ALTER TABLE `spaces`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT untuk tabel `users`
+-- AUTO_INCREMENT for table `space_tickets`
+--
+ALTER TABLE `space_tickets`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `tickets`
+--
+ALTER TABLE `tickets`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

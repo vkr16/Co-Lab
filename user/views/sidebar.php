@@ -21,7 +21,7 @@
     <li class="nav-item <?php echo $space == true ? 'active' : '' ?>">
         <a class="nav-link" href="workspaces.php">
             <i class="fa-solid fa-house-laptop"></i>
-            <span>Ruang Kerja Bersama</span></a>
+            <span>Area Bersama</span></a>
     </li>
     <li class="nav-item <?php echo $myTickets == true ? 'active' : '' ?>">
         <a class="nav-link" href="my-tickets.php">
