@@ -366,8 +366,12 @@ function isConflict($room_id, $start_time, $end_time)
     $room_id = mysqli_real_escape_string($link, $room_id);
 
 
-    $query = "SELECT * FROM tickets WHERE room_id = '$room_id'";
+    $query = "SELECT * FROM tickets WHERE room_id = '$room_id' AND status = 'valid' ";
     $result = mysqli_query($link, $query);
+
+    if (mysqli_num_rows($result) == 0) {
+        $conflict = false;
+    }
 
     while ($data = mysqli_fetch_assoc($result)) {
         $conflict = false;
@@ -441,7 +445,7 @@ function updateUsername($newUsername, $oldUsername)
 function isSpaceConflict($space_no, $area_id, $start_time, $end_time)
 {
     global $link;
-    $query = "SELECT * FROM space_tickets WHERE area_id = '$area_id' AND space_no = '$space_no'";
+    $query = "SELECT * FROM space_tickets WHERE area_id = '$area_id' AND space_no = '$space_no' AND status = 'valid'";
     $result = mysqli_query($link, $query);
 
     if (mysqli_num_rows($result) == 0) {
@@ -472,4 +476,18 @@ function isSpaceConflict($space_no, $area_id, $start_time, $end_time)
     } else {
         return false;
     }
+}
+
+
+function getUserDataById($id)
+{
+    global $link;
+
+    $id = mysqli_real_escape_string($link, $id);
+
+    $query = "SELECT * FROM users WHERE id = '$id'";
+    $result = mysqli_query($link, $query);
+    $data = mysqli_fetch_assoc($result);
+
+    return $data;
 }

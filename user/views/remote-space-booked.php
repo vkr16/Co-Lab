@@ -40,7 +40,7 @@
 
             $area_id = $_POST['area_id'];
 
-            $query = "SELECT * FROM space_tickets WHERE time_start >= '$date' AND time_end < '$tomorrow' AND area_id = $area_id ORDER BY time_start";
+            $query = "SELECT * FROM space_tickets WHERE time_start >= '$date' AND time_end < '$tomorrow' AND area_id = $area_id AND status ='valid' ORDER BY time_start";
             $result = mysqli_query($link, $query);
             $i = 1;
 

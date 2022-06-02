@@ -3,11 +3,12 @@ require_once "../../core/init.php";
 require_once "../../core/user-session-only.php";
 
 ?>
-<table id="ticketHistory" class="table">
+<table id="spaceticketHistory" class="table">
     <thead>
         <tr>
             <th>No</th>
-            <th>Ruang / Laboratorium</th>
+            <th>Area</th>
+            <th>Nomor Kursi</th>
             <th>Tanggal</th>
             <th>Waktu</th>
             <th>Di Batalkan</th>
@@ -22,7 +23,7 @@ require_once "../../core/user-session-only.php";
             $userid = $_POST['userid'];
             $now = date("Y-m-d H:i:s");
 
-            $query = "SELECT * FROM tickets WHERE user_id = '$userid' AND time_end<'$now' OR status = 'invalid'";
+            $query = "SELECT * FROM space_tickets WHERE user_id = '$userid' AND time_end<'$now' OR status = 'invalid'";
             $result = mysqli_query($link, $query);
             if (mysqli_num_rows($result) == 0) {
         ?>
@@ -31,22 +32,20 @@ require_once "../../core/user-session-only.php";
             }
             $i = 0;
             while ($data = mysqli_fetch_assoc($result)) {
-                $room_data =  getRoomDataById($data['room_id']);
-                $room_name = $room_data['room_name'];
-                $room_thumbnail = $room_data['thumbnail'];
+                $area_data =  getAreaDataById($data['area_id']);
+                $areaname = $area_data['name'];
                 $i++;
                 $invalidateTime = date_create($data['invalidated']);
-
             ?>
 
                 <!-- row item -->
                 <tr>
                     <td class="col-md-1"><?= $i; ?></td>
-                    <td class="col-md-4"><?= $room_name; ?></td>
+                    <td class="col-md-3"><?= $areaname; ?></td>
+                    <td class="col-md-1"><?= $area_data['code'] . '-' . $data['space_no']; ?></td>
                     <td class="col-md-2"><?= date_format(date_create($data['time_start']), 'd / m / Y'); ?></td>
                     <td class="col-md-2"><?= date_format(date_create($data['time_start']), 'H:i') . " - " . date_format(date_create($data['time_end']), 'H:i'); ?></td>
                     <td class="col-md-3"><?= $data['invalidated'] != NULL ? date_format($invalidateTime, 'd-m-Y') . ' pukul ' . date_format($invalidateTime, 'H:i') : '-';  ?></td>
-
                 </tr>
                 <!-- row item end -->
         <?php
@@ -61,7 +60,7 @@ require_once "../../core/user-session-only.php";
 
 <script>
     $(document).ready(function() {
-        $('#ticketHistory').DataTable({
+        $('#spaceticketHistory').DataTable({
             "language": {
                 "search": "Cari : ",
                 "lengthMenu": "Tampilkan _MENU_ data per halaman",

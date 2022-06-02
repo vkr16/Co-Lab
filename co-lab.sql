@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 02, 2022 at 12:42 PM
+-- Generation Time: Jun 02, 2022 at 05:50 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 7.4.27
 
@@ -126,7 +126,9 @@ CREATE TABLE `tickets` (
   `room_id` int(10) NOT NULL,
   `time_start` datetime DEFAULT NULL,
   `time_end` datetime DEFAULT NULL,
-  `notes` varchar(255) NOT NULL
+  `notes` varchar(255) NOT NULL,
+  `status` enum('valid','invalid') NOT NULL DEFAULT 'valid',
+  `invalidated` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------

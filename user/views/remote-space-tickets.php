@@ -7,7 +7,7 @@ if (isset($_POST['userid'])) {
 
     $now = date("Y-m-d H:i:s");
 
-    $query = "SELECT * FROM tickets WHERE user_id = '$userid' AND time_end>='$now' AND status ='valid'";
+    $query = "SELECT * FROM space_tickets WHERE user_id = '$userid' AND time_end>='$now' AND status = 'valid'";
     $result = mysqli_query($link, $query);
     if (mysqli_num_rows($result) == 0) {
 ?>
@@ -17,21 +17,22 @@ if (isset($_POST['userid'])) {
     <?php
     }
     while ($data = mysqli_fetch_assoc($result)) {
-        $room_data =  getRoomDataById($data['room_id']);
-        $room_name = $room_data['room_name'];
-        $room_thumbnail = $room_data['thumbnail'];
+        $area_data =  getAreaDataById($data['area_id']);
+        $area_name = $area_data['name'];
+        $area_thumbnail = $area_data['thumbnail'];
     ?>
 
         <!-- row item -->
         <div class="col-md-3 px-2">
             <div class="card shadow mb-3" style="min-height: 420px;">
-                <img src="../assets/img/rooms/<?= $room_thumbnail ?>" class="card-img-top thumbnail-card-img" alt="...">
+                <img src="../assets/img/areas/<?= $area_thumbnail ?>" class="card-img-top thumbnail-card-img" alt="...">
                 <div class="card-body">
-                    <h5 class="card-subtitle text-dark"><?= $room_name ?></h5>
+                    <h5 class="card-subtitle text-dark"><?= $area_name ?></h5><br>
+                    <h6 class="card-subtitle text-dark"><?= $area_data['code'] . '-' . $data['space_no'] ?></h6>
                 </div>
                 <div class="card-footer">
                     <h6 class=" card-subtitle my-1 text-muted d-flex align-items-center">Berlaku pada <?= date_format(date_create($data['time_start']), 'd/m/Y'); ?> <br> Pukul <?= date_format(date_create($data['time_start']), 'H:i') . " - " . date_format(date_create($data['time_end']), 'H:i'); ?></h6>
-                    <button class="btn btn-sm btn-success mt-1" onclick="showTicket(<?= $data['id'] ?>)"><i class="fa-solid fa-tag"></i> View</button>
+                    <button class="btn btn-sm btn-success mt-1" onclick="showSpaceTicket(<?= $data['id'] ?>)"><i class="fa-solid fa-tag"></i> View</button>
                 </div>
             </div>
         </div>

@@ -42,6 +42,11 @@
             <i class="fa-solid fa-user-gear fa-fw"></i>
             <span>Manajemen Pengguna</span></a>
     </li>
+    <li class="nav-item <?php echo $logs == true ? 'active' : '' ?>">
+        <a class="nav-link" href="booking-logs.php">
+            <i class="fa-solid fa-list-check fa-fw"></i>
+            <span>Log Pembukuan</span></a>
+    </li>
 
 
     <!-- Divider -->

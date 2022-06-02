@@ -14,7 +14,7 @@ $tomorrow = date_format(date_create($tomorrow), 'Y-m-d H:i:s');
 
 $room_id = $_POST['room_id'];
 
-$query = "SELECT * FROM tickets WHERE time_start >= '$date' AND time_end < '$tomorrow' AND room_id = $room_id ORDER BY time_start";
+$query = "SELECT * FROM tickets WHERE time_start >= '$date' AND time_end < '$tomorrow' AND room_id = $room_id AND status ='valid' ORDER BY time_start";
 $result = mysqli_query($link, $query);
 $i = 1;
 

@@ -61,30 +61,30 @@ $user_id = getUserIdByUsername($_SESSION['cl_user']);
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h4 mb-0 text-gray-800">Tiket Aktif</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Tiket Aktif</h1>
                     </div>
+                    <h5 class="h4 text-dark">Tiket Penggunaan Ruangan</h5>
+                    <br>
                     <div class="row" id="tickets">
+                    </div>
+                    <hr>
+                    <h5 class="h4 text-dark">Tiket Area Bersama</h5>
+                    <br>
+                    <div class="row" id="spacetickets">
                     </div>
                     <hr>
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h4 mb-0 text-gray-800">Riwayat / Tiket Kadaluarsa</h1>
                     </div>
                     <div class="col-md-12 card">
+                        <h5 class="card-subtitle mt-4 ml-2 text-dark">Tiket Penggunaan Ruangan</h5>
                         <div class="card-body table-responsive" id="expiredTickets">
-
-                            <table id="ticketHistory" class="table">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="col-md-12 card">
+                        <h5 class="card-subtitle mt-4 ml-2 text-dark">Tiket Area Bersama</h5>
+                        <div class="card-body table-responsive" id="expiredSpaceTickets">
 
 
                         </div>
@@ -119,7 +119,7 @@ $user_id = getUserIdByUsername($_SESSION['cl_user']);
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class=" modal-header">
-                    <h5 class="modal-title" id="activeTicketModalLabel">Tiket Pembukuan Ruangan</h5>
+                    <h5 class="modal-title" id="activeTicketModalLabel">Detail Informasi Tiket</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -162,22 +162,6 @@ $user_id = getUserIdByUsername($_SESSION['cl_user']);
 <script>
     $(document).ready(function() {
         gettickets(<?= $user_id ?>);
-        $('#ticketHistory').DataTable({
-            "language": {
-                "search": "Cari : ",
-                "lengthMenu": "Tampilkan _MENU_ data per halaman",
-                "zeroRecords": "Tidak ada data yang cocok ditemukan.",
-                "info": "Menampilkan halaman _PAGE_ dari _PAGES_",
-                "infoEmpty": "Data tidak tersedia",
-                "infoFiltered": "(Difilter dari _MAX_ total data)",
-                "paginate": {
-                    "first": "Pertama",
-                    "last": "Terakhir",
-                    "next": "Selanjutnya",
-                    "previous": "Sebelumnya"
-                },
-            }
-        })
     });
 
     function gettickets(userid) {
@@ -187,11 +171,23 @@ $user_id = getUserIdByUsername($_SESSION['cl_user']);
             function(data) {
                 $("#tickets").html(data);
             });
+        $.post("views/remote-space-tickets.php", {
+                userid: userid
+            },
+            function(data) {
+                $("#spacetickets").html(data);
+            });
         $.post("views/remote-index-ticketsHistory.php", {
                 userid: userid
             },
             function(data) {
-                $("#ticketHistory").html(data);
+                $("#expiredTickets").html(data);
+            });
+        $.post("views/remote-index-spaceticketsHistory.php", {
+                userid: userid
+            },
+            function(data) {
+                $("#expiredSpaceTickets").html(data);
             });
     }
 
@@ -199,6 +195,17 @@ $user_id = getUserIdByUsername($_SESSION['cl_user']);
         $('#activeTicketModal').modal('show');
 
         $.post("views/remote-index-ticketsShow.php", {
+                ticketID: ticketID
+            },
+            function(data) {
+                $("#ticketmodaldata").html(data);
+            });
+    }
+
+    function showSpaceTicket(ticketID) {
+        $('#activeTicketModal').modal('show');
+
+        $.post("views/remote-space-ticketsShow.php", {
                 ticketID: ticketID
             },
             function(data) {
@@ -223,6 +230,33 @@ $user_id = getUserIdByUsername($_SESSION['cl_user']);
                     function(data) {
                         $('#activeTicketModal').modal('hide');
                         gettickets(<?= $user_id ?>);
+                    });
+            }
+        })
+    }
+
+    function cancelSpacePrompt(ticketID) {
+        Swal.fire({
+            icon: 'question',
+            title: 'Apakah Anda Yakin?',
+            text: 'Menghapus tiket akan membatalkan pembukuan yang sudah anda buat',
+            showCancelButton: true,
+            cancelButtonText: "Batal",
+            confirmButtonText: "Ya, Hapus dan Batalkan"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.post("views/remote-delete-spaceticket.php", {
+                        ticketID: ticketID
+                    },
+                    function(data) {
+                        $('#activeTicketModal').modal('hide');
+                        gettickets(<?= $user_id ?>);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: 'Tiket berhasil dibatalkan.',
+                            confirmButtonText: "Selesai"
+                        })
                     });
             }
         })
