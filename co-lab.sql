@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 02, 2022 at 07:51 PM
+-- Generation Time: Jun 03, 2022 at 11:18 AM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 7.4.27
 
@@ -81,7 +81,6 @@ INSERT INTO `rooms` (`id`, `room_name`, `location`, `capacity`, `description`, `
 (20, 'Laboratorium Treatroom', 'Gedung Fakultas Keperawatan Lantai 7 Ruang A7.3', 35, 'Laboratorium ini di lengkapi dengan fasilitas-fasilitas pendukung seperti berikut: <br><br>- Alat-Alat Praktik<br>- Komponen-Komponen Dasar <br>- Bahan Kimia<br>- dll', '3ae0707f5a13a87ac47e.jpg', 'active'),
 (21, 'Laboratorium Inbeautiful', 'Gedung Fakultas Vokasi Lantai 6 Ruang A6.19', 25, 'Laboratorium Pro Lab merupakan salah satu Laboratorium yang dimiliki Universitas Brawijaya Kampus Dieng Laboratorium ini memiliki ruangan yang luas serta ditunjang dengan fasilitas pendukung yang lengkap dan memiliki perangkat utama komputer dengan spesifikasi cukup tinggi. <br>Fasilitas yang di miliki lab yaitu :<br>1. Personal Computer (PC) sebanyak 25<br>2. Software berlisensi resmi<br>3. Osciloscope, dll', '5055cd2f965511b95abc.jpg', 'active'),
 (22, 'Laboratorium Lookingood', 'Gedung Fakultas Vokasi Lantai 3 Ruang A3.16', 27, 'Laboratorium Pro Lab merupakan salah satu Laboratorium yang dimiliki Universitas Brawijaya Kampus Dieng Laboratorium ini memiliki ruangan yang luas serta ditunjang dengan fasilitas pendukung yang lengkap dan memiliki perangkat utama komputer dengan spesifikasi cukup tinggi. <br>Fasilitas yang di miliki lab yaitu :<br>1. Personal Computer (PC) sebanyak 27<br>2. Software berlisensi resmi<br>3. Osciloscope, dll', '407c850fe4148ffdd5c6.jpg', 'active'),
-(23, 'Laboratorium Furnichia', 'Gedung Fakultas Vokasi Lantai 5 Ruang A5.21', 35, 'Laboratorium Pro Lab merupakan salah satu Laboratorium yang dimiliki Universitas Brawijaya Kampus Dieng Laboratorium ini memiliki ruangan yang luas serta ditunjang dengan fasilitas pendukung yang lengkap dan memiliki perangkat utama komputer dengan spesifikasi cukup tinggi. <br>Fasilitas yang di miliki lab yaitu :<br>1. Personal Computer (PC) sebanyak 35<br>2. Software berlisensi resmi<br>3. Osciloscope, dll', '320a090fbbb23c6b37ec.jpg', 'active'),
 (24, 'Laboratorium Komputer', 'Gedung Vokasi Lantai 5 A5.11', 15, 'Fasilitas untuk laboratorium komputer sebagai berikut :<br>1. Komputer<br>2. Meja<br>3. Ac', 'cd4afac96715c411d4a3.jpg', 'active');
 
 -- --------------------------------------------------------
@@ -155,7 +154,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `fullname`, `studentid`, `username`, `email`, `password`, `role`, `validity`, `uniqueid`, `photo`) VALUES
-(2, 'Administrator', '000000000000001', 'admin', 'not.gamer16@gmail.com', '$2y$10$TnHNhl4EE.wHGPBtmyFxnOFG4XLvly0bdtbf9EbmQqfkZLyY8OI7W', 'admin', 'valid', 'faaee5e5281ee9448af3a38136b5e612125a6788', '2482b3210d4167ec1872.jfif'),
+(2, 'Administrator', '000000000000001', 'admin', 'not.gamer16@gmail.com', '$2y$10$TnHNhl4EE.wHGPBtmyFxnOFG4XLvly0bdtbf9EbmQqfkZLyY8OI7W', 'admin', 'valid', 'faaee5e5281ee9448af3a38136b5e612125a6788', 'c788db75589b1017d582.jpg'),
 (9, 'Nur Amalia Asmi susanteo', '193140714111050', 'amiisteo_', 'namaliaamiisteo@gmail.com', '$2y$10$J9V4Gw05WnyD0CNOAQGK/.e7SWMJGOnuydK16ssnbKiI50uUKYi1W', 'user', 'valid', '3dc73702b0a3599419a873fa5b2670890eae6992', 'c9dad0fe660754e7c5cf.png'),
 (10, 'Amalia Asmi', '193140714111051', 'amii_', 'nuramaliaasmisteo@icloud.com', '$2y$10$Ix/I79Y6DAWFGd.MoaaaeeXCMPX2iJYPhA6OsALBapVuh1ArpF3Yq', 'user', 'invalid', '4053f840a5c973f4d0788da1e839120401baddfb', 'default.png'),
 (11, 'Fikri Miftah Akmaludin', '185150301111043', 'vkr16', 'fikri.droid16@gmail.com', '$2y$10$gY7p/8wXF5SSD8lYqndUOuGqvql7Re.uS.SlPZBaIJ8eEeRS1eHAa', 'user', 'valid', '6f3e50da82785e690cc252164bcbff841016f8ba', 'default.png');

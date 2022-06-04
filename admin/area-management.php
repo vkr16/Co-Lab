@@ -24,6 +24,11 @@ if (isset($_POST['savearea'])) {
         "\r\n",
         "\n"
     ), '<br>', $description);
+    $description =  str_replace(array(
+        "'",
+        "\\",
+        "\""
+    ), '', $description);
 
     $capacity = $_POST['capacity'];
     $status   = $_POST['status'];
@@ -46,12 +51,12 @@ if (isset($_POST['savearea'])) {
 
     if ($_FILES['layout']['size'] != 0 && $_FILES['layout']['error'] == 0) {
         $randStr = bin2hex(random_bytes(10));
-        $path  = $_SERVER['DOCUMENT_ROOT'] . "/co-lab/assets/img/layout/";
+        $path  = $_SERVER['DOCUMENT_ROOT'] . "/co-lab/assets/img/layouts/";
         $path2 = $_FILES['layout']['name'];
         $ext   = pathinfo($path2, PATHINFO_EXTENSION);
         $path  = $path . $randStr . '.' . $ext;
 
-        $filenameondb = $randStr . '.' . $ext;
+        $filenameondb2 = $randStr . '.' . $ext;
 
         move_uploaded_file($_FILES['layout']['tmp_name'], $path);
     } else {
@@ -97,6 +102,11 @@ if (isset($_POST['updatearea'])) {
         "\r\n",
         "\n"
     ), '<br>', $description);
+    $description =  str_replace(array(
+        "'",
+        "\\",
+        "\""
+    ), '', $description);
 
     $capacity = $_POST['capacity'];
     $status   = $_POST['status'];

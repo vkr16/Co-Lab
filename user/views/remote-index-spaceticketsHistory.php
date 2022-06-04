@@ -33,6 +33,9 @@ require_once "../../core/user-session-only.php";
             $i = 0;
             while ($data = mysqli_fetch_assoc($result)) {
                 $area_data =  getAreaDataById($data['area_id']);
+                if ($area_data == NULL) {
+                    $area_data = array("name" => "<i>Area Telah Dihapus</i>", "code" => "ERROR-404");
+                }
                 $areaname = $area_data['name'];
                 $i++;
                 $invalidateTime = date_create($data['invalidated']);
@@ -42,7 +45,7 @@ require_once "../../core/user-session-only.php";
                 <tr>
                     <td class="col-md-1"><?= $i; ?></td>
                     <td class="col-md-3"><?= $areaname; ?></td>
-                    <td class="col-md-1"><?= $area_data['code'] . '-' . $data['space_no']; ?></td>
+                    <td class="col-md-1"><?= $area_data['code'] != "ERROR-404" ? $area_data['code'] . '-' . $data['space_no'] : $area_data['code'] ?></td>
                     <td class="col-md-2"><?= date_format(date_create($data['time_start']), 'd / m / Y'); ?></td>
                     <td class="col-md-2"><?= date_format(date_create($data['time_start']), 'H:i') . " - " . date_format(date_create($data['time_end']), 'H:i'); ?></td>
                     <td class="col-md-3"><?= $data['invalidated'] != NULL ? date_format($invalidateTime, 'd-m-Y') . ' pukul ' . date_format($invalidateTime, 'H:i') : '-';  ?></td>
@@ -61,6 +64,7 @@ require_once "../../core/user-session-only.php";
 <script>
     $(document).ready(function() {
         $('#spaceticketHistory').DataTable({
+            lengthMenu: [5, 10, 20, 50, 100],
             "language": {
                 "search": "Cari : ",
                 "lengthMenu": "Tampilkan _MENU_ data per halaman",

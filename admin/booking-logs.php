@@ -91,9 +91,14 @@ $now = date("Y-m-d H:i:s");
                                     while ($data = mysqli_fetch_assoc($result)) {
                                         $room_id = $data['room_id'];
                                         $room_data = getRoomDataById($room_id);
+                                        if ($room_data == null) {
+                                            $room_data = array("room_name" => "<i>Ruangan Telah Dihapus</i>");
+                                        }
                                         $user_id = $data['user_id'];
                                         $user_data = getUserDataById($user_id);
-
+                                        if ($user_data == null) {
+                                            $user_data = array("fullname" => "<i>Tidak Dikenali</i>");
+                                        }
                                         $i++;
                                     ?>
                                         <tr>
@@ -140,8 +145,14 @@ $now = date("Y-m-d H:i:s");
                                     while ($data = mysqli_fetch_assoc($result)) {
                                         $area_id = $data['area_id'];
                                         $area_data = getAreaDataById($area_id);
+                                        if ($area_data == null) {
+                                            $area_data = array("name" => "<i>Area Telah Dihapus</i>", "code" => "ERROR-404");
+                                        }
                                         $user_id = $data['user_id'];
                                         $user_data = getUserDataById($user_id);
+                                        if ($user_data == null) {
+                                            $user_data = array("fullname" => "<i>Tidak Dikenali</i>");
+                                        }
 
                                         $i++;
                                     ?>
@@ -149,7 +160,7 @@ $now = date("Y-m-d H:i:s");
                                             <th><?= $i; ?></th>
                                             <td class=""><?= $user_data['fullname']; ?></td>
                                             <td><?= $area_data['name'] ?></td>
-                                            <td><?= $area_data['code'] . '-' . $data['space_no'] ?></td>
+                                            <td><?= $area_data['code'] != "ERROR-404" ? $area_data['code'] . '-' . $data['space_no'] : $area_data['code'] ?></td>
                                             <td><?= date_format(date_create($data['time_start']), 'd-m-Y'); ?></td>
                                             <td><?= date_format(date_create($data['time_start']), 'H:i') . ' - ' . date_format(date_create($data['time_end']), 'H:i'); ?></td>
                                             <td><?= $data['invalidated'] == NULL ? '-' : date_format(date_create($data['invalidated']), 'd-m-Y') . ' &nbsp; || &nbsp; ' . date_format(date_create($data['invalidated']), 'H:i A') ?></td>

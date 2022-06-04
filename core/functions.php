@@ -348,7 +348,7 @@ function isNowAvailable($room_id)
     $now = date("Y-m-d H:i:s");
 
 
-    $query = "SELECT * FROM tickets WHERE time_start < '$now' AND time_end > '$now' AND room_id = $room_id";
+    $query = "SELECT * FROM tickets WHERE time_start < '$now' AND time_end > '$now' AND room_id = $room_id AND status = 'valid'";
     $result = mysqli_query($link, $query);
 
     $count = mysqli_num_rows($result);

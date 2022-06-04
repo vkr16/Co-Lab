@@ -31,6 +31,11 @@ if (isset($_POST['btnsave'])) {
         "\r\n",
         "\n"
     ), '<br>', $description);
+    $description =  str_replace(array(
+        "'",
+        "\\",
+        "\""
+    ), '', $description);
 
     if ($_FILES['thumbnail']['size'] != 0 && $_FILES['thumbnail']['error'] == 0) {
         $randStr = bin2hex(random_bytes(10));

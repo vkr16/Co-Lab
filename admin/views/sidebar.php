@@ -10,22 +10,18 @@
     </a>
 
     <!-- Divider -->
-    <hr class="sidebar-divider my-0">
-
-    <!-- Nav Item - Dashboard -->
-    <li class="nav-item <?php echo $dashboard == true ? 'active' : '' ?>">
-        <a class="nav-link" href="index.php">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Beranda</span></a>
-    </li>
-
-    <!-- Divider -->
     <hr class="sidebar-divider">
 
     <!-- Heading -->
     <div class="sidebar-heading">
-        Interface
+        Manajemen Panel
     </div>
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item <?php echo $dashboard == true ? 'active' : '' ?>">
+        <a class="nav-link" href="index.php">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Manajemen Tiket</span></a>
+    </li>
 
     <li class="nav-item <?php echo $room_management == true ? 'active' : '' ?>">
         <a class="nav-link" href="room-management.php">
@@ -42,6 +38,11 @@
             <i class="fa-solid fa-user-gear fa-fw"></i>
             <span>Manajemen Pengguna</span></a>
     </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+
     <li class="nav-item <?php echo $logs == true ? 'active' : '' ?>">
         <a class="nav-link" href="booking-logs.php">
             <i class="fa-solid fa-list-check fa-fw"></i>

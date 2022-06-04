@@ -32,8 +32,10 @@ require_once "../../core/user-session-only.php";
             $i = 0;
             while ($data = mysqli_fetch_assoc($result)) {
                 $room_data =  getRoomDataById($data['room_id']);
+                if ($room_data == NULL) {
+                    $room_data = array("room_name" => "<i>Ruangan Telah Dihapus</i>");
+                }
                 $room_name = $room_data['room_name'];
-                $room_thumbnail = $room_data['thumbnail'];
                 $i++;
                 $invalidateTime = date_create($data['invalidated']);
 
@@ -62,6 +64,7 @@ require_once "../../core/user-session-only.php";
 <script>
     $(document).ready(function() {
         $('#ticketHistory').DataTable({
+            lengthMenu: [5, 10, 20, 50, 100],
             "language": {
                 "search": "Cari : ",
                 "lengthMenu": "Tampilkan _MENU_ data per halaman",

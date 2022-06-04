@@ -66,59 +66,92 @@ require_once "../core/admin-session-only.php";
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-4 text-gray-800">Beranda Admin</h1>
+                    <h1 class="h3 mb-4 text-gray-800">Manajemen Tiket Aktif</h1>
 
                     <div class="card shadow col-md-12 ">
                         <div class="card-body table-responsive">
-                            <h5 class="text-dark">Informasi Ketersediaan Ruangan</h5>
+                            <h5 class="text-dark">Daftar Tiket Aktif Penggunaan Ruangan / Laboratorium</h5>
                             <br>
 
                             <table class="table" id="rooms_table">
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Nama Ruangan</th>
-                                        <th>Kapasitas</th>
-                                        <th>Ketersediaan</th>
-                                        <th>Penanggung Jawab</th>
-                                        <th>Jadwal</th>
+                                        <th>Nama Pengguna</th>
+                                        <th>Ruangan / Lab</th>
+                                        <th>Tanggal</th>
+                                        <th>Waktu</th>
+                                        <th>Catatan</th>
+                                        <th>Batalkan</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $query = "SELECT * FROM rooms WHERE status = 'active'";
+                                    $now = date('Y-m-d H:i:s');
+                                    $query = "SELECT * FROM tickets WHERE time_end >= '$now' AND status = 'valid'";
                                     $result  = mysqli_query($link, $query);
                                     $i = 0;
-                                    $now = date("Y-m-d H:i:s");
                                     while ($data = mysqli_fetch_assoc($result)) {
                                         $i++;
-                                        $room_id = $data['id'];
-                                        $query2 = "SELECT * FROM tickets WHERE room_id='$room_id' AND time_start <= '$now' AND time_end >= '$now'";
-                                        $result2 = mysqli_query($link, $query2);
-                                        if (mysqli_num_rows($result2) > 0) {
-                                            $data2 = mysqli_fetch_assoc($result2);
-
-                                            $user_id = $data2['user_id'];
-                                            $query3 = "SELECT * FROM users WHERE id = '$user_id'";
-                                            $result3 = mysqli_query($link, $query3);
-                                            $data3 = mysqli_fetch_assoc($result3);
-                                            $empty = false;
-                                        } else {
-                                            $empty = true;
-                                        }
+                                        $user_data = getUserDataById($data['user_id']);
+                                        $room_data = getRoomDataById($data['room_id']);
 
                                     ?>
                                         <tr>
                                             <td><?= $i; ?></td>
-                                            <td><?= $data['room_name']; ?></td>
-                                            <td><?= $data['capacity'] . " Orang"; ?></td>
-                                            <td><?php if (isNowAvailable($data['id'])) {
-                                                    echo '<i class="fa-regular fa-circle-check text-success"></i> &nbsp; Tersedia Saat Ini';
-                                                } else {
-                                                    echo '<i class="fa-regular fa-hourglass text-danger"></i> &nbsp; Sedang Digunakan';
-                                                } ?></td>
-                                            <td><?= $empty == false ? $data3['fullname'] : "-" ?></td>
-                                            <td><button class="btn btn-sm btn-orange" onclick="copyRomid(<?= $data['id'] ?>,'<?= $data['room_name'] ?>')">Lihat Jadwal</button></td>
+                                            <td><?= $user_data['fullname']; ?></td>
+                                            <td><?= $room_data['room_name'] ?></td>
+                                            <td><?= date_format(date_create($data['time_start']), 'd-m-Y') ?></td>
+                                            <td><?= date_format(date_create($data['time_start']), 'H:i') . ' - ' . date_format(date_create($data['time_end']), 'H:i') ?></td>
+                                            <td><?= $data['notes'] ?></td>
+                                            <td><button class="btn btn-sm btn-red" onclick="cancelPrompt(<?= $data['id'] ?>)"><i class="fa-solid fa-ban fa-fw"></i> Batalkan</button></td>
+                                        </tr>
+                                    <?php
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <br>
+                    <hr><br>
+                    <div class="card shadow col-md-12 ">
+                        <div class="card-body table-responsive">
+                            <h5 class="text-dark">Daftar Tiket Aktif Penggunaan Area Bersama</h5>
+                            <br>
+
+                            <table class="table" id="rooms_table2">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Nama Pengguna</th>
+                                        <th>Area</th>
+                                        <th>No. Tempat</th>
+                                        <th>Tanggal</th>
+                                        <th>Waktu</th>
+                                        <th>Batalkan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $now = date('Y-m-d H:i:s');
+                                    $query = "SELECT * FROM space_tickets WHERE time_end >= '$now' AND status = 'valid'";
+                                    $result  = mysqli_query($link, $query);
+                                    $i = 0;
+                                    while ($data = mysqli_fetch_assoc($result)) {
+                                        $i++;
+                                        $user_data = getUserDataById($data['user_id']);
+                                        $area_data = getAreaDataById($data['area_id']);
+
+                                    ?>
+                                        <tr>
+                                            <td><?= $i; ?></td>
+                                            <td><?= $user_data['fullname']; ?></td>
+                                            <td><?= $area_data['name'] ?></td>
+                                            <td><?= $area_data['code'] . '-' . $data['space_no'] ?></td>
+                                            <td><?= date_format(date_create($data['time_start']), 'd-m-Y') ?></td>
+                                            <td><?= date_format(date_create($data['time_start']), 'H:i') . ' - ' . date_format(date_create($data['time_end']), 'H:i') ?></td>
+                                            <td><button class="btn btn-sm btn-red" onclick="cancelSpacePrompt(<?= $data['id'] ?>)"><i class="fa-solid fa-ban fa-fw"></i> Batalkan</button></td>
                                         </tr>
                                     <?php
                                     }
@@ -148,46 +181,6 @@ require_once "../core/admin-session-only.php";
         <i class="fas fa-angle-up"></i>
     </a>
 
-    <div class="modal fade" id="scheduleModal" tabindex="-1" aria-labelledby="scheduleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <h5 id="roname"></h5>
-                    <br>
-                    <div class="form-group row">
-                        <label for="datepicker2" class="col-sm-7 col-form-label">Tampilkan jadwal untuk tanggal</label>
-
-                        <div class="col-sm-5">
-                            <input type="text" id="hiddenRomid" hidden>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control form-control-sm bg-white" name="date" id="datepicker2" readonly onchange="getBookingList()" />
-                                <div class="input-group-append">
-                                    <button class="btn btn-sm btn-outline-secondary" onclick="$('#datepicker2').focus()" type="button" id="button-addon2"><i class="fa-solid fa-calendar-days"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <table class="table table-sm table-hover">
-                        <thead>
-                            <tr class="bg-primary text-light">
-                                <th scope="col" class="col-sm-1">No.</th>
-                                <th scope="col" class="col-sm-3">Pengguna</th>
-                                <th scope="col" class="col-sm-1">Mulai</th>
-                                <th scope="col" class="col-sm-1">Selesai</th>
-                                <th scope="col" class="col-sm-6">Catatan</th>
-                            </tr>
-                        </thead>
-                        <tbody id="bookingtable">
-
-                        </tbody>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Bootstrap core JavaScript-->
     <script src="../assets/vendor/jquery/jquery.min.js"></script>
@@ -209,6 +202,9 @@ require_once "../core/admin-session-only.php";
     <!-- Custom scripts for all pages-->
     <script src="../assets/js/sb-admin-2.min.js"></script>
 
+    <script src="../assets/vendor/SweetAlert2/SweetAlert2.js"></script>
+
+
 </body>
 
 </html>
@@ -216,6 +212,22 @@ require_once "../core/admin-session-only.php";
 <script>
     $(document).ready(function() {
         $('#rooms_table').DataTable({
+            "language": {
+                "search": "Cari : ",
+                "lengthMenu": "Tampilkan _MENU_ data per halaman",
+                "zeroRecords": "Tidak ada data yang cocok ditemukan.",
+                "info": "Menampilkan halaman _PAGE_ dari _PAGES_",
+                "infoEmpty": "Data tidak tersedia",
+                "infoFiltered": "(Difilter dari _MAX_ total data)",
+                "paginate": {
+                    "first": "Pertama",
+                    "last": "Terakhir",
+                    "next": "Selanjutnya",
+                    "previous": "Sebelumnya"
+                },
+            }
+        })
+        $('#rooms_table2').DataTable({
             "language": {
                 "search": "Cari : ",
                 "lengthMenu": "Tampilkan _MENU_ data per halaman",
@@ -260,5 +272,64 @@ require_once "../core/admin-session-only.php";
             function(data) {
                 $("#bookingtable").html(data)
             });
+    }
+
+    function cancelPrompt(ticketID) {
+        Swal.fire({
+            icon: 'question',
+            title: 'Apakah Anda Yakin?',
+            text: 'Menghapus tiket akan membatalkan pembukuan yang dibuat oleh pengguna',
+            showCancelButton: true,
+            cancelButtonText: "Batal",
+            confirmButtonText: "Ya, Hapus dan Batalkan"
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.post("views/remote-delete-ticket.php", {
+                        ticketID: ticketID
+                    },
+                    function(data) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: 'Tiket berhasil di batalkan',
+                            confirmButtonText: "Selesai"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        })
+                    });
+            }
+        })
+    }
+
+    function cancelSpacePrompt(ticketID) {
+        Swal.fire({
+            icon: 'question',
+            title: 'Apakah Anda Yakin?',
+            text: 'Menghapus tiket akan membatalkan pembukuan yang dibuat oleh pengguna',
+            showCancelButton: true,
+            cancelButtonText: "Batal",
+            confirmButtonText: "Ya, Hapus dan Batalkan"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.post("views/remote-delete-spaceticket.php", {
+                        ticketID: ticketID
+                    },
+                    function(data) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: 'Tiket berhasil dibatalkan.',
+                            confirmButtonText: "Selesai"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        })
+                    });
+            }
+        })
     }
 </script>
